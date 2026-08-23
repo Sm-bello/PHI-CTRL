@@ -147,7 +147,7 @@ python run_jsbsim_test.py
 ## 🎯 Target Publications & Academic Context
 
 * **Target venues:** *IEEE Transactions on Aerospace and Electronic Systems (TAES)*, *AIAA Journal of Guidance, Control, and Dynamics*, *Reliability Engineering & System Safety*.
-* **Authors:** Mohammed Bello Sani, Praise Balogun Ileedo
+* **Authors:** Mohammed Bello Sani
 * **Advisors:** Prof. Samuel David Iyaghigba (Avionics), Dr. Joel Ajayi (Aircraft Structures)
 * **Institution:** Air Force Institute of Technology (AFIT), Kaduna, Nigeria
 
@@ -157,7 +157,7 @@ python run_jsbsim_test.py
 
 ```bibtex
 @article{bellosani2026phictrl,
-  author       = {Bello and PHI lAB Research Division},
+  author       = {Bello and PHI LAB Research Division},
   title        = {PHI-CTRL: A Physics-Hybrid Integrity Control Architecture for Self-Healing Flight Systems},
   institution  = {Air Force Institute of Technology (AFIT), Kaduna},
   year         = {2026},
