@@ -1,136 +1,128 @@
-<div align="center">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PHI-CTRL — post</title>
+<style>
+  body {
+    background: #0d1117;
+    margin: 0;
+    padding: 40px 20px;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .term {
+    width: 100%;
+    max-width: 720px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .term-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #30363d;
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .r { background: #ff5f56; }
+  .y { background: #ffbd2e; }
+  .g { background: #27c93f; }
+  .term-label {
+    margin-left: 8px;
+    font-size: 12px;
+    color: #8b949e;
+  }
+  #term {
+    padding: 18px;
+    font-size: 13px;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    min-height: 340px;
+  }
+  .img-wrap {
+    width: 100%;
+    max-width: 720px;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .img-wrap img {
+    width: 100%;
+    display: block;
+  }
+</style>
+</head>
+<body>
 
-# ✈️ PHI-CTRL
+<div class="term">
+  <div class="term-bar">
+    <span class="dot r"></span>
+    <span class="dot y"></span>
+    <span class="dot g"></span>
+    <span class="term-label">phi-ctrl — main — zsh</span>
+  </div>
+  <div id="term"></div>
+</div>
 
-### Closed-Loop Digital Twin for Self-Healing Flight Control
-
-[![Status](https://img.shields.io/badge/Status-In_Progress-orange?style=flat-square)](.)
-[![Stack](https://img.shields.io/badge/Stack-Python_|_PyTorch_|_MATLAB_|_Stable--Baselines3-blue?style=flat-square)](.)
-[![Domain](https://img.shields.io/badge/Domain-Flight_Control_|_PHM-purple?style=flat-square)](.)
-[![Author](https://img.shields.io/badge/Author-Sm--bello-black?style=flat-square)](https://github.com/Sm-bello)
+<div class="img-wrap">
+  <img width="1693" height="929" alt="ChatGPT Image Aug 23, 2026, 08_30_19 AM" src="https://github.com/user-attachments/assets/28f9061f-022e-4da6-b03b-4531e5c17c80" />
 
 </div>
 
----
+<script>
+const lines = [
+  {t:"$ git log --oneline -5", c:"#c9d1d9"},
+  {t:"a5f2c91 fix(control): correct sign error in phugoid damping term", c:"#3fb950"},
+  {t:"8e14d0b tune(gains): retune PID for C172x light-aircraft plant", c:"#3fb950"},
+  {t:"3bc902a feat(lateral): add roll/rudder coupling to prevent spiral div.", c:"#3fb950"},
+  {t:"f001abc test(jsbsim): validate 40% elevator loss, 6-DOF, full coupling", c:"#3fb950"},
+  {t:"", c:""},
+  {t:"$ python run_verification.py --layer=3 --plant=c172x --fault=elevator_loss", c:"#c9d1d9"},
+  {t:"[LAYER 1] unit + deterministic replay ......... PASS", c:"#8b949e"},
+  {t:"[LAYER 2] monte carlo (n=50, gamma∈[0.3,0.8]) .. PASS", c:"#8b949e"},
+  {t:"[LAYER 3] jsbsim 6-dof, cessna c172x .......... PASS", c:"#8b949e"},
+  {t:"", c:""},
+  {t:"baseline_pid   : alt_dev=106.48ft  rec_time=16.00s", c:"#f85149"},
+  {t:"phi_ctrl_hybrid: alt_dev=48.30ft   rec_time=5.20s", c:"#3fb950"},
+  {t:"improvement    : -55% deviation, -68% recovery time", c:"#58a6ff"},
+  {t:"", c:""},
+  {t:"$ echo $STATUS", c:"#c9d1d9"},
+  {t:"> the plane holds steady.", c:"#58a6ff"},
+  {t:"", c:""},
+  {t:"$ git commit -m \"paper submission loading\" 🛫", c:"#8b949e"}
+];
 
-## What This Is
+const el = document.getElementById('term');
+let li = 0;
 
-**PHI-CTRL** is a closed-loop fault-tolerant flight control framework that extends the PHI-Twin digital twin from *monitoring* to *acting*. When a fault is detected in-flight, the system autonomously reconfigures its control strategy without human intervention — what engineers call **autonomous control reconfiguration**.
+function typeLine(){
+  if(li >= lines.length) return;
+  const {t, c} = lines[li];
+  const row = document.createElement('div');
+  row.style.color = c || '#8b949e';
+  el.appendChild(row);
+  let ci = 0;
+  const speed = t.length > 0 ? 12 : 0;
+  function typeChar(){
+    if(ci <= t.length){
+      row.textContent = t.slice(0, ci);
+      ci++;
+      setTimeout(typeChar, speed);
+    } else {
+      li++;
+      setTimeout(typeLine, 90);
+    }
+  }
+  typeChar();
+}
+typeLine();
+</script>
 
-This is the natural sequel to PHI-Twin:
-
-```
-PHI-Twin (existing):    Sensors → Digital Twin → Fault Classification → 🚨 Alert
-PHI-CTRL (this repo):   Sensors → Digital Twin → Fault Classification
-                                                          ↓
-                                                  Controller Decision
-                                                          ↓
-                                                  Actuator Command → Aircraft System
-                                                          ↑_________________________|
-```
-
-The twin stops being a **spectator** and becomes a **co-pilot**.
-
----
-
-## Self-Healing Scenarios
-
-| Fault Injected | PHI-CTRL Response |
-|---|---|
-| Partial actuator failure (elevator stuck at 30%) | Redistribute control to remaining surfaces |
-| Engine thrust asymmetry (one engine at 60%) | Adaptive trim update + rudder bias compensation |
-| Sensor bias (pitot tube icing) | Fall back to twin-estimated airspeed |
-
----
-
-## Architecture
-
-```
-Longitudinal Aircraft Model (Python ODE — pitch/altitude/speed)
-        ↓
-Fault Injection Module (parameter override mid-episode)
-        ↓
-PHI-Twin Fault Classifier (CNN-BiLSTM — detects fault type + severity)
-        ↓
-Adaptive Controller (MRAC → PPO/SAC Reinforcement Learning)
-        ↓
-Closed-Loop Recovery — altitude/pitch response plotted vs. PID baseline
-```
-
----
-
-## Tech Stack
-
-| Tool | Role |
-|---|---|
-| `Python` | Aircraft ODE plant model |
-| `PyTorch` | CNN-BiLSTM fault detector (reused from PHI-Twin) |
-| `Stable-Baselines3` | PPO/SAC RL adaptive controller |
-| `MRAC` | Model Reference Adaptive Control (stable baseline) |
-| `Custom Gym Env` | Fault-injectable flight simulation environment |
-| `Plotly` | Publication-quality recovery comparison figures |
-
----
-
-## Project Structure
-
-```
-PHI-CTRL/
-├── plant/              # Aircraft longitudinal ODE model
-├── fault_injection/    # Fault parameter override module
-├── detector/           # CNN-BiLSTM classifier (PHI-Twin derived)
-├── controller/
-│   ├── mrac/           # Model Reference Adaptive Control
-│   └── rl/             # PPO/SAC reinforcement learning agent
-├── gym_env/            # Custom Gym fault-injectable environment
-├── results/            # Recovery plots, benchmark tables
-├── notebooks/          # Experiments and analysis
-└── docs/               # Research notes and references
-```
-
----
-
-## Research Contributions
-
-1. A digital twin architecture whose fault signals are **directly consumable by a controller** — not just dashboard alerts
-2. A **fault-conditioned adaptive control policy** (MRAC + RL) validated against PID baseline degradation
-3. Quantitative recovery metrics: **time-to-recover**, **altitude deviation**, **control energy cost**
-
----
-
-## Status
-
-- [ ] Aircraft longitudinal plant model (Python ODE)
-- [ ] Fault injection module
-- [ ] CNN-BiLSTM fault classifier (adapt from PHI-Twin)
-- [ ] MRAC adaptive controller implementation
-- [ ] Custom Gym environment with mid-episode fault injection
-- [ ] RL agent training (PPO via Stable-Baselines3)
-- [ ] Recovery comparison plots (PHI-CTRL vs. baseline PID)
-- [ ] AIAA SciTech 2027 abstract
-
----
-
-## Part of the PHI Suite
-
-| Component | Role |
-|---|---|
-| **PHI-Twin** | Fault detection (existing) |
-| **PHI-CTRL** *(this repo)* | Fault-conditioned adaptive controller |
-| **PHI-Suite** | End-to-end: detection → recovery |
-
----
-
-## Target Publications
-
-- **AIAA SciTech Forum 2027**
-- **IEEE Transactions on Aerospace and Electronic Systems (TAES)**
-- **MDPI Aerospace**
-
----
-
-## Author
-
-**Bello** | Aerospace & AI Engineer | [@Sm-bello](https://github.com/Sm-bello)
-
-*Part of the PHI Research Portfolio — physics-informed AI for advanced aerospace systems.*
+</body>
+</html>
