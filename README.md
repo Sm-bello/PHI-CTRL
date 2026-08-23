@@ -157,7 +157,7 @@ python run_jsbsim_test.py
 
 ```bibtex
 @article{bellosani2026phictrl,
-  author       = {Bello Sani, Mohammed and Ileedo, Praise Balogun},
+  author       = {Bello and PHI lAB Research Division},
   title        = {PHI-CTRL: A Physics-Hybrid Integrity Control Architecture for Self-Healing Flight Systems},
   institution  = {Air Force Institute of Technology (AFIT), Kaduna},
   year         = {2026},
@@ -169,7 +169,7 @@ python run_jsbsim_test.py
 
 ## 🛡️ Author
 
-**Sonny Bello (Mohammed Bello Sani)** — Aerospace Engineering Graduate & Systems Developer, Founder of Penelope Inc.
+Mohammed Bello Sani** — Aerospace Engineering Graduate & Systems Developer, Founder of Penelope Inc.
 
 GitHub: [@Sm-bello](https://github.com/Sm-bello) • Enterprise: [penelope-inc.vercel.app](https://penelope-inc.vercel.app)
 
