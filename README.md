@@ -240,7 +240,7 @@ See also `CITATION.cff`. After a Zenodo release, add the DOI here.
 |---|---|
 | **Author** | [Mohammed Bello Sani](https://smbello.vercel.app) — Aerospace Intelligence & Digital Twin Systems |
 | **Lab** | [Penelope Inc. · PHI Lab](https://penelope-inc.vercel.app) |
-| **Advisors (academic context)** | Prof. Samuel David Iyaghigba (Avionics), Joel Ajayi (Aircraft Structures) |
+| **Advisors (academic context)** | Prof. Samuel David Iyaghigba (Avionics), Dr. Joel Ajayi (Aircraft Structures) |
 | **Institution** | Air Force Institute of Technology (AFIT), Kaduna |
 
 Part of the PHI suite (PHI-Twin, PHI-Chain, PHI-SWARM, PHI-CTRL, and related frameworks).

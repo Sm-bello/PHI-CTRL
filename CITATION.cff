@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+title: "PHI-CTRL: Physics-Hybrid Integrity Control for Fault-Tolerant Flight"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: Bello
+    given-names: Mohammed Sani
+    alias: S. M. Bello
+    website: "https://smbello.vercel.app"
+version: 1.0.0
+license: MIT
+repository-code: "https://github.com/Sm-bello/PHI-CTRL"
+url: "https://penelope-inc.vercel.app"
+abstract: >-
+  Hybrid integrity architecture for resilient longitudinal control under
+  elevator-effectiveness faults on JSBSim F-16A (6-DOF). Baseline energy-hold,
+  MRAC, MMAE effectiveness bank, optional residual policy, diagnostic observer.
+  Simulation and optional FlightGear path. No flight claims.
+keywords:
+  - flight-control
+  - fault-tolerance
+  - jsbsim
+  - digital-twin
+  - phm
+  - mrac
+  - adaptive-control

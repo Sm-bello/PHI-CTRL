@@ -1,0 +1,8 @@
+numpy>=1.24
+pandas>=2.0
+matplotlib>=3.7
+scipy>=1.10
+# jsbsim  (prefer: conda install -c conda-forge jsbsim)
+# optional for residual RL:
+# stable-baselines3
+# gymnasium

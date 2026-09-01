@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<output name="localhost" type="FLIGHTGEAR" port="5606" protocol="UDP" rate="60"/>
