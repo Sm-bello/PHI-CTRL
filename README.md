@@ -1,184 +1,260 @@
 <div align="center">
 
-# ✈️ PHI-CTRL (Penelope)
-### Physics-Hybrid Integrity Control — A Certifiable Fault-Tolerant Flight Control Architecture
+# PHI-CTRL
 
-[![Status](https://img.shields.io/badge/Status-Verified_%26_Archived-16a34a?style=for-the-badge)](.)
-[![Stack](https://img.shields.io/badge/Stack-Python_%7C_JSBSim_%7C_PyTorch-0284c7?style=for-the-badge)](.)
-[![Domain](https://img.shields.io/badge/Domain-Flight_Control_%7C_PHM_%7C_Digital_Twin-534AB7?style=for-the-badge)](.)
-[![Dataset](https://img.shields.io/badge/HuggingFace-Dataset-d97706?style=for-the-badge&logo=huggingface)](https://huggingface.co/datasets/SM-Bello/Physics-Hybrid-Integrity-CTRL-Digital-Twin)
-[![License](https://img.shields.io/badge/License-CC_BY_4.0-black?style=for-the-badge)](https://creativecommons.org/licenses/by/4.0/)
+### Physics-Hybrid Integrity Control — Fault-Tolerant Flight Control Architecture
 
-═══════════════════════════════════════════════════════════════════════════════════════
-P H I   L A B   •   P E N E L O P E   I N C .   R E S E A R C H   D I V I S I O N
-═══════════════════════════════════════════════════════════════════════════════════════
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
+[![JSBSim](https://img.shields.io/badge/Plant-JSBSim%20F--16A%206--DOF-0284c7)](https://jsbsim.sourceforge.net/)
+[![Domain](https://img.shields.io/badge/Domain-Flight%20Control%20%7C%20PHM%20%7C%20Digital%20Twin-534AB7)](.)
+[![Dataset](https://img.shields.io/badge/HuggingFace-Dataset-d97706?logo=huggingface)](https://huggingface.co/datasets/SM-Bello/Physics-Hybrid-Integrity-CTRL-Digital-Twin)
+[![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
+[![Author](https://img.shields.io/badge/author-S.%20M.%20Bello-0A66C2)](https://smbello.vercel.app)
+[![Lab](https://img.shields.io/badge/lab-Penelope%20Inc.%20%7C%20PHI%20Lab-111827)](https://penelope-inc.vercel.app)
+
+**Author:** [Mohammed Bello Sani (S. M. Bello)](https://smbello.vercel.app)  
+**Lab:** [Penelope Inc. · PHI Lab](https://penelope-inc.vercel.app)  
+**Affiliation:** Air Force Institute of Technology (AFIT) · Beihang M.Sc trajectory
 
 </div>
 
 ---
 
-## 📌 Abstract
+## Abstract
 
-Modern aerospace control systems are severely vulnerable to unmodeled structural degradation, actuator effectiveness loss, and sensor bias anomalies. Black-box deep reinforcement learning controllers lack formal stability guarantees and generalize poorly out-of-distribution; conventional gain-scheduled controllers fail under compound, real-time faults.
+Modern flight control loops remain vulnerable to **actuator effectiveness loss**, sensor bias, and compound faults that fixed-gain and black-box policies handle poorly. PHI-CTRL is a **physics-hybrid integrity** architecture for resilient longitudinal control under elevator-effectiveness faults, demonstrated on the **NASA-oriented JSBSim F-16A** nonlinear 6-DOF plant.
 
-**PHI-CTRL** is a certifiable, physics-informed, fault-conditioned control architecture. It pairs a cascaded PID baseline with phugoid ($\dot h$) damping against a real-time, parameter-adaptive gain-scaling compensator ($1/\gamma$) driven by digital twin health estimation, plus a parallel Luenberger-style observer for multi-sensor bias correction.
+The stack pairs:
 
-Validated across a rigorous three-layer verification pyramid — unit testing, 50-episode Monte Carlo stress benchmarking ($\gamma \in [0.3, 0.8]$), and high-fidelity nonlinear 6-DOF simulation in the NASA-verified **JSBSim** engine (Cessna C172x plant) — PHI-CTRL stabilizes multi-axis flight trajectories, cutting recovery time and integrated tracking error by over 50% versus nominal baselines, without sacrificing attitude stability.
+1. A **gate-passing baseline** energy-hold / pitch law (honest comparison, zero fault knowledge).
+2. A **hybrid compensator** path: inverse-multiplicative gain scaling driven by estimated remaining effectiveness $\gamma$, optional **MRAC**, and an **MMAE-style effectiveness bank**.
+3. A **diagnostic observer** (Luenberger-style) for bias monitoring — closed-loop injection is optional and off by default.
+4. An optional **residual policy** (PPO) that applies **only** when the bank estimates degradation — not blindly.
 
----
-
-## 🏛️ Architecture
-
-<img width="1693" height="929" alt="ChatGPT Image Aug 23, 2026, 08_30_19 AM" src="https://github.com/user-attachments/assets/22c44623-e60c-4aee-8aa3-25eb83ef5f64" />
-
-```
-Sensors (y = [h, θ, q, φ, p, r])
-        │
-        ▼
-Luenberger Observer ──── isolates sensor bias b̂ in real time
-        │
-        ▼
-Health Monitor (γ̂ Estimator) ──── digital twin health estimation
-        │
-        ▼
-Hybrid Compensator (u = u_pid / γ̂) ──── inverse-multiplicative gain scaling
-        │
-        ▼
-Baseline PID (phugoid ḣ damping) ──► Actuator (effectiveness γ) ──► Aircraft Plant (JSBSim 6-DOF)
-        ▲                                                                    │
-        └────────────────────────── sensor feedback loop ──────────────────┘
-```
-
-### Core equations
-
-**Actuator degradation** (multiplicative effectiveness loss):
-$$\delta_{\text{actual}} = \gamma \cdot \delta_{\text{command}}, \quad \gamma \in [0, 1]$$
-
-**Observer-based bias compensation:**
-$$\dot{\hat{\mathbf{x}}} = \mathbf{A}\hat{\mathbf{x}} + \mathbf{B}\mathbf{u}, \quad \mathbf{y}_{\text{comp}} = \mathbf{y}_{\text{meas}} - \hat{\mathbf{b}}$$
-
-**Hybrid fault-conditioned control law:**
-$$\delta_{\text{elev}} = \text{clip}\left( \frac{\text{PID}_{\text{output}}}{\max(\gamma, 0.25)}, -1.0, 1.0 \right)$$
-
-For 6-DOF implementations, lateral aileron and rudder damping loops ($\phi \to p \to \delta_a$, $r \to \delta_r$) are coupled to prevent cross-axis roll divergence and spiral instability.
+Validation follows a verification ladder: baseline recovery gates → unified ablations across $\gamma$ → multi-seed metrics → optional FlightGear live path. This repository is **simulation software** (TRL ~3–5 path). **Hardware-in-the-loop flight and operational certification claims are out of scope.**
 
 ---
 
-## 🛠️ Verification Pyramid
-
-PHI-CTRL is validated through three escalating layers of rigor, run inside the `aerospace` conda environment:
-
-1. **Layer 1 — Unit Verification:** Deterministic trajectory replay and open-loop step responses confirming baseline controller convergence.
-2. **Layer 2 — Monte Carlo Stress Testing:** 50 randomized episodes, fault severities sampled uniformly across $\gamma \in [0.3, 0.8]$, injection times randomized between $t = 3.0\text{s}$ and $6.0\text{s}$.
-3. **Layer 3 — High-Fidelity 6-DOF Simulation:** Full 3D spatial rotation and cross-axis inertial coupling on the NASA-verified JSBSim engine, Cessna C172x plant model, full cross-products of inertia ($I_{xx}, I_{yy}, I_{zz}, I_{xz}$).
-
-### Layer 1 & 2 results — Monte Carlo benchmarking (n = 50)
-
-| Metric | Baseline PID (damaged) | PHI-CTRL hybrid-adaptive | Improvement |
-| :--- | :--- | :--- | :--- |
-| Max altitude deviation | 106.48 ± 10.63 ft | 48.30 ± 8.50 ft | ~55% reduction |
-| Integrated tracking error | 1045.04 ± 95.54 ft·s | 420.00 ± 60.00 ft·s | ~60% reduction |
-| Recovery time | 16.00 ± 0.00 s (sluggish) | 5.20 ± 1.10 s | Rapid stabilization |
-| Flight success rate | 100.0% | 100.0% | Zero envelope violations |
-
-### Layer 3 results — nonlinear 6-DOF JSBSim stress test
-
-Sudden 40% elevator loss under full 3D spatial rotation on the Cessna C172x model:
-
-* **Attitude coupling:** cross-axis roll bounded within $\vert\phi\vert < 5.0^\circ$, preventing the divergent spin spirals seen in uncompensated baselines.
-* **Actuator saturation:** compensated elevator command instantly rescaled authority upon fault detection at $t = 5\text{s}$, restoring closed-loop bandwidth without exceeding actuator rate limits.
-
----
-
-## 📊 Live Telemetry & Dataset
-
-Benchmarking results, time-series telemetry arrays, and verification plots are archived on the Hugging Face Hub:
-
-👉 **[Physics-Hybrid-Integrity-CTRL-Digital-Twin](https://huggingface.co/datasets/SM-Bello/Physics-Hybrid-Integrity-CTRL-Digital-Twin)**
-
----
-
-## 🗂️ Project Structure
+## Architecture
 
 ```text
-PHI_CTRL/
-├── plant/
-│   ├── longitudinal_ode.py   # 5-state longitudinal ODE model (u, w, q, θ, h)
-│   └── jsbsim_plant.py       # High-fidelity 6-DOF JSBSim bridge wrapper
-├── fault_injection/
-│   └── injector.py           # Multiplicative effectiveness loss & sensor bias override
-├── sensor_fusion/
-│   └── observer.py           # Luenberger-style parallel bias compensator
-├── controller/
-│   └── baseline_pid.py       # Cascaded PID with phugoid (ḣ) damping
-├── docs/
-│   └── architecture.png      # System architecture diagram
-├── results/                  # Generated IEEE/AIAA-grade verification plots
-├── verify_phi_ctrl.py        # Layer 1 & 2: unit + Monte Carlo + sensor bias execution
-└── run_jsbsim_test.py        # Layer 3: 6-DOF nonlinear JSBSim flight stress test
+Sensors  y = [h, θ, q, …]
+        │
+        ▼
+┌───────────────────┐
+│ Diagnostic observer│  bias estimate (monitoring; closed-loop optional)
+└─────────┬─────────┘
+          ▼
+┌───────────────────┐
+│ Effectiveness bank │  MMAE-style γ̂  (+ GainRatio detector)
+│ / health monitor   │
+└─────────┬─────────┘
+          ▼
+┌───────────────────┐     ┌────────────────┐
+│ Hybrid compensator│────►│ Baseline law   │  energy-hold / PID-style
+│ u ← u_cmd / γ̂     │     │ (no fault info)│
+└─────────┬─────────┘     └───────┬────────┘
+          │                       │
+          └──────────┬────────────┘
+                     ▼
+              Actuator (γ · δ_cmd)  →  JSBSim F-16A plant (6-DOF)
+                     ▲
+                     └──────── sensor feedback ────────┘
+```
+
+### γ convention (mandatory)
+
+| Symbol | Meaning |
+|--------|---------|
+| $\gamma = 1.0$ | Healthy elevator |
+| $\gamma = 0.8$ | 20% effectiveness **loss** (80% remaining) |
+| $\gamma = 0.5$ | 50% effectiveness **loss** |
+| $\gamma \in [0, 1]$ | Remaining effectiveness |
+
+**Actuator degradation**
+
+$$\delta_{\text{actual}} = \gamma \cdot \delta_{\text{command}}, \quad \gamma \in [0, 1]$$
+
+**Hybrid fault-conditioned scaling** (concept)
+
+$$\delta = \mathrm{clip}\left(\frac{u_{\mathrm{baseline}}}{\max(\hat\gamma,\,\gamma_{\min})},\,-1,\,1\right)$$
+
+Positive elevator command is **nose-down** on this airframe (verified against the model’s $C_{m_{\delta_e}}$ table). Physical $\gamma$ is applied last at the plant write.
+
+### Honest design notes
+
+- **Observer:** diagnostic-only by default (`OBSERVER_CLOSED_LOOP=False`).
+- **Detector path:** GainRatio + MMAE-style bank (not assumed CNN-BiLSTM for the primary gate).
+- **Residual RL:** enabled only when fault is active **and** bank estimates degradation.
+- **Baseline:** zero fault knowledge — fair comparison case.
+- Staged gate: baseline pre-fault must pass before augmented cases are scored.
+
+---
+
+## Verification ladder
+
+| Layer | What runs | Purpose |
+|-------|-----------|---------|
+| **L0** | `plant/jsbsim_plant_f16.py` | F-16A 6-DOF interface, trim ownership, throttle/elev authority |
+| **L1** | `baseline_jsbsim_recovery/` | No-fault / hold-trim / elevator-fault recovery gates |
+| **L2** | `phi_ctrl_unified_f16.py` | Unified ablation: baseline · hybrid · TECS/MRAC · full stack |
+| **L3** | `eval/eval_multiseed.py` | Multi-seed metrics across $\gamma$ |
+| **Optional** | `run_f16_live_flightgear.py` | Live visualization path (FDM null + native socket) |
+
+Sample **PASSING** plots and CSVs live under `artifacts/`. Regenerate full trees locally; large episode datasets are on Hugging Face.
+
+---
+
+## Quick start
+
+### Environment
+
+```bash
+git clone https://github.com/Sm-bello/PHI-CTRL.git
+cd PHI-CTRL
+
+python -m venv .venv && source .venv/bin/activate   # or: conda activate aerospace
+pip install -r requirements.txt
+# JSBSim: prefer conda-forge
+# conda install -c conda-forge jsbsim
+```
+
+### 1) Baseline recovery gates
+
+```bash
+cd baseline_jsbsim_recovery
+python run_baseline_recovery.py --no-fault
+python run_baseline_recovery.py --hold-trim
+python run_baseline_recovery.py          # elevator fault case
+cd ..
+```
+
+### 2) Unified ablation (V2)
+
+```bash
+python phi_ctrl_unified_f16.py --gamma 0.5
+python phi_ctrl_unified_f16.py --gamma 0.8
+```
+
+### 3) Multi-seed metrics
+
+```bash
+python eval/eval_multiseed.py --seeds 20 --gamma 1.0 0.8 0.5
+```
+
+### 4) Optional residual training / FlightGear
+
+```bash
+python scripts/train_residual_f16.py --timesteps 500000 --curriculum
+
+# Terminal A
+fgfs --aircraft=f16 --fdm=null --native-fdm=socket,in,60,,5505,udp
+# Terminal B
+python run_f16_live_flightgear.py
+```
+
+See `docs/ICD_HIL_FLIGHTGEAR.md` for the property contract.
+
+---
+
+## Repository layout
+
+```text
+PHI-CTRL/
+├── README.md
+├── LICENSE · CITATION.cff · requirements.txt · .gitignore
+├── phi_ctrl_unified_f16.py          # L2 unified orchestrator
+├── run_f16_live_flightgear.py       # optional FG live path
+├── plant/                           # JSBSim F-16A + longitudinal ODE
+├── controller/                      # baseline, adaptive, energy-hold, MRAC
+├── detector/                        # GainRatio, MMAE bank, twin models
+├── sensor_fusion/                   # diagnostic observer
+├── fault_injection/                 # γ / bias injection
+├── gym_env/                         # training / eval environments
+├── bridge/                          # plant bridge helpers
+├── baseline_jsbsim_recovery/        # L1 gate scripts
+├── eval/                            # multi-seed & residual grid
+├── scripts/                         # dataset, train residual, plots
+├── models/                          # final residual zip + optional twin weights
+├── data/                            # sample manifest only (full set on HF)
+├── artifacts/                       # small PASSING samples
+└── docs/                            # TRL roadmap, ICD, narrative text
+```
+
+**Not shipped (on purpose):** intermediate RL checkpoints, multi-GB result dumps, console debug logs, private Word progress reports, nested legacy C172 archives. Regenerate with scripts; frozen bulk data → Hugging Face / Zenodo.
+
+---
+
+## Dataset
+
+Benchmarking telemetry and related exports:
+
+**[Physics-Hybrid-Integrity-CTRL-Digital-Twin](https://huggingface.co/datasets/SM-Bello/Physics-Hybrid-Integrity-CTRL-Digital-Twin)** on Hugging Face.
+
+Generate local fault episodes:
+
+```bash
+python scripts/generate_fault_dataset_f16.py
 ```
 
 ---
 
-## 💻 Quick Start
+## Documentation
 
-### 1. Clone and activate
-
-```bash
-git clone https://github.com/Sm-bello/Physics-Hybrid-Integrity-CTRL-Digital-Twin.git
-cd Physics-Hybrid-Integrity-CTRL-Digital-Twin
-conda activate aerospace
-```
-
-### 2. Run Layer 1 & 2 — Monte Carlo and sensor bias verification
-
-```bash
-python verify_phi_ctrl.py
-```
-
-### 3. Run Layer 3 — High-fidelity 6-DOF JSBSim stress test
-
-```bash
-python run_jsbsim_test.py
-```
+| Document | Content |
+|----------|---------|
+| [`docs/TRL_ROADMAP_PHI_CTRL.md`](docs/TRL_ROADMAP_PHI_CTRL.md) | TRL 3→5 plan and honest status |
+| [`docs/ICD_HIL_FLIGHTGEAR.md`](docs/ICD_HIL_FLIGHTGEAR.md) | FlightGear / HIL property contract |
+| [`docs/PHI-CTRL.txt`](docs/PHI-CTRL.txt) | Launch sequence, γ convention |
+| [`artifacts/`](artifacts/) | Sample PASSING figures and CSVs |
 
 ---
 
-## 🎯 Target Publications & Academic Context
+## Limits (read before citing)
 
-* **Target venues:** *IEEE Transactions on Aerospace and Electronic Systems (TAES)*, *AIAA Journal of Guidance, Control, and Dynamics*, *Reliability Engineering & System Safety*.
-* **Authors:** Mohammed Bello Sani
-* **Advisors:** Prof. Samuel David Iyaghigba (Avionics), Dr. Joel Ajayi (Aircraft Structures)
-* **Institution:** Air Force Institute of Technology (AFIT), Kaduna, Nigeria
+- **In scope:** JSBSim F-16A simulation, baseline vs hybrid ablations, multi-seed metrics, optional FG visualization, residual training scripts.
+- **Out of scope:** Certified flight software, piloted flight test, formal DO-178C evidence packages, claims that residual RL is always superior to hybrid-only.
+- Prefer claim language tied to **logged metrics** in `artifacts/` and regenerated runs, not marketing copy.
 
 ---
 
-## 📜 Citation
+## Citation
 
 ```bibtex
-@article{bellosani2026phictrl,
-  author       = {Bello and PHI LAB Research Division},
-  title        = {PHI-CTRL: A Physics-Hybrid Integrity Control Architecture for Self-Healing Flight Systems},
-  institution  = {Air Force Institute of Technology (AFIT), Kaduna},
-  year         = {2026},
-  note         = {Penelope Inc. / PHI Lab Research Division}
+@software{bello2026phictrl,
+  title  = {PHI-CTRL: Physics-Hybrid Integrity Control for Fault-Tolerant Flight},
+  author = {Bello, Mohammed Sani},
+  year   = {2026},
+  url    = {https://github.com/Sm-bello/PHI-CTRL},
+  note   = {Penelope Inc. / PHI Lab — JSBSim F-16A simulation framework}
 }
 ```
 
+See also `CITATION.cff`. After a Zenodo release, add the DOI here.
+
 ---
 
-## 🛡️ Author
+## Built by
 
-Mohammed Bello Sani** — Aerospace Engineering Graduate & Systems Developer, Founder of Penelope Inc.
+| | |
+|---|---|
+| **Author** | [Mohammed Bello Sani](https://smbello.vercel.app) — Aerospace Intelligence & Digital Twin Systems |
+| **Lab** | [Penelope Inc. · PHI Lab](https://penelope-inc.vercel.app) |
+| **Advisors (academic context)** | Prof. Samuel David Iyaghigba (Avionics), Joel Ajayi (Aircraft Structures) |
+| **Institution** | Air Force Institute of Technology (AFIT), Kaduna |
 
-GitHub: [@Sm-bello](https://github.com/Sm-bello) • Enterprise: [penelope-inc.vercel.app](https://penelope-inc.vercel.app)
+Part of the PHI suite (PHI-Twin, PHI-Chain, PHI-SWARM, PHI-CTRL, and related frameworks).
 
-*Part of the Penelope Inc. / PHI Lab Research Portfolio.*
+---
 
-<div align="center">
+## License
 
-═══════════════════════════════════════════════════════════════════════════════════════
-© 2026–2027 PENELOPE INC. • PHI LAB • ALL RESEARCH TRADEMARKS REGISTERED
-═══════════════════════════════════════════════════════════════════════════════════════
+- **Code:** MIT  
+- **Datasets / frozen figures on HF or Zenodo:** CC-BY-4.0 recommended  
 
-</div>
+---
+
+## Status
+
+Public source of truth for the **simulation** framework.  
+Tag `v1.0.0` when baseline + unified gates pass on a clean clone; archive frozen metrics on Zenodo and link the DOI here.
