@@ -1,0 +1,132 @@
+PHI-CTRL — Physics-Hybrid Integrity Control
+===========================================
+Release: TRL 4 / edge-of-5 package (F-16 primary)
+γ convention: γ = elevator REMAINING effectiveness
+  1.0 = healthy; 0.8 = 20% loss; 0.5 = 50% loss
+
+Terminal 1:
+---------------------------------------------------------------------------
+"C:\Program Files\FlightGear 2024.1\bin\fgfs.exe" --aircraft=f16-block-52 --fdm=external --native-fdm=socket,in,60,,5606,udp --lat=0 --lon=0 --altitude=15000 --vc=400 --disable-clouds3d --disable-random-objects
+
+---------------------------------------------------------------------------
+Terminal 2:
+---------------------------------------------------------------------------
+conda activate aerospace
+cd PHI-CTRL          # repo root
+python run_f16_live_flightgear.py --fault
+
+---------------------------------------------------------------------------
+1. WHAT THIS IS
+---------------------------------------------------------------------------
+Layered hybrid architecture for resilient longitudinal control under
+actuator-effectiveness faults on JSBSim F-16A (6-DOF):
+
+  L0 Plant       plant/jsbsim_plant_f16.py
+  L1 Baseline    controller/energy_hold_f16.py
+  L2 Resilient   MRAC + MMAE bank + optional PPO residual (MMAE-gated)
+  L3 Integration phi_ctrl_unified_f16.py  +  optional FlightGear
+
+Honest scope:
+  - Detector = GainRatio + MMAE-style bank (NOT CNN-BiLSTM yet)
+  - Observer = diagnostic-only (OBSERVER_CLOSED_LOOP=False)
+  - Residual is MMAE-gated; full-stack is not assumed superior to baseline
+  - CNN-BiLSTM twin and multi-aircraft campaigns are future work
+
+---------------------------------------------------------------------------
+2. ENVIRONMENT
+---------------------------------------------------------------------------
+  conda activate aerospace
+  # jsbsim: conda install -c conda-forge jsbsim
+  # numpy pandas matplotlib scipy
+  # optional RL: gymnasium stable-baselines3
+
+---------------------------------------------------------------------------
+3. LAUNCH SEQUENCE
+---------------------------------------------------------------------------
+
+A) Baseline gate (must PASS)
+
+  cd baseline_jsbsim_recovery
+  python run_baseline_recovery.py --no-fault
+  python run_baseline_recovery.py --hold-trim
+  python run_baseline_recovery.py
+
+B) Unified ablation (V2)
+
+  cd <repo root>
+  python phi_ctrl_unified_f16.py                  # default γ_remaining=0.50
+  python phi_ctrl_unified_f16.py --gamma 0.8      # 20% loss study
+  python phi_ctrl_unified_f16.py --gamma 0.5      # 50% loss study
+
+  Outputs in results_f16/:
+    unified_*_log.csv
+    ablation_summary.csv
+    phi_ctrl_unified_f16_comparison.png
+    console_log_f16_unified.txt
+
+C) Multi-seed metrics (scientific table)
+
+  python eval/eval_multiseed.py --seeds 20
+  python eval/eval_multiseed.py --seeds 20 --gamma 1.0 0.8 0.5
+  python eval/eval_multiseed.py --seeds 10 --with-residual
+
+D) Envelope grid (single-run per cell)
+
+  python eval/eval_residual_grid.py --out results/eval_grid
+
+E) Residual training (curriculum)
+
+  python scripts/train_residual_f16.py --smoke-test --curriculum
+  python scripts/train_residual_f16.py --timesteps 500000 --curriculum
+
+---------------------------------------------------------------------------
+4. FLIGHTGEAR (relevant environment toward TRL 5)
+---------------------------------------------------------------------------
+Terminal 1:
+  fgfs --aircraft=f16 --fdm=null --native-fdm=socket,in,60,,5505,udp
+
+Terminal 2:
+  python run_f16_live_flightgear.py
+
+ICD: docs/ICD_HIL_FLIGHTGEAR.md
+  - fcs/fbw-override=1
+  - throttle-pos-norm drives thrust on this model
+  - Metrics from JSBSim truth, not FG visuals
+
+---------------------------------------------------------------------------
+5. ABLATION INTERPRETATION
+---------------------------------------------------------------------------
+Cases: BASELINE | TECS_MRAC | HYBRID | FULL_STACK
+
+If FULL_STACK max|Δh| > BASELINE: report as finding; residual policy needs
+curriculum retrain / better gating — do not claim superiority.
+
+Observer bias columns are diagnostic logs only.
+
+---------------------------------------------------------------------------
+6. DOCS
+---------------------------------------------------------------------------
+  docs/TRL_ROADMAP_PHI_CTRL.md
+  docs/ICD_HIL_FLIGHTGEAR.md
+  README.md
+
+---------------------------------------------------------------------------
+7. NON-CLAIMS
+---------------------------------------------------------------------------
+Not flight-certified. Not TRL 6+. Not CNN-BiLSTM twin (yet).
+C172P is legacy only (legacy_c172p/).
+
+---------------------------------------------------------------------------
+8. FAULT DATASET GENERATOR (for future CNN-BiLSTM)
+---------------------------------------------------------------------------
+Ground-truth-labeled F-16 telemetry (not a trained model):
+
+  python scripts/generate_fault_dataset_f16.py --smoke
+  python scripts/generate_fault_dataset_f16.py \
+      --episodes-per-gamma 200 \
+      --gammas 1.0 0.9 0.8 0.7 0.6 0.5 \
+      --out data/phi_ctrl_f16_fault
+
+Outputs: episodes.csv, episode_index.csv, manifest.json
+γ = remaining effectiveness (labels included every row).
+Sliding windows (50–100 steps) → CNN-BiLSTM later.
