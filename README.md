@@ -37,30 +37,8 @@ Validation follows a verification ladder: baseline recovery gates → unified ab
 
 ## Architecture
 
-```text
-Sensors  y = [h, θ, q, …]
-        │
-        ▼
-┌───────────────────┐
-│ Diagnostic observer│  bias estimate (monitoring; closed-loop optional)
-└─────────┬─────────┘
-          ▼
-┌───────────────────┐
-│ Effectiveness bank │  MMAE-style γ̂  (+ GainRatio detector)
-│ / health monitor   │
-└─────────┬─────────┘
-          ▼
-┌───────────────────┐     ┌────────────────┐
-│ Hybrid compensator│────►│ Baseline law   │  energy-hold / PID-style
-│ u ← u_cmd / γ̂     │     │ (no fault info)│
-└─────────┬─────────┘     └───────┬────────┘
-          │                       │
-          └──────────┬────────────┘
-                     ▼
-              Actuator (γ · δ_cmd)  →  JSBSim F-16A plant (6-DOF)
-                     ▲
-                     └──────── sensor feedback ────────┘
-```
+<img width="1536" height="1024" alt="arc" src="https://github.com/user-attachments/assets/d345e08b-970a-42fe-8db7-29c7622e922d" />
+
 
 ### γ convention (mandatory)
 
