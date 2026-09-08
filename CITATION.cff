@@ -1,10 +1,36 @@
 cff-version: 1.2.0
-message: "If you use PHI-CTRL, please cite the associated paper and this software release."
-title: "PHI-CTRL: Physics- and Health-Integrity-Controlled Flight Control"
+message: "If you use this software, please cite it as below."
 type: software
-version: "1.0.0"
-date-released: 2026-09-06
-abstract: "Reproducible research software for integrity-aware F-16 flight-control experiments under elevator-effectiveness faults."
+title: "PHI-CTRL: Physics-Hybrid Integrity Control for Fault-Tolerant Flight"
+abstract: >-
+  PHI-CTRL is a physics-hybrid, fault-conditioned flight control
+  architecture validated on the JSBSim F-16A 6-DOF plant under actuator
+  effectiveness faults. It combines an energy-hold baseline law, an
+  inverse-multiplicative hybrid compensator, MRAC adaptation, an
+  MMAE-style effectiveness bank, a diagnostic observer, and an optional
+  MMAE-gated PPO residual policy, validated through a three-layer
+  verification ladder.
 authors:
-  - family-names: "Bello"
-    given-names: "Just"
+  - family-names: "Sani"
+    given-names: "Mohammed Bello"
+    affiliation: "Air Force Institute of Technology (AFIT), Kaduna"
+    website: "https://smbello.vercel.app"
+repository-code: "https://github.com/Sm-bello/PHI-CTRL"
+url: "https://github.com/Sm-bello/PHI-CTRL"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.22218809"
+    description: "Zenodo archive of PHI-CTRL v1.0.0"
+keywords:
+  - flight-control
+  - fault-tolerant-control
+  - JSBSim
+  - digital-twin
+  - reinforcement-learning
+  - PPO
+  - MRAC
+  - aerospace
+  - PHM
+license: MIT
+version: "v1.0.0"
+date-released: "2026-09-08"
