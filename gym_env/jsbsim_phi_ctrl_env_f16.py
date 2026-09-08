@@ -1,8 +1,22 @@
+"""
+PHI-CTRL residual env — train/infer residual path MATCHED to phi_ctrl_unified_f16.py
+
+Unified residual law (must stay identical):
+  raw_a   = clip(action[0], -0.5, 0.5)
+  deficit = max(1 - gamma_hat, 0.15)          # when fault active
+  desired = clip(raw_a * 0.35 * deficit, -0.20, 0.20)
+  rl_res  = prev + clip(desired - prev, -0.05, 0.05)   # rate limit
+  elev_comp = clip(elev_raw * kappa + rl_res, -1, 1)
+  elev_plant = elev_comp * physical_gamma
+  kappa = min(1/gamma_hat, 4)
+
+Observation (8,): same as unified FULL_STACK obs8
+"""
+from __future__ import annotations
 import math
 import numpy as np
 import gymnasium as gym
 from gymnasium import spaces
-
 import jsbsim
 
 from plant.jsbsim_plant_f16 import (
@@ -11,43 +25,24 @@ from plant.jsbsim_plant_f16 import (
 )
 from controller.energy_hold_f16 import EnergyHold
 
+# ---- MUST MATCH phi_ctrl_unified_f16.py constants ----
+RESIDUAL_MAX = 0.20
+RESIDUAL_RATE_MAX = 0.05
+RESIDUAL_GAIN = 0.35
+KAPPA_MAX = 4.0
+RESIDUAL_ENABLE_GAMMA = 0.92
 
-# Default envelope grid for generalization training.
-# Solved once at env construction; reset() only indexes into the cache.
 DEFAULT_TRIM_GRID = [
     {"alt_ft": 10000.0, "vc_kts": 350.0, "theta_seed": 2.5},
     {"alt_ft": 10000.0, "vc_kts": 400.0, "theta_seed": 2.5},
-    {"alt_ft": 10000.0, "vc_kts": 450.0, "theta_seed": 2.0},
-    {"alt_ft": 15000.0, "vc_kts": 350.0, "theta_seed": 2.5},
-    {"alt_ft": 15000.0, "vc_kts": 400.0, "theta_seed": 2.5},  # original point
+    {"alt_ft": 15000.0, "vc_kts": 400.0, "theta_seed": 2.5},
     {"alt_ft": 15000.0, "vc_kts": 450.0, "theta_seed": 2.0},
-    {"alt_ft": 20000.0, "vc_kts": 350.0, "theta_seed": 3.0},
     {"alt_ft": 20000.0, "vc_kts": 400.0, "theta_seed": 2.5},
     {"alt_ft": 20000.0, "vc_kts": 450.0, "theta_seed": 2.0},
 ]
 
 
 class JSBSimF16PhiCtrlEnv(gym.Env):
-    """
-    PHI-CTRL residual-learning env on the REAL F-16 JSBSim plant.
-
-    Observation (8,):
-        [u (ft/s), w (ft/s), q (rad/s), theta (rad), h (ft),
-         target_h (ft), last_pid_action (normalized elev), fault_estimate]
-
-    Action (1,): additive residual on raw elevator, applied only during the
-    active fault window, clipped with the baseline command once. Bound [-0.5, 0.5].
-
-    Trim strategy (generalization-ready):
-      - At construction, native_trim() is solved once for each point in a
-        small altitude×airspeed grid and cached.
-      - reset() randomly picks one cached trim (near-zero cost).
-      - Curriculum: early training can restrict sampling to the original
-        15k/400 point, then widen to the full grid (see set_curriculum_phase).
-
-    This preserves the training-speed win (no per-episode trim solve) while
-    enabling a policy that generalizes across flight conditions.
-    """
     metadata = {"render_modes": [], "render_fps": 60}
 
     def __init__(
@@ -59,6 +54,8 @@ class JSBSimF16PhiCtrlEnv(gym.Env):
         trim_grid=None,
         curriculum_phase=0.0,
         randomize_trim=True,
+        gamma_noise_std=0.02,
+        gamma_lag_s=1.0,
     ):
         super().__init__()
         self.dt = DT
@@ -67,8 +64,9 @@ class JSBSimF16PhiCtrlEnv(gym.Env):
         self.fault_severity_range = fault_severity_range
         self.settle_time_s = settle_time_s
         self.randomize_trim = randomize_trim
-        # 0.0 → only original point; 1.0 → full grid uniform
         self.curriculum_phase = float(np.clip(curriculum_phase, 0.0, 1.0))
+        self.gamma_noise_std = float(gamma_noise_std)
+        self.gamma_lag_s = float(gamma_lag_s)
 
         self.action_space = spaces.Box(low=-0.5, high=0.5, shape=(1,), dtype=np.float32)
         self.observation_space = spaces.Box(
@@ -76,17 +74,14 @@ class JSBSimF16PhiCtrlEnv(gym.Env):
         )
 
         self.fdm = None
-        # list of dicts: {env, thr, elev, ptrim, theta, ok}
         self._trim_cache = []
         self._active_trim = None
         self._build_fdm_and_trim_grid(trim_grid or DEFAULT_TRIM_GRID)
 
         self.baseline = None
         self.last_pid_action = 0.0
+        self.prev_rl_res = 0.0
 
-    # ------------------------------------------------------------------
-    # Construction: pre-compute trim grid
-    # ------------------------------------------------------------------
     def _build_fdm_and_trim_grid(self, grid):
         self.fdm = jsbsim.FGFDMExec(None)
         self.fdm.set_dt(self.dt)
@@ -100,46 +95,31 @@ class JSBSimF16PhiCtrlEnv(gym.Env):
                 "alt_ft": float(point["alt_ft"]),
                 "vc_kts": float(point["vc_kts"]),
                 "theta_seed": float(point.get("theta_seed", 2.5)),
-                "desc": f"grid[{i}] {point['alt_ft']:.0f}ft/{point['vc_kts']:.0f}kts",
+                "desc": f"grid[{i}]",
             }
             ok, thr, elev, ptrim, theta = native_trim(self.fdm, env)
-            entry = {
-                "env": env,
-                "thr": thr,
-                "elev": elev,
-                "ptrim": ptrim,
-                "theta": theta,
-                "ok": bool(ok),
-            }
             if ok:
-                accepted.append(entry)
+                accepted.append({
+                    "env": env, "thr": thr, "elev": elev,
+                    "ptrim": ptrim, "theta": theta, "ok": True,
+                })
                 print(
-                    f"[ENV]   grid[{i}] OK  h={env['alt_ft']:.0f} Vc={env['vc_kts']:.0f} "
-                    f"thr={thr:.3f} elev={elev:+.4f} θ={theta:+.2f}"
+                    f"[ENV]   grid[{i}] OK  h={env['alt_ft']:.0f} "
+                    f"Vc={env['vc_kts']:.0f} thr={thr:.3f} θ={theta:+.2f}"
                 )
             else:
-                print(
-                    f"[ENV]   grid[{i}] FAIL h={env['alt_ft']:.0f} Vc={env['vc_kts']:.0f} "
-                    f"— skipped"
-                )
+                print(f"[ENV]   grid[{i}] FAIL — skipped")
 
         if not accepted:
-            # Absolute fallback: original single-point ENV
-            print("[ENV] WARNING: entire grid failed; falling back to default ENV")
             ok, thr, elev, ptrim, theta = native_trim(self.fdm, ENV)
             if not ok:
-                raise RuntimeError("F16 trim failed to converge — cannot build training env")
+                raise RuntimeError("F16 trim failed")
             accepted = [{
-                "env": dict(ENV),
-                "thr": thr,
-                "elev": elev,
-                "ptrim": ptrim,
-                "theta": theta,
-                "ok": True,
+                "env": dict(ENV), "thr": thr, "elev": elev,
+                "ptrim": ptrim, "theta": theta, "ok": True,
             }]
 
         self._trim_cache = accepted
-        # Prefer the original 15k/400 as index 0 when present
         self._nominal_idx = 0
         for i, e in enumerate(self._trim_cache):
             if (
@@ -148,42 +128,21 @@ class JSBSimF16PhiCtrlEnv(gym.Env):
             ):
                 self._nominal_idx = i
                 break
+        print(f"[ENV] Trim cache: {len(self._trim_cache)} pts (nominal={self._nominal_idx})")
 
-        print(
-            f"[ENV] Trim cache ready: {len(self._trim_cache)} points "
-            f"(nominal idx={self._nominal_idx}). "
-            f"reset() samples from cache — no per-episode trim solve."
-        )
-
-    # ------------------------------------------------------------------
-    # Curriculum control (called from training callback / outside)
-    # ------------------------------------------------------------------
     def set_curriculum_phase(self, phase: float):
-        """
-        phase ∈ [0, 1]:
-          0.0 → always sample the nominal 15k/400 trim
-          1.0 → uniform over the full accepted grid
-        Intermediate values mix: with probability `phase` sample the full
-        grid, otherwise stick to nominal. Simple and effective.
-        """
         self.curriculum_phase = float(np.clip(phase, 0.0, 1.0))
 
     def _sample_trim_entry(self):
         if not self.randomize_trim or len(self._trim_cache) == 1:
             return self._trim_cache[self._nominal_idx]
-
-        # Curriculum: mostly nominal early, full grid later
         if self.np_random.random() > self.curriculum_phase:
             return self._trim_cache[self._nominal_idx]
         idx = int(self.np_random.integers(0, len(self._trim_cache)))
         return self._trim_cache[idx]
 
-    # ------------------------------------------------------------------
-    # Gym API
-    # ------------------------------------------------------------------
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
-
         entry = self._sample_trim_entry()
         self._active_trim = entry
         env = entry["env"]
@@ -216,6 +175,7 @@ class JSBSimF16PhiCtrlEnv(gym.Env):
 
         self.current_step = 0
         self.last_pid_action = 0.0
+        self.prev_rl_res = 0.0
         self.target_altitude = float(env["alt_ft"])
         self.target_vc = float(env["vc_kts"])
         self.fault_trigger_time = float(self.np_random.uniform(*self.fault_time_range))
@@ -223,6 +183,7 @@ class JSBSimF16PhiCtrlEnv(gym.Env):
         self.elevator_health = float(self.np_random.uniform(*self.fault_severity_range))
         self.fault_active = False
         self.detector_estimate = 1.0
+        self._fault_onset_step = None
 
         return self._get_obs(), {
             "trim_alt_ft": self.target_altitude,
@@ -230,26 +191,48 @@ class JSBSimF16PhiCtrlEnv(gym.Env):
             "curriculum_phase": self.curriculum_phase,
         }
 
+    def _update_gamma_hat(self):
+        """Approximate twin: lag + noise (not pure oracle)."""
+        if not self.fault_active:
+            self.detector_estimate = 1.0
+            return
+        if self._fault_onset_step is None:
+            self._fault_onset_step = self.current_step
+        lag_steps = max(1, int(self.gamma_lag_s / self.dt))
+        alpha = min(1.0, (self.current_step - self._fault_onset_step) / lag_steps)
+        g = 1.0 + alpha * (self.elevator_health - 1.0)
+        if self.gamma_noise_std > 0:
+            g += float(self.np_random.normal(0.0, self.gamma_noise_std))
+        self.detector_estimate = float(np.clip(g, 0.05, 1.0))
+
     def step(self, action):
         self.current_step += 1
-        t = self.current_step * self.dt
 
         if self.current_step >= self.fault_trigger_step:
             self.fault_active = True
-            self.detector_estimate = self.elevator_health
         physical_gamma = self.elevator_health if self.fault_active else 1.0
+        self._update_gamma_hat()
+        gamma_hat = float(np.clip(self.detector_estimate, 0.05, 1.0))
 
         cmds = self.baseline.update(self.fdm, self.target_altitude, self.target_vc)
-        elev_raw = cmds["elev"]
+        elev_raw = float(cmds["elev"])
         self.last_pid_action = float(np.clip(elev_raw, -1.0, 1.0))
 
-        # Match unified: residual is bounded add-on AFTER 1/γ compensation
-        residual = float(action[0]) if self.fault_active else 0.0
-        residual = float(np.clip(residual, -0.2, 0.2))
-        gamma_hat = float(np.clip(self.detector_estimate, 0.05, 1.0))
-        comp = min(1.0 / gamma_hat, 4.0) if self.fault_active else 1.0
-        deficit = max(1.0 - gamma_hat, 0.15) if self.fault_active else 0.0
-        elev_comp = float(np.clip(elev_raw * comp + residual * deficit * 0.35, -1.0, 1.0))
+        # ---- residual path IDENTICAL to unified ----
+        residual_enabled = self.fault_active and (gamma_hat < RESIDUAL_ENABLE_GAMMA)
+        if residual_enabled:
+            raw_a = float(np.clip(float(action[0]), -0.5, 0.5))
+            deficit = float(np.clip(1.0 - gamma_hat, 0.0, 1.0))
+            desired = raw_a * RESIDUAL_GAIN * max(deficit, 0.15)
+            desired = float(np.clip(desired, -RESIDUAL_MAX, RESIDUAL_MAX))
+            du = float(np.clip(desired - self.prev_rl_res, -RESIDUAL_RATE_MAX, RESIDUAL_RATE_MAX))
+            rl_res = self.prev_rl_res + du
+        else:
+            rl_res = self.prev_rl_res * 0.85
+        self.prev_rl_res = rl_res
+
+        kappa = min(1.0 / gamma_hat, KAPPA_MAX) if self.fault_active else 1.0
+        elev_comp = float(np.clip(elev_raw * kappa + rl_res, -1.0, 1.0))
         elev_out = float(np.clip(elev_comp * physical_gamma, -1.0, 1.0))
 
         set_elev(self.fdm, elev_out)
@@ -265,16 +248,16 @@ class JSBSimF16PhiCtrlEnv(gym.Env):
         theta_rad = math.radians(st["theta"])
         q_rad_s = math.radians(st["q"])
 
+        # Reward: prioritize altitude hold; penalize residual effort lightly
         reward = -(
             2.5 * (alt_error ** 2) / 10000.0
             + 2.0 * (theta_rad ** 2)
             + 1.0 * (q_rad_s ** 2)
-            + 0.5 * (residual ** 2)
+            + 0.3 * (rl_res ** 2)
         )
         reward += 3.0
 
         terminated = False
-        # Floor scales with target so high-altitude points are not unfairly terminated
         hard_floor = max(3000.0, 0.4 * self.target_altitude)
         if abs(theta_rad) > math.radians(45.0) or abs(alt_error) > 3000.0 or st["h"] < hard_floor:
             reward -= 400.0
@@ -284,21 +267,26 @@ class JSBSimF16PhiCtrlEnv(gym.Env):
         info = {
             "fault_active": self.fault_active,
             "elevator_health": physical_gamma,
+            "gamma_hat": gamma_hat,
             "altitude": st["h"],
             "target_altitude": self.target_altitude,
-            "target_vc": self.target_vc,
-            "residual_correction": residual,
-            "curriculum_phase": self.curriculum_phase,
+            "rl_residual": rl_res,
+            "kappa": kappa,
+            "residual_enabled": residual_enabled,
         }
         return self._get_obs(), float(reward), terminated, truncated, info
 
     def _get_obs(self):
         st = flight_state(self.fdm)
-        u = self.fdm.get_property_value("velocities/u-fps")
-        w = self.fdm.get_property_value("velocities/w-fps")
-        q = math.radians(st["q"])
-        theta = math.radians(st["theta"])
+        # Match unified obs8:
+        # [vc*1.68781, 0.0, q_rad, theta_rad, h, target_h, prev_elev, gamma_hat]
         return np.array([
-            u, w, q, theta, st["h"], self.target_altitude,
-            self.last_pid_action, self.detector_estimate,
+            st["vc"] * 1.68781,
+            0.0,
+            math.radians(st["q"]),
+            math.radians(st["theta"]),
+            st["h"],
+            self.target_altitude,
+            self.last_pid_action,
+            float(self.detector_estimate),
         ], dtype=np.float32)

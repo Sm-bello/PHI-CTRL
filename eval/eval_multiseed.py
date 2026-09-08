@@ -42,6 +42,7 @@ RESIDUAL_ENABLE_GAMMA_HAT = 0.92
 RESIDUAL_MAX = 0.20
 RESIDUAL_GAIN = 0.35
 RESIDUAL_RATE_MAX = 0.05
+MODE_SEED_OFFSET = {"baseline": 100, "hybrid": 200, "full": 300}
 BAILOUT_THETA = 60.0
 BAILOUT_ALT_FRAC = 0.35
 
@@ -279,7 +280,7 @@ def main():
             for mode in modes:
                 print(f"[MC] alt={alt:.0f} γ={g:.2f} mode={mode} seeds={args.seeds}")
                 for s in range(args.seeds):
-                    seed = 2000 + s * 97 + int(alt) + int(g * 100) + hash(mode) % 1000
+                    seed = 2000 + s * 97 + int(alt) + int(g * 100) + MODE_SEED_OFFSET.get(mode, 900)
                     row = run_once(
                         alt, args.vc, g, seed=seed, mode=mode,
                         residual_model=residual_model if mode == "full" else None,

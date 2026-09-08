@@ -1,0 +1,5435 @@
+PHI-CTRL Unified Orchestrator — F-16 (V2)
+OBSERVER_CLOSED_LOOP=False (diagnostic-only)
+Fault: γ_remaining=0.50 (50% effectiveness loss) at t≥15s
+Detector: MMAE physics bank + PHI-Twin CNN-BiLSTM
+RL residual enable threshold: gamma_hat < 0.92
+
+======================================================================
+  CASE : BASELINE
+======================================================================
+  physical γ_remaining=0.50 (50% effectiveness loss) after t=15s
+
+
+     JSBSim Flight Dynamics Model v1.3.1 [GitHub build 1837/commit 3b25f25e49b42d0489c04ac805674fc1450ca579] May 17 2026 14:28:34
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+Reading Aircraft Configuration File: General Dynamics F-16A
+                            Version: 2.0
+
+
+This aircraft model is a PRODUCTION release.
+
+  Description:   Models an F-16A Block-32 (Basic US configuration)
+  Model Author:  Erik Hofman
+  Creation Date: 2001-12-28
+  Version:       $Revision: 1.95 $
+
+  Aircraft Metrics:
+    WingArea: 300.000000
+    WingSpan: 30.000000
+    Incidence: 0.000000
+    Chord: 11.320000
+    H. Tail Area: 63.700000
+    H. Tail Arm: 16.460000
+    V. Tail Area: 54.750000
+    V. Tail Arm: 0.000000
+    Eyepoint (x, y, z): -336.200000 , 0.000000 , 29.500000
+    Ref Pt (x, y, z): -189.500000 , 0.000000 , 3.900000
+    Visual Ref Pt (x, y, z): -180.000000 , 0.000000 , 0.000000
+
+  Mass and Balance:
+    baseIxx: 9496.000000 slug-ft2
+    baseIyy: 55814.000000 slug-ft2
+    baseIzz: 63100.000000 slug-ft2
+    baseIxy: -0.000000 slug-ft2
+    baseIxz: -982.000000 slug-ft2
+    baseIyz: -0.000000 slug-ft2
+    Empty Weight: 17400.000000 lbm
+    CG (x, y, z): -193.000000 , 0.000000 , -5.100000
+    Point Mass Object: 230.000000 lbs. at X, Y, Z (in.): -336.200000  0.000000  0.000000
+
+  Ground Reactions: 
+    BOGEY NOSE_LG
+      Location: -299.600000 , 0.000000 , -72.000000
+      Spring Constant:  17250.000000
+      Damping Constant: 4250.000000 (linear)
+      Rebound Damping Constant: 4250.000000 (linear)
+      Dynamic Friction: 0.500000
+      Static Friction:  0.800000
+      Rolling Friction: 0.020000
+      Steering Type:    STEERABLE
+      Grouping:         CENTER
+      Max Steer Angle:  80.000000
+      Retractable:      1
+    BOGEY LEFT_MLG
+      Location: -158.600000 , -48.000000 , -71.600000
+      Spring Constant:  37500.000000
+      Damping Constant: 7500.000000 (linear)
+      Rebound Damping Constant: 7500.000000 (linear)
+      Dynamic Friction: 0.500000
+      Static Friction:  0.800000
+      Rolling Friction: 0.020000
+      Steering Type:    FIXED
+      Grouping:         LEFT
+      Max Steer Angle:  0.000000
+      Retractable:      1
+    BOGEY RIGHT_MLG
+      Location: -158.600000 , 48.000000 , -71.600000
+      Spring Constant:  37500.000000
+      Damping Constant: 7500.000000 (linear)
+      Rebound Damping Constant: 7500.000000 (linear)
+      Dynamic Friction: 0.500000
+      Static Friction:  0.800000
+      Rolling Friction: 0.020000
+      Steering Type:    FIXED
+      Grouping:         RIGHT
+      Max Steer Angle:  0.000000
+      Retractable:      1
+    STRUCTURE LEFT_WT
+      Location: -121.300000 , -189.000000 , 0.000000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE RIGHT_WT
+      Location: -121.300000 , 189.000000 , 0.000000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE TOP_VS
+      Location: -27.200000 , 0.000000 , 123.200000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE LEFT_VFT
+      Location: -97.600000 , -24.800000 , -52.000000
+      Spring Constant:  200.000000
+      Damping Constant: 5000.000000 (linear)
+      Rebound Damping Constant: 5000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE RIGHT_VFT
+      Location: -97.600000 , 24.800000 , -52.000000
+      Spring Constant:  200.000000
+      Damping Constant: 5000.000000 (linear)
+      Rebound Damping Constant: 5000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE INTAKE
+      Location: -322.400000 , 0.000000 , -36.600000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE RADOME
+      Location: -486.600000 , 0.000000 , -8.700000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+
+  External Reactions: 
+    
+    Frame: BODY
+    Location: (0.000000, 0.000000, 0.000000)
+    
+    Frame: BODY
+    Location: (0.000000, 0.000000, 0.000000)
+
+  Propulsion:
+       (FUEL) tank holds 3486 lbs. FUEL
+      currently at 43.0293% of maximum capacity
+      Tank location (X, Y, Z): -174.4, 65, 5
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+       (FUEL) tank holds 3486 lbs. FUEL
+      currently at 43.0293% of maximum capacity
+      Tank location (X, Y, Z): -174.4, -65, 5
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+       (FUEL) tank holds 2991 lbs. FUEL
+      currently at 0% of maximum capacity
+      Tank location (X, Y, Z): -174.4, 65, -15
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+       (FUEL) tank holds 2991 lbs. FUEL
+      currently at 0% of maximum capacity
+      Tank location (X, Y, Z): -174.4, -65, -15
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+    2 dimensional table with 6 rows, 8 columns.
+		-1e+04	0	1e+04	2e+04	3e+04	4e+04	5e+04	6e+04	
+	0	0.043	0.0488	0.0528	0.0694	0.0899	0.1183	0.1467	0	
+	0.2	0.05	0.0501	0.0335	0.0544	0.0797	0.1049	0.1342	0	
+	0.4	0.004	0.0047	0.002	0.0272	0.0595	0.0891	0.1203	0	
+	0.6	-0.0804	-0.0804	-0.056	-0.0237	0.0276	0.0718	0.1073	0	
+	0.8	-0.2129	-0.2129	-0.1498	-0.1025	0.0474	0.0868	0.09	0	
+	1	-0.2839	-0.2839	-0.1104	-0.0469	-0.027	0.0552	0.08	0	
+    Function: propulsion/engine[0]/IdleThrust
+    2 dimensional table with 8 rows, 8 columns.
+		-1e+04	0	1e+04	2e+04	3e+04	4e+04	5e+04	6e+04	
+	0	1.26	1	0.74	0.534	0.372	0.241	0.149	0	
+	0.2	1.171	0.934	0.697	0.506	0.355	0.231	0.143	0	
+	0.4	1.15	0.921	0.692	0.506	0.357	0.233	0.145	0	
+	0.6	1.181	0.951	0.721	0.532	0.378	0.248	0.154	0	
+	0.8	1.258	1.02	0.782	0.582	0.417	0.275	0.17	0	
+	1	1.369	1.12	0.871	0.651	0.475	0.315	0.195	0	
+	1.2	1.485	1.23	0.975	0.744	0.545	0.364	0.225	0	
+	1.4	1.594	1.34	1.086	0.845	0.628	0.424	0.263	0	
+    Function: propulsion/engine[0]/MilThrust
+    2 dimensional table with 14 rows, 8 columns.
+		-1e+04	0	1e+04	2e+04	3e+04	4e+04	5e+04	6e+04	
+	0	1.182	1	0.8184	0.6627	0.528	0.3756	0.2327	0	
+	0.2	1.131	0.9599	0.789	0.6406	0.5116	0.3645	0.2258	0	
+	0.4	1.115	0.9474	0.7798	0.634	0.507	0.3615	0.224	0	
+	0.6	1.128	0.9589	0.7894	0.642	0.5134	0.3661	0.2268	0	
+	0.8	1.171	0.9942	0.8177	0.6647	0.5309	0.3784	0.2345	0	
+	1	1.241	1.053	0.8648	0.7017	0.5596	0.3983	0.2467	0	
+	1.2	1.329	1.125	0.9221	0.7462	0.5936	0.4219	0.2614	0	
+	1.4	1.437	1.215	0.9933	0.8021	0.636	0.4509	0.2794	0	
+	1.6	1.571	1.326	1.081	0.87	0.6874	0.486	0.3011	0	
+	1.8	1.73	1.458	1.186	0.9512	0.7495	0.5289	0.3277	0	
+	2	1.831	1.57	1.309	1.047	0.8216	0.5786	0.3585	0	
+	2.2	1.97	1.69	1.41	1.24	0.91	0.6359	0.394	0	
+	2.4	2.07	1.8	1.53	1.34	1	0.72	0.46	0	
+	2.6	2.2	1.92	1.64	1.44	1.1	0.8	0.52	0	
+    Function: propulsion/engine[0]/AugThrust
+      X = 0
+      Y = 0
+      Z = 0
+      Pitch = 0 degrees
+      Yaw = 0 degrees
+
+    Declared properties
+
+      /sim/model/pushback/target-speed-fps (initial value: 0)
+
+      /sim/model/pushback/position-norm (initial value: 0)
+
+
+    Overriding properties
+
+      /sim/model/pushback/kp (initial value: 0)
+
+      /sim/model/pushback/ki (initial value: 0)
+
+      /sim/model/pushback/kd (initial value: 0)
+
+
+  System: pushback
+
+    Channel Pushback
+
+    Loading Component "systems/pushback/linked" of type: SWITCH
+        position-norm gt constant value 0.950000        WOW == constant value 1.000000        wheel-speed-fps lt constant value 50.000000      if all of the following are true: {
+
+
+
+      }      Switch default value is: constant value -1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: linked
+
+    Loading Component "systems/pushback/speed-error" of type: SUMMER
+      INPUTS: 
+       target-speed-fps
+       -wheel-speed-fps
+      OUTPUT: speed-error
+
+    Loading Component "systems/pushback/force" of type: PID
+      INPUT: speed-error
+      OUTPUT: force
+      OUTPUT: force
+
+    Loading Component "systems/pushback/force-output" of type: SWITCH
+        linked == constant value 0.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (force)
+
+      OUTPUT: magnitude
+      OUTPUT: force-output
+
+    Declared properties
+
+      systems/hook/tailhook-cmd-norm (initial value: 0)
+
+      systems/hook/tailhook-length-ft (initial value: 4.537)
+
+      systems/hook/tailhook-pos-min-deg (initial value: -3.806)
+
+      systems/hook/tailhook-pos-max-deg (initial value: 53.369)
+
+      systems/hook/tailhook-offset-x-in (initial value: 100.669)
+
+      systems/hook/tailhook-offset-y-in (initial value: 0)
+
+      systems/hook/tailhook-offset-z-in (initial value: -28.818)
+
+      systems/hook/tailhook-pos-deg (initial value: -3.806)
+
+
+  System: hook
+
+    Channel Hook
+
+    Loading Component "systems/hook/tailhook-control" of type: KINEMATIC
+      INPUT: tailhook-cmd-norm
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 1.5000
+      OUTPUT: tailhook-pos-norm
+      OUTPUT: tailhook-control
+
+    Loading Component "systems/hook/ready" of type: SWITCH
+        tailhook-pos-norm gt constant value 0.990000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: ready
+
+    Loading Component "systems/hook/hook-decel-multiplier" of type: SCHEDULED_GAIN
+    1 dimensional table with 3 rows.
+	0	0	
+	1	0	
+	80	2.2	
+    1 dimensional table with 3 rows.
+	0	0	
+	1	0	
+	80	2.2	
+      INPUT: ready
+      GAIN: constant value 1.000000
+      OUTPUT: hook-decel-multiplier
+      Scheduled by table:
+
+    Loading Component "systems/hook/hook-decel-force" of type: PURE_GAIN
+      INPUT: hook-decel-multiplier
+      GAIN: weight-lbs
+      OUTPUT: hook-decel-force
+
+    Loading Component "systems/hook/force" of type: SUMMER
+      INPUTS: 
+       hook-decel-force
+       fbx-prop-lbs
+      OUTPUT: force
+
+    Loading Component "systems/hook/animation-norm" of type: FCS_FUNCTION
+      OUTPUT: tailhook-pos-norm
+      OUTPUT: animation-norm
+
+    Declared properties
+
+      fcs/alpha-norm (initial value: 0)
+
+      fcs/hook-engage (initial value: 0)
+
+      fcs/canopy-engage (initial value: 0)
+
+      fcs/fbw-override (initial value: 0)
+
+
+  FCS: F-16 FC
+
+    Channel Flaps
+
+    Loading Component "fcs/tef-pos-rad" of type: SWITCH
+        vc-kts lt constant value 250.000000      if all of the following are true: {
+
+      }        mach gt constant value 0.900000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 0.349000)
+
+      Switch takes test 2 value (constant value -0.034900)
+
+      OUTPUT: tef-pos-rad
+
+    Loading Component "fcs/tef-pos-norm" of type: PURE_GAIN
+      INPUT: tef-pos-rad
+      GAIN: constant value 2.864789
+      OUTPUT: tef-pos-norm
+
+    Loading Component "fcs/tef-control" of type: KINEMATIC
+      INPUT: tef-pos-norm
+      DETENTS: 3
+        -1.0000 3.0000
+        0.0000 0.0000
+        1.0000 3.0000
+      OUTPUT: tef-control
+
+    Channel Roll
+
+    Loading Component "fcs/roll-rate-norm" of type: PURE_GAIN
+      INPUT: p-aero-rad_sec
+      GAIN: constant value 0.318210
+      OUTPUT: roll-rate-norm
+
+    Loading Component "fcs/roll-trim-error" of type: SUMMER
+      INPUTS: 
+       aileron-cmd-norm
+       -roll-rate-norm
+      OUTPUT: roll-trim-error
+
+    Loading Component "fcs/aileron-pid-trigger" of type: SWITCH
+        vc-kts lt constant value 20.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: aileron-pid-trigger
+
+    Loading Component "fcs/roll-rate-pid" of type: PID
+      INPUT: roll-trim-error
+      OUTPUT: roll-rate-pid
+
+    Loading Component "fcs/roll-rate-command" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       roll-rate-pid
+       aileron-cmd-norm
+      OUTPUT: roll-rate-command
+
+    Loading Component "fcs/aileron-control" of type: AEROSURFACE_SCALE
+      INPUT: roll-rate-command
+      GAIN: constant value 1.000000
+      OUTPUT: aileron-pos-rad
+      OUTPUT: aileron-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.3750
+        Output MAX: 0.3750
+
+    Loading Component "fcs/roll-rate-command-switch" of type: SWITCH
+        fbw-override == constant value 1.000000      if all of the following are true: {
+
+      }      Switch default value is: roll-rate-command
+      Switch takes test 1 value (aileron-cmd-norm)
+
+      OUTPUT: roll-rate-command-switch
+
+    Loading Component "fcs/aileron-position" of type: KINEMATIC
+      INPUT: roll-rate-command-switch
+      DETENTS: 2
+        -1.0000 0.3000
+        1.0000 0.3000
+      OUTPUT: left-aileron-pos-norm
+      OUTPUT: aileron-position
+
+    Loading Component "fcs/aileron-speed-compensated" of type: SCHEDULED_GAIN
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.15	
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.15	
+      INPUT: left-aileron-pos-norm
+      GAIN: constant value 1.000000
+      OUTPUT: aileron-speed-compensated
+      Scheduled by table:
+
+    Loading Component "fcs/left-flaperon-norm" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       -tef-control
+       -aileron-speed-compensated
+      OUTPUT: left-flaperon-norm
+
+    Loading Component "fcs/right-flaperon-norm" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       tef-control
+       -aileron-speed-compensated
+      OUTPUT: right-flaperon-norm
+
+    Loading Component "fcs/flaperon-summer" of type: SUMMER
+      INPUTS: 
+       left-flaperon-norm
+       right-flaperon-norm
+      OUTPUT: flaperon-summer
+
+    Loading Component "fcs/flaperon-mix-rad" of type: PURE_GAIN
+      INPUT: flaperon-summer
+      GAIN: constant value 1.432400
+      OUTPUT: flaperon-mix-rad
+
+    Loading Component "fcs/left-aileron-control" of type: AEROSURFACE_SCALE
+      INPUT: aileron-speed-compensated
+      GAIN: constant value 1.000000
+      OUTPUT: left-aileron-pos-rad
+      OUTPUT: left-aileron-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.3750
+        Output MAX: 0.3750
+
+    Loading Component "fcs/right-aileron-control" of type: AEROSURFACE_SCALE
+      INPUT: -aileron-speed-compensated
+      GAIN: constant value 1.000000
+      OUTPUT: right-aileron-pos-rad
+      OUTPUT: right-aileron-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.3750
+        Output MAX: 0.3750
+
+    Channel Pitch
+
+    Loading Component "fcs/n-pilot-z-correction" of type: FCS_FUNCTION
+      OUTPUT: n-pilot-z-correction
+
+    Loading Component "fcs/g-load-corrected" of type: SUMMER
+      INPUTS: 
+       n-pilot-z-norm
+       -n-pilot-z-correction
+      OUTPUT: g-load-corrected
+
+    Loading Component "fcs/elevator-cmd-limiter" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 0.440000
+      INPUTS: 
+       elevator-cmd-norm
+       pitch-trim-cmd-norm
+      OUTPUT: elevator-cmd-limiter
+
+    Loading Component "fcs/elevator-scheduler" of type: SCHEDULED_GAIN
+    1 dimensional table with 5 rows.
+	-0.5236	0	
+	-0.5	0.11	
+	0	1	
+	0.5	0.11	
+	0.5236	0	
+    1 dimensional table with 5 rows.
+	-0.5236	0	
+	-0.5	0.11	
+	0	1	
+	0.5	0.11	
+	0.5236	0	
+      INPUT: elevator-cmd-limiter
+      GAIN: constant value 1.000000
+      OUTPUT: elevator-scheduler
+      Scheduled by table:
+
+    Loading Component "fcs/alpha-limiter-norm" of type: PURE_GAIN
+      INPUT: alpha-rad
+      GAIN: constant value 1.047200
+      OUTPUT: alpha-limiter-norm
+
+    Loading Component "fcs/pitch-rate-norm" of type: PURE_GAIN
+      INPUT: q-aero-rad_sec
+      GAIN: constant value 6.200000
+      OUTPUT: pitch-rate-norm
+
+    Loading Component "fcs/g-load-norm" of type: PURE_GAIN
+      INPUT: g-load-corrected
+      GAIN: constant value 0.020000
+      OUTPUT: g-load-norm
+
+    Loading Component "fcs/pitch-trim-error" of type: SUMMER
+      INPUTS: 
+       elevator-scheduler
+       pitch-rate-norm
+       -g-load-norm
+      OUTPUT: pitch-trim-error
+
+    Loading Component "fcs/elevator-pid-trigger" of type: SWITCH
+        vc-kts lt constant value 5.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: elevator-pid-trigger
+
+    Loading Component "fcs/g-load-pid" of type: PID
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUT: pitch-trim-error
+      OUTPUT: g-load-pid
+
+    Loading Component "fcs/pitch-scheduler" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       elevator-scheduler
+       alpha-limiter-norm
+       g-load-pid
+      OUTPUT: pitch-scheduler
+
+    Loading Component "fcs/pitch-scheduler-switch" of type: SWITCH
+        fbw-override == constant value 1.000000      if all of the following are true: {
+
+      }      Switch default value is: pitch-scheduler
+      Switch takes test 1 value (elevator-cmd-limiter)
+
+      OUTPUT: pitch-scheduler-switch
+
+    Loading Component "fcs/elevator-position-normalized" of type: KINEMATIC
+      INPUT: pitch-scheduler-switch
+      DETENTS: 2
+        -1.0000 0.3000
+        1.0000 0.3000
+      OUTPUT: elevator-pos-norm
+      OUTPUT: elevator-position-normalized
+
+    Loading Component "fcs/elevator-position" of type: AEROSURFACE_SCALE
+      INPUT: elevator-pos-norm
+      GAIN: constant value 1.000000
+      OUTPUT: elevator-pos-rad
+      OUTPUT: elevator-position
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.4360
+        Output MAX: 0.4360
+
+    Loading Component "fcs/dht-left-pos-rad" of type: SUMMER
+      Minimum limit: constant value -0.436000
+      Maximum limit: constant value 0.436000
+      INPUTS: 
+       -elevator-pos-rad
+       -left-aileron-pos-rad
+      OUTPUT: dht-left-pos-rad
+
+    Loading Component "fcs/dht-right-pos-rad" of type: SUMMER
+      Minimum limit: constant value -0.436000
+      Maximum limit: constant value 0.436000
+      INPUTS: 
+       elevator-pos-rad
+       right-aileron-pos-rad
+      OUTPUT: dht-right-pos-rad
+
+    Channel Yaw
+
+    Loading Component "fcs/yaw-rate-norm" of type: SCHEDULED_GAIN
+    1 dimensional table with 3 rows.
+	80	0	
+	100	15	
+	150	100	
+    1 dimensional table with 3 rows.
+	80	0	
+	100	15	
+	150	100	
+      INPUT: r-aero-rad_sec
+      GAIN: constant value 1.000000
+      OUTPUT: yaw-rate-norm
+      Scheduled by table:
+
+    Loading Component "fcs/yaw-load-norm" of type: PURE_GAIN
+      INPUT: n-pilot-y-norm
+      GAIN: constant value 0.250000
+      OUTPUT: yaw-load-norm
+
+    Loading Component "fcs/yaw-trim-error" of type: SUMMER
+      INPUTS: 
+       rudder-cmd-norm
+       yaw-rate-norm
+       yaw-load-norm
+      OUTPUT: yaw-trim-error
+
+    Loading Component "fcs/rudder-pid-trigger" of type: SWITCH
+        vc-kts lt constant value 10.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: rudder-pid-trigger
+
+    Loading Component "fcs/yaw-load-pid" of type: PID
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUT: yaw-trim-error
+      OUTPUT: rudder-pos-norm
+      OUTPUT: yaw-load-pid
+
+    Loading Component "fcs/yaw-scheduler" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       rudder-cmd-norm
+       yaw-trim-cmd-norm
+       yaw-load-pid
+      OUTPUT: yaw-scheduler
+
+    Loading Component "fcs/rudder-position" of type: KINEMATIC
+      INPUT: yaw-scheduler
+      DETENTS: 2
+        -1.0000 0.4000
+        1.0000 0.4000
+      OUTPUT: rudder-pos-norm
+      OUTPUT: rudder-position
+
+    Loading Component "fcs/rudder-control" of type: AEROSURFACE_SCALE
+      INPUT: rudder-pos-norm
+      GAIN: constant value 1.000000
+      OUTPUT: rudder-pos-rad
+      OUTPUT: rudder-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.5240
+        Output MAX: 0.5240
+
+    Channel Landing Gear
+
+    Loading Component "fcs/gear-wow" of type: SWITCH
+        WOW eq constant value 1.000000        WOW eq constant value 1.000000      if all of the following are true: {
+
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: gear-wow
+
+    Loading Component "fcs/gear-control" of type: KINEMATIC
+      INPUT: gear-cmd-norm
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 5.0000
+      OUTPUT: gear-pos-norm
+      OUTPUT: gear-control
+
+    Loading Component "fcs/scheduled-steer-pos-deg" of type: SCHEDULED_GAIN
+    1 dimensional table with 3 rows.
+	10	80	
+	50	15	
+	150	2	
+    1 dimensional table with 3 rows.
+	10	80	
+	50	15	
+	150	2	
+      INPUT: steer-cmd-norm
+      GAIN: constant value 1.000000
+      OUTPUT: steer-pos-deg
+      OUTPUT: scheduled-steer-pos-deg
+      Scheduled by table:
+
+    Channel Leading Edge Flap
+
+    Loading Component "fcs/lef-pos-rad" of type: SWITCH
+        gear-wow eq constant value 1.000000        gear-pos-norm gt constant value 0.000000      if all of the following are true: {
+
+
+      }        gear-pos-norm eq constant value 0.000000        alpha-rad gt constant value 0.261800      if all of the following are true: {
+
+
+      }        gear-wow eq constant value 0.000000        alpha-rad gt constant value 0.087300      if all of the following are true: {
+
+
+      }        mach gt constant value 0.900000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value -0.034900)
+
+      Switch takes test 2 value (constant value 0.436000)
+
+      Switch takes test 3 value (constant value 0.262000)
+
+      Switch takes test 4 value (constant value -0.034900)
+
+      OUTPUT: lef-pos-rad
+
+    Loading Component "fcs/lef-pos-norm" of type: PURE_GAIN
+      INPUT: lef-pos-rad
+      GAIN: constant value 2.293578
+      OUTPUT: lef-pos-norm
+
+    Loading Component "fcs/lef-control" of type: KINEMATIC
+      INPUT: lef-pos-norm
+      DETENTS: 2
+        -1.0000 3.0000
+        1.0000 3.0000
+      OUTPUT: lef-control
+
+    Loading Component "fcs/lef-pos-deg" of type: AEROSURFACE_SCALE
+      INPUT: lef-control
+      GAIN: constant value 1.000000
+      OUTPUT: lef-pos-deg
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -25.0000
+        Output MAX: 25.0000
+
+    Channel Throttle
+
+    Loading Component "fcs/throttle1" of type: PURE_GAIN
+      INPUT: throttle-cmd-norm
+      GAIN: constant value 2.000000
+      OUTPUT: throttle-pos-norm
+      OUTPUT: throttle1
+
+    Channel Speedbrake
+
+    Loading Component "fcs/speedbrake-alpha-limiter" of type: SWITCH
+        alpha-deg ge constant value 53.000000        v-fps le constant value 18.000000      if all of the following are true: {
+
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: speedbrake-alpha-limiter
+
+    Loading Component "fcs/speedbrake-initiate" of type: SWITCH
+        speedbrake-alpha-limiter eq constant value 1.000000        speedbrake-cmd-norm eq constant value 1.000000      if any of the following are true: {
+
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: speedbrake-initiate
+
+    Loading Component "fcs/speedbrake-scheduler" of type: SCHEDULED_GAIN
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.7167	
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.7167	
+      INPUT: speedbrake-initiate
+      GAIN: constant value 1.000000
+      OUTPUT: speedbrake-scheduler
+      Scheduled by table:
+
+    Loading Component "fcs/speedbrake-control" of type: KINEMATIC
+      INPUT: speedbrake-scheduler
+      DETENTS: 2
+        0.0000 0.0000
+        60.0000 1.0000
+      OUTPUT: speedbrake-pos-deg
+      OUTPUT: speedbrake-control
+
+    Loading Component "fcs/speedbrake-position-normalizer" of type: AEROSURFACE_SCALE
+      INPUT: speedbrake-control
+      GAIN: constant value 1.000000
+      OUTPUT: speedbrake-pos-norm
+      OUTPUT: speedbrake-position-normalizer
+      In/Out Mapping:
+        Input MIN: 0.0000
+        Input MAX: 60.0000
+        Output MIN: 0.0000
+        Output MAX: 1.0000
+
+    Channel Hook
+
+    Loading Component "fcs/hook-control" of type: KINEMATIC
+      INPUT: hook-engage
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 2.5000
+      OUTPUT: hook-pos-norm
+      OUTPUT: hook-control
+
+    Channel Canopy
+
+    Loading Component "fcs/canopy-trigger" of type: SWITCH
+        u-fps gt constant value 1.000000      if all of the following are true: {
+
+      }      Switch default value is: canopy-engage
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: canopy-trigger
+
+    Loading Component "fcs/canopy-control" of type: KINEMATIC
+      INPUT: canopy-trigger
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 10.0000
+      OUTPUT: canopy-pos-norm
+      OUTPUT: canopy-control
+    1 dimensional table with 13 rows.
+	0	1.229	
+	0.1	1.124	
+	0.15	1.116	
+	0.2	1.124	
+	0.3	1.105	
+	0.4	1.041	
+	0.5	1.034	
+	0.6	1.019	
+	0.7	1.008	
+	0.8	1.003	
+	0.9	1.001	
+	1	1	
+	1.1	1	
+    Function: aero/function/kCLge
+
+  Aerodynamics (Lift|Side|Drag axes):
+
+    2 dimensional table with 12 rows, 5 columns.
+		-0.436	-0.218	0	0.218	0.436	
+	-0.175	0.217	0.174	0.156	0.181	0.23	
+	-0.087	0.094	0.055	0.041	0.062	0.101	
+	0	0.081	0.04	0.021	0.039	0.076	
+	0.087	0.106	0.061	0.04	0.057	0.101	
+	0.175	0.166	0.119	0.096	0.114	0.158	
+	0.262	0.252	0.203	0.182	0.202	0.24	
+	0.349	0.404	0.362	0.347	0.371	0.416	
+	0.436	0.628	0.588	0.577	0.601	0.637	
+	0.524	0.875	0.84	0.826	0.852	0.88	
+	0.611	1.127	1.095	1.084	1.102	1.125	
+	0.698	1.365	1.334	1.326	1.338	1.356	
+	0.785	1.517	1.487	1.478	1.482	1.489	
+    Function: aero/coefficient/CDDh
+    1 dimensional table with 4 rows.
+	0	0	
+	0.81	0	
+	1.1	0.023	
+	1.8	0.015	
+    Function: aero/coefficient/CDmach
+    1 dimensional table with 12 rows.
+	-0.175	0.003	
+	-0.087	0.001	
+	0	0	
+	0.087	0.001	
+	0.175	0.002	
+	0.262	0.004	
+	0.349	0.007	
+	0.436	0.011	
+	0.524	0.015	
+	0.611	0.019	
+	0.698	0.023	
+	0.785	0.024	
+    Function: aero/coefficient/CDDlef
+    Function: aero/coefficient/CDDflaps
+    Function: aero/coefficient/CDgear
+    1 dimensional table with 12 rows.
+	-0.175	-0.0545	
+	-0.087	-0.0225	
+	0	0.0096	
+	0.087	0.059	
+	0.175	0.1244	
+	0.262	0.2182	
+	0.349	0.2324	
+	0.436	0.2029	
+	0.524	0.1435	
+	0.611	0.1046	
+	0.698	0.1363	
+	0.785	0.1196	
+    Function: aero/coefficient/CDDsb
+    1 dimensional table with 12 rows.
+	-0.175	-1.265	
+	-0.087	-2.139	
+	0	-0.308	
+	0.087	1.402	
+	0.175	3.369	
+	0.262	5.135	
+	0.349	6.88	
+	0.436	10.06	
+	0.524	13.2	
+	0.611	15.87	
+	0.698	23.22	
+	0.785	24.11	
+    Function: aero/coefficient/CDq
+    1 dimensional table with 12 rows.
+	-0.175	0.067	
+	-0.087	0.034	
+	0	0.028	
+	0.087	0.029	
+	0.175	0.033	
+	0.262	0.059	
+	0.349	0.061	
+	0.436	0.027	
+	0.524	0.036	
+	0.611	0.047	
+	0.698	0.029	
+	0.785	0.015	
+    Function: aero/coefficient/CDq_Dlef
+    Function: aero/coefficient/CYb
+    1 dimensional table with 3 rows.
+	0.4	0	
+	1.2	0.0573	
+	1.6	-0.1719	
+    Function: aero/coefficient/CYb_M
+    Function: aero/coefficient/CYDa
+    Function: aero/coefficient/CYdr
+    1 dimensional table with 12 rows.
+	-0.175	-0.108	
+	-0.087	-0.108	
+	0	-0.188	
+	0.087	0.11	
+	0.175	0.258	
+	0.262	0.226	
+	0.349	0.344	
+	0.436	0.362	
+	0.524	0.611	
+	0.611	0.529	
+	0.698	0.298	
+	0.785	-0.227	
+    Function: aero/coefficient/CYp
+    1 dimensional table with 12 rows.
+	-0.175	0.882	
+	-0.087	0.852	
+	0	0.876	
+	0.087	0.958	
+	0.175	0.962	
+	0.262	0.974	
+	0.349	0.819	
+	0.436	0.483	
+	0.524	0.59	
+	0.611	1.21	
+	0.698	-0.493	
+	0.785	-1.04	
+    Function: aero/coefficient/CYr
+    2 dimensional table with 12 rows, 5 columns.
+		-0.436	-0.218	0	0.218	0.436	
+	-0.175	-0.659	-0.709	-0.754	-0.792	-0.825	
+	-0.087	-0.151	-0.196	-0.238	-0.278	-0.316	
+	0	0.183	0.141	0.1	0.059	0.017	
+	0.087	0.491	0.454	0.414	0.371	0.326	
+	0.175	0.797	0.763	0.725	0.68	0.63	
+	0.262	1.108	1.079	1.041	0.993	0.94	
+	0.349	1.395	1.366	1.327	1.274	1.214	
+	0.436	1.615	1.587	1.547	1.49	1.427	
+	0.524	1.804	1.777	1.737	1.674	1.61	
+	0.611	1.9	1.872	1.829	1.766	1.699	
+	0.698	1.898	1.869	1.822	1.757	1.689	
+	0.785	1.753	1.724	1.674	1.612	1.546	
+    Function: aero/coefficient/CLDh
+    1 dimensional table with 12 rows.
+	-0.175	-0.012	
+	-0.087	-0.004	
+	0	0.002	
+	0.087	0.007	
+	0.175	0.012	
+	0.262	0.018	
+	0.349	0.022	
+	0.436	0.025	
+	0.524	0.026	
+	0.611	0.028	
+	0.698	0.028	
+	0.785	0.025	
+    Function: aero/coefficient/CLDlef
+    Function: aero/coefficient/CLDflaps
+    1 dimensional table with 12 rows.
+	-0.175	0.3645	
+	-0.087	0.3678	
+	0	0.3684	
+	0.087	0.2522	
+	0.175	0.271	
+	0.262	0.3615	
+	0.349	0.1283	
+	0.436	0.0075	
+	0.524	-0.1311	
+	0.611	-0.1836	
+	0.698	-0.1161	
+	0.785	-0.1064	
+    Function: aero/coefficient/CLDsb
+    1 dimensional table with 12 rows.
+	-0.175	8.713	
+	-0.087	25.71	
+	0	28.9	
+	0.087	31.4	
+	0.175	31.09	
+	0.262	30.41	
+	0.349	26.97	
+	0.436	26.42	
+	0.524	25.86	
+	0.611	25.27	
+	0.698	30.52	
+	0.785	25.82	
+    Function: aero/coefficient/CLq
+    1 dimensional table with 12 rows.
+	-0.175	-0.256	
+	-0.087	-0.062	
+	0	-0.01	
+	0.087	0.02	
+	0.175	-0.011	
+	0.262	0.053	
+	0.349	0.063	
+	0.436	-0.009	
+	0.524	0.034	
+	0.611	0.042	
+	0.698	0.005	
+	0.785	0.001	
+    Function: aero/coefficient/CLq_Dsb
+    2 dimensional table with 12 rows, 13 columns.
+		-0.524	-0.436	-0.349	-0.262	-0.175	-0.087	0	0.087	0.175	0.262	0.349	0.436	0.524	
+	-0.175	-0.009	-0.007	-0	0.001	0.003	0.001	0	-0.001	-0.003	-0.001	0	0.007	0.009	
+	-0.087	0.011	0.01	0.01	0.01	0.009	0.004	0	-0.004	-0.009	-0.01	-0.01	-0.01	-0.011	
+	0	0.023	0.023	0.022	0.02	0.017	0.008	0	-0.008	-0.017	-0.02	-0.022	-0.023	-0.023	
+	0.087	0.037	0.034	0.034	0.03	0.024	0.012	0	-0.012	-0.024	-0.03	-0.034	-0.034	-0.037	
+	0.175	0.05	0.049	0.047	0.039	0.03	0.016	0	-0.016	-0.03	-0.039	-0.047	-0.049	-0.05	
+	0.262	0.068	0.063	0.06	0.054	0.041	0.022	0	-0.022	-0.041	-0.054	-0.06	-0.063	-0.068	
+	0.349	0.089	0.081	0.069	0.057	0.045	0.022	0	-0.022	-0.045	-0.057	-0.069	-0.081	-0.089	
+	0.436	0.088	0.079	0.067	0.054	0.04	0.021	0	-0.021	-0.04	-0.054	-0.067	-0.079	-0.088	
+	0.524	0.091	0.06	0.033	0.023	0.016	0.015	0	-0.015	-0.016	-0.023	-0.033	-0.06	-0.091	
+	0.611	0.076	0.058	0.036	0.006	0.002	0.008	0	-0.008	-0.002	-0.006	-0.036	-0.058	-0.076	
+	0.698	0.077	0.062	0.035	0.014	0.01	0.013	0	-0.013	-0.01	-0.014	-0.035	-0.062	-0.077	
+	0.785	0.076	0.059	0.035	0.027	0.019	0.015	0	-0.015	-0.019	-0.027	-0.035	-0.059	-0.076	
+    Function: aero/coefficient/Clb
+    1 dimensional table with 6 rows.
+	0.6	0	
+	0.8	0.1891	
+	1	0.1776	
+	1.2	0.1375	
+	1.4	0.1203	
+	1.6	0.0859	
+    Function: aero/coefficient/Clb_M
+    1 dimensional table with 12 rows.
+	-0.175	-0.36	
+	-0.087	-0.359	
+	0	-0.443	
+	0.087	-0.42	
+	0.175	-0.383	
+	0.262	-0.375	
+	0.349	-0.329	
+	0.436	-0.294	
+	0.524	-0.23	
+	0.611	-0.21	
+	0.698	-0.12	
+	0.785	-0.1	
+    Function: aero/coefficient/Clp
+    1 dimensional table with 12 rows.
+	-0.175	-0.126	
+	-0.087	-0.026	
+	0	0.063	
+	0.087	0.113	
+	0.175	0.208	
+	0.262	0.23	
+	0.349	0.319	
+	0.436	0.437	
+	0.524	0.68	
+	0.611	0.1	
+	0.698	0.447	
+	0.785	-0.33	
+    Function: aero/coefficient/Clr
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	0.041	0.041	0.042	0.04	0.043	0.044	0.043	
+	-0.087	0.052	0.053	0.053	0.052	0.049	0.048	0.049	
+	0	0.053	0.053	0.052	0.051	0.048	0.048	0.047	
+	0.087	0.056	0.053	0.051	0.052	0.049	0.047	0.045	
+	0.175	0.05	0.05	0.049	0.048	0.043	0.042	0.042	
+	0.262	0.056	0.051	0.049	0.048	0.042	0.041	0.037	
+	0.349	0.082	0.066	0.043	0.042	0.042	0.02	0.003	
+	0.436	0.059	0.043	0.035	0.037	0.036	0.028	0.013	
+	0.524	0.042	0.038	0.026	0.031	0.025	0.013	0.01	
+	0.611	0.038	0.027	0.016	0.026	0.021	0.014	0.003	
+	0.698	0.027	0.023	0.018	0.017	0.016	0.011	0.007	
+	0.785	0.017	0.016	0.014	0.012	0.011	-0.01	0.008	
+    Function: aero/coefficient/Clda
+    1 dimensional table with 3 rows.
+	0.6	0	
+	1.2	-0.063	
+	1.6	-0.063	
+    Function: aero/coefficient/Clda_M
+    1 dimensional table with 2 rows.
+	0.6	0	
+	1.6	-0.0201	
+    Function: aero/coefficient/Cldr_M
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	0.005	0.007	0.013	0.018	0.015	0.021	0.023	
+	-0.087	0.017	0.016	0.013	0.015	0.014	0.011	0.01	
+	0	0.014	0.014	0.011	0.015	0.013	0.01	0.011	
+	0.087	0.01	0.014	0.012	0.014	0.013	0.011	0.011	
+	0.175	-0.005	0.013	0.011	0.014	0.012	0.01	0.011	
+	0.262	0.009	0.009	0.009	0.014	0.011	0.009	0.01	
+	0.349	0.019	0.012	0.008	0.014	0.011	0.008	0.008	
+	0.436	0.005	0.005	0.005	0.015	0.01	0.01	0.01	
+	0.524	0	0	0	0.013	0.008	0.006	0.006	
+	0.611	-0.005	0.004	0.005	0.011	0.008	0.005	0.014	
+	0.698	-0.011	0.009	0.003	0.006	0.007	0	0.02	
+	0.785	0.008	0.007	0.005	0.001	0.003	0.001	0	
+    Function: aero/coefficient/Cldr
+    2 dimensional table with 12 rows, 5 columns.
+		-0.436	-0.218	0	0.218	0.436	
+	-0.175	0.205	0.081	-0.046	-0.174	-0.259	
+	-0.087	0.168	0.077	-0.02	-0.145	-0.202	
+	0	0.186	0.107	-0.009	-0.121	-0.184	
+	0.087	0.196	0.11	-0.005	-0.127	-0.193	
+	0.175	0.213	0.11	-0.006	-0.129	-0.199	
+	0.262	0.251	0.141	0.01	-0.102	-0.15	
+	0.349	0.245	0.127	0.006	-0.097	-0.16	
+	0.436	0.238	0.119	-0.001	-0.113	-0.167	
+	0.524	0.252	0.133	0.014	-0.087	-0.104	
+	0.611	0.231	0.108	0	-0.084	-0.076	
+	0.698	0.198	0.081	-0.013	-0.069	-0.041	
+	0.785	0.192	0.093	0.032	-0.006	-0.005	
+    Function: aero/coefficient/CmDh
+    1 dimensional table with 6 rows.
+	0.6	0	
+	0.8	0.0974	
+	0.9	-0.3323	
+	1	-0.9626	
+	1.1	-0.848	
+	1.2	-0.7907	
+    Function: aero/coefficient/Cma_M
+    1 dimensional table with 12 rows.
+	-0.175	-0.0036	
+	-0.087	-0.0036	
+	0	-0.0036	
+	0.087	0.0303	
+	0.175	0.0225	
+	0.262	0.0128	
+	0.349	0.0252	
+	0.436	0.0275	
+	0.524	-0.0171	
+	0.611	-0.0448	
+	0.698	-0.0737	
+	0.785	-0.0884	
+    Function: aero/coefficient/CmDsb
+    1 dimensional table with 12 rows.
+	-0.175	-7.21	
+	-0.087	-5.4	
+	0	-5.23	
+	0.087	-5.26	
+	0.175	-6.11	
+	0.262	-6.64	
+	0.349	-5.69	
+	0.436	-6	
+	0.524	-6.2	
+	0.611	-6.4	
+	0.698	-6.6	
+	0.785	-6	
+    Function: aero/coefficient/Cmq
+    2 dimensional table with 12 rows, 13 columns.
+		-0.524	-0.436	-0.349	-0.262	-0.175	-0.087	0	0.087	0.175	0.262	0.349	0.436	0.524	
+	-0.175	-0.079	-0.074	-0.064	-0.056	-0.038	-0.018	0	0.018	0.038	0.056	0.064	0.074	0.079	
+	-0.087	-0.09	-0.086	-0.077	-0.057	-0.042	-0.019	0	0.019	0.042	0.057	0.077	0.086	0.09	
+	0	-0.106	-0.093	-0.076	-0.059	-0.042	-0.018	0	0.018	0.042	0.059	0.076	0.093	0.106	
+	0.087	-0.106	-0.089	-0.074	-0.058	-0.042	-0.019	0	0.019	0.042	0.058	0.074	0.089	0.106	
+	0.175	-0.096	-0.08	-0.073	-0.058	-0.043	-0.019	0	0.019	0.043	0.058	0.073	0.08	0.096	
+	0.262	-0.08	-0.062	-0.057	-0.053	-0.039	-0.018	0	0.018	0.039	0.053	0.057	0.062	0.08	
+	0.349	-0.068	-0.049	-0.029	-0.032	-0.03	-0.013	0	0.013	0.03	0.032	0.029	0.049	0.068	
+	0.436	-0.03	-0.022	-0.007	-0.012	-0.017	-0.007	0	0.007	0.017	0.012	0.007	0.022	0.03	
+	0.524	-0.064	-0.028	-0.012	-0.002	-0.004	-0.004	0	0.004	0.004	0.002	0.012	0.028	0.064	
+	0.611	-0.015	0.012	0.034	0.046	0.035	0.014	0	-0.014	-0.035	-0.046	-0.034	-0.012	0.015	
+	0.698	-0.011	0.002	0.065	0.071	0.047	0.017	0	-0.017	-0.047	-0.071	-0.065	-0.002	0.011	
+	0.785	0.001	0.013	0.041	0.073	0.057	0.033	0	-0.033	-0.057	-0.073	-0.041	-0.013	-0.001	
+    Function: aero/coefficient/Cnb
+    1 dimensional table with 8 rows.
+	0.6	0	
+	0.7	-0.0688	
+	0.8	-0.0172	
+	0.9	0.0229	
+	1	0	
+	1.2	-0.0688	
+	1.4	0.0057	
+	1.6	0.0688	
+    Function: aero/coefficient/Cnb_M
+    1 dimensional table with 12 rows.
+	-0.175	-0.061	
+	-0.087	-0.052	
+	0	-0.052	
+	0.087	0.012	
+	0.175	0.013	
+	0.262	0.024	
+	0.349	-0.05	
+	0.436	-0.15	
+	0.524	-0.13	
+	0.611	-0.158	
+	0.698	-0.24	
+	0.785	-0.15	
+    Function: aero/coefficient/Cnp
+    1 dimensional table with 12 rows.
+	-0.175	-0.38	
+	-0.087	-0.363	
+	0	-0.378	
+	0.087	-0.386	
+	0.175	-0.37	
+	0.262	-0.453	
+	0.349	-0.55	
+	0.436	-0.582	
+	0.524	-0.595	
+	0.611	-0.637	
+	0.698	-1.02	
+	0.785	-0.84	
+    Function: aero/coefficient/Cnr
+    1 dimensional table with 6 rows.
+	0.6	0	
+	0.8	0.0149	
+	1	-0.0011	
+	1.2	0.0097	
+	1.4	0.0126	
+	1.6	-0.004	
+    Function: aero/coefficient/Cnda_M
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	0.001	0.002	0.006	0.011	0.015	0.024	-0.022	
+	-0.087	0.027	0.014	0.008	0.011	0.015	0.01	-0.002	
+	0	0.017	0.016	0.006	0.01	0.014	0.004	0.003	
+	0.087	0.013	0.016	0.006	0.009	0.012	0.002	0.005	
+	0.175	0.012	0.014	0.005	0.008	0.011	0.001	0.003	
+	0.262	0.016	0.019	0.008	0.006	0.008	-0.003	0.001	
+	0.349	-0.001	0.021	0.005	-0	0.002	-0.014	0.009	
+	0.436	-0.017	-0.002	-0.007	-0.004	-0.002	-0.006	0.009	
+	0.524	-0.011	-0.012	-0.004	-0.007	-0.006	0.001	0.001	
+	0.611	-0.017	-0.016	-0.007	-0.01	-0.012	-0.004	-0.003	
+	0.698	-0.008	-0.015	-0.006	-0.004	-0.011	-0.004	0.002	
+	0.785	-0.016	-0.011	-0.006	-0.01	-0.011	-0.006	-0.001	
+    Function: aero/coefficient/Cnda
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	-0.018	-0.028	-0.037	-0.048	-0.043	-0.052	-0.062	
+	-0.087	-0.052	-0.051	-0.041	-0.045	-0.044	-0.034	-0.034	
+	0	-0.052	-0.043	-0.038	-0.045	-0.041	-0.036	-0.027	
+	0.087	-0.052	-0.046	-0.04	-0.045	-0.041	-0.036	-0.028	
+	0.175	-0.054	-0.045	-0.04	-0.044	-0.04	-0.035	-0.027	
+	0.262	-0.049	-0.049	-0.038	-0.045	-0.038	-0.028	-0.027	
+	0.349	-0.059	-0.057	-0.037	-0.047	-0.034	-0.024	-0.023	
+	0.436	-0.051	-0.052	-0.03	-0.048	-0.035	-0.023	-0.023	
+	0.524	-0.03	-0.03	-0.027	-0.049	-0.035	-0.02	-0.019	
+	0.611	-0.037	-0.033	-0.024	-0.045	-0.029	-0.016	-0.009	
+	0.698	-0.026	-0.03	-0.019	-0.033	-0.022	-0.01	-0.025	
+	0.785	-0.013	-0.008	-0.013	-0.016	-0.009	-0.014	-0.01	
+    Function: aero/coefficient/Cndr
+    1 dimensional table with 3 rows.
+	0.6	0	
+	1.2	0.0401	
+	1.6	0.0716	
+    Function: aero/coefficient/Cndr_M
+[TRIM] Native do_trim(1) ...
+GEAR_CONTACT: 0.000000 seconds: NOSE_LG 1
+GEAR_CONTACT: 0.000000 seconds: LEFT_MLG 1
+GEAR_CONTACT: 0.000000 seconds: RIGHT_MLG 1
+GEAR_CONTACT: 0.000000 seconds: LEFT_VFT 1
+GEAR_CONTACT: 0.000000 seconds: RIGHT_VFT 1
+GEAR_CONTACT: 0.000000 seconds: INTAKE 1
+GEAR_CONTACT: 0.000000 seconds: RADOME 1
+
+  Mass Properties Report (English units: lbf, in, slug-ft^2)
+                                      Weight    CG-X    CG-Y    CG-Z         Ixx         Iyy         Izz         Ixy         Ixz         Iyz
+    Base Vehicle                       17400.0  -193.0     0.0    -5.1      9496.0     55814.0     63100.0        -0.0      -982.0        -0.0
+0   Pilot                                230.0  -336.2     0.0     0.0         0.0         0.0         0.0        -0.0         0.0        -0.0
+[1m0   Fuel                          [22m        1500  -174.4      65       5           0           0           0
+[1m1   Fuel                          [22m        1500  -174.4     -65       5           0           0           0
+[1m2   Fuel                          [22m           0  -174.4      65     -15           0           0           0
+[1m3   Fuel                          [22m           0  -174.4     -65     -15           0           0           0
+                                                                                                                                            
+    Total:                           20630.0  -191.9     0.0    -3.6     12288.8     57107.5     67072.3         0.0     -1059.9         0.0
+
+End of vehicle configuration loading.
+-------------------------------------------------------------------------------
+GEAR_CONTACT: 0.000000 seconds: LEFT_VFT 0
+GEAR_CONTACT: 0.000000 seconds: RIGHT_VFT 0
+GEAR_CONTACT: 0.000000 seconds: INTAKE 0
+GEAR_CONTACT: 0.000000 seconds: RADOME 0
+
+  Mass Properties Report (English units: lbf, in, slug-ft^2)
+                                      Weight    CG-X    CG-Y    CG-Z         Ixx         Iyy         Izz         Ixy         Ixz         Iyz
+    Base Vehicle                       17400.0  -193.0     0.0    -5.1      9496.0     55814.0     63100.0        -0.0      -982.0        -0.0
+0   Pilot                                230.0  -336.2     0.0     0.0         0.0         0.0         0.0        -0.0         0.0        -0.0
+[1m0   Fuel                          [22m        1500  -174.4      65       5           0           0           0
+[1m1   Fuel                          [22m        1500  -174.4     -65       5           0           0           0
+[1m2   Fuel                          [22m           0  -174.4      65     -15           0           0           0
+[1m3   Fuel                          [22m           0  -174.4     -65     -15           0           0           0
+                                                                                                                                            
+    Total:                           20630.0  -191.9     0.0    -3.6     12288.8     57107.5     67072.3         0.0     -1059.9         0.0
+
+End of vehicle configuration loading.
+-------------------------------------------------------------------------------
+  Full Trim
+
+  Trim successful
+  Angle of Attack     : 0.49   wdot : -2.17e-04 Tolerance: 1e-03  Passed
+  Throttle            : 0.33   udot : -1.22e-04 Tolerance: 1e-03  Passed
+  Pitch Trim          : -0.021 qdot : -7.47e-12 Tolerance: 1e-04  Passed
+  Roll Angle          : -2.3e-08 vdot : 9.97e-08  Tolerance: 1e-03  Passed
+  Ailerons            : -1.3e-10 pdot : 2.87e-08  Tolerance: 1e-04  Passed
+  Rudder              : 8.9e-10 rdot : -1.68e-08 Tolerance: 1e-04  Passed
+  Trim Results:
+[TRIM] attempt 0: gamma_bias=+0.00 theta=+0.49 hdot=+0.00 Vc=400.0 elev_cmd=-0.0200 thr=0.3293
+[TRIM] ACCEPTED thr=0.3293 elev=-0.0200 ptrim=-0.0214 theta0=+0.49 hdot=+0.00 (genuinely level)
+[SETTLE] 18s closed-loop settle...
+[SETTLE] h=15093ft Vc=488.1kts theta=+0.38deg
+[LOG] Wrote 7200 rows
+
+METRICS (BASELINE): max|dh|=578.8ft  θ=[-0.1,0.4]  roll_max=3.3  interlock=False  crash=False  residual_steps=0
+
+[GATE] BASELINE PASSED. Proceeding to TECS_MRAC, HYBRID, FULL_STACK.
+
+======================================================================
+  CASE : TECS_MRAC
+======================================================================
+  physical γ_remaining=0.50 (50% effectiveness loss) after t=15s
+
+
+     JSBSim Flight Dynamics Model v1.3.1 [GitHub build 1837/commit 3b25f25e49b42d0489c04ac805674fc1450ca579] May 17 2026 14:28:34
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+Reading Aircraft Configuration File: General Dynamics F-16A
+                            Version: 2.0
+
+
+This aircraft model is a PRODUCTION release.
+
+  Description:   Models an F-16A Block-32 (Basic US configuration)
+  Model Author:  Erik Hofman
+  Creation Date: 2001-12-28
+  Version:       $Revision: 1.95 $
+
+  Aircraft Metrics:
+    WingArea: 300.000000
+    WingSpan: 30.000000
+    Incidence: 0.000000
+    Chord: 11.320000
+    H. Tail Area: 63.700000
+    H. Tail Arm: 16.460000
+    V. Tail Area: 54.750000
+    V. Tail Arm: 0.000000
+    Eyepoint (x, y, z): -336.200000 , 0.000000 , 29.500000
+    Ref Pt (x, y, z): -189.500000 , 0.000000 , 3.900000
+    Visual Ref Pt (x, y, z): -180.000000 , 0.000000 , 0.000000
+
+  Mass and Balance:
+    baseIxx: 9496.000000 slug-ft2
+    baseIyy: 55814.000000 slug-ft2
+    baseIzz: 63100.000000 slug-ft2
+    baseIxy: -0.000000 slug-ft2
+    baseIxz: -982.000000 slug-ft2
+    baseIyz: -0.000000 slug-ft2
+    Empty Weight: 17400.000000 lbm
+    CG (x, y, z): -193.000000 , 0.000000 , -5.100000
+    Point Mass Object: 230.000000 lbs. at X, Y, Z (in.): -336.200000  0.000000  0.000000
+
+  Ground Reactions: 
+    BOGEY NOSE_LG
+      Location: -299.600000 , 0.000000 , -72.000000
+      Spring Constant:  17250.000000
+      Damping Constant: 4250.000000 (linear)
+      Rebound Damping Constant: 4250.000000 (linear)
+      Dynamic Friction: 0.500000
+      Static Friction:  0.800000
+      Rolling Friction: 0.020000
+      Steering Type:    STEERABLE
+      Grouping:         CENTER
+      Max Steer Angle:  80.000000
+      Retractable:      1
+    BOGEY LEFT_MLG
+      Location: -158.600000 , -48.000000 , -71.600000
+      Spring Constant:  37500.000000
+      Damping Constant: 7500.000000 (linear)
+      Rebound Damping Constant: 7500.000000 (linear)
+      Dynamic Friction: 0.500000
+      Static Friction:  0.800000
+      Rolling Friction: 0.020000
+      Steering Type:    FIXED
+      Grouping:         LEFT
+      Max Steer Angle:  0.000000
+      Retractable:      1
+    BOGEY RIGHT_MLG
+      Location: -158.600000 , 48.000000 , -71.600000
+      Spring Constant:  37500.000000
+      Damping Constant: 7500.000000 (linear)
+      Rebound Damping Constant: 7500.000000 (linear)
+      Dynamic Friction: 0.500000
+      Static Friction:  0.800000
+      Rolling Friction: 0.020000
+      Steering Type:    FIXED
+      Grouping:         RIGHT
+      Max Steer Angle:  0.000000
+      Retractable:      1
+    STRUCTURE LEFT_WT
+      Location: -121.300000 , -189.000000 , 0.000000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE RIGHT_WT
+      Location: -121.300000 , 189.000000 , 0.000000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE TOP_VS
+      Location: -27.200000 , 0.000000 , 123.200000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE LEFT_VFT
+      Location: -97.600000 , -24.800000 , -52.000000
+      Spring Constant:  200.000000
+      Damping Constant: 5000.000000 (linear)
+      Rebound Damping Constant: 5000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE RIGHT_VFT
+      Location: -97.600000 , 24.800000 , -52.000000
+      Spring Constant:  200.000000
+      Damping Constant: 5000.000000 (linear)
+      Rebound Damping Constant: 5000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE INTAKE
+      Location: -322.400000 , 0.000000 , -36.600000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE RADOME
+      Location: -486.600000 , 0.000000 , -8.700000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+
+  External Reactions: 
+    
+    Frame: BODY
+    Location: (0.000000, 0.000000, 0.000000)
+    
+    Frame: BODY
+    Location: (0.000000, 0.000000, 0.000000)
+
+  Propulsion:
+       (FUEL) tank holds 3486 lbs. FUEL
+      currently at 43.0293% of maximum capacity
+      Tank location (X, Y, Z): -174.4, 65, 5
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+       (FUEL) tank holds 3486 lbs. FUEL
+      currently at 43.0293% of maximum capacity
+      Tank location (X, Y, Z): -174.4, -65, 5
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+       (FUEL) tank holds 2991 lbs. FUEL
+      currently at 0% of maximum capacity
+      Tank location (X, Y, Z): -174.4, 65, -15
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+       (FUEL) tank holds 2991 lbs. FUEL
+      currently at 0% of maximum capacity
+      Tank location (X, Y, Z): -174.4, -65, -15
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+    2 dimensional table with 6 rows, 8 columns.
+		-1e+04	0	1e+04	2e+04	3e+04	4e+04	5e+04	6e+04	
+	0	0.043	0.0488	0.0528	0.0694	0.0899	0.1183	0.1467	0	
+	0.2	0.05	0.0501	0.0335	0.0544	0.0797	0.1049	0.1342	0	
+	0.4	0.004	0.0047	0.002	0.0272	0.0595	0.0891	0.1203	0	
+	0.6	-0.0804	-0.0804	-0.056	-0.0237	0.0276	0.0718	0.1073	0	
+	0.8	-0.2129	-0.2129	-0.1498	-0.1025	0.0474	0.0868	0.09	0	
+	1	-0.2839	-0.2839	-0.1104	-0.0469	-0.027	0.0552	0.08	0	
+    Function: propulsion/engine[0]/IdleThrust
+    2 dimensional table with 8 rows, 8 columns.
+		-1e+04	0	1e+04	2e+04	3e+04	4e+04	5e+04	6e+04	
+	0	1.26	1	0.74	0.534	0.372	0.241	0.149	0	
+	0.2	1.171	0.934	0.697	0.506	0.355	0.231	0.143	0	
+	0.4	1.15	0.921	0.692	0.506	0.357	0.233	0.145	0	
+	0.6	1.181	0.951	0.721	0.532	0.378	0.248	0.154	0	
+	0.8	1.258	1.02	0.782	0.582	0.417	0.275	0.17	0	
+	1	1.369	1.12	0.871	0.651	0.475	0.315	0.195	0	
+	1.2	1.485	1.23	0.975	0.744	0.545	0.364	0.225	0	
+	1.4	1.594	1.34	1.086	0.845	0.628	0.424	0.263	0	
+    Function: propulsion/engine[0]/MilThrust
+    2 dimensional table with 14 rows, 8 columns.
+		-1e+04	0	1e+04	2e+04	3e+04	4e+04	5e+04	6e+04	
+	0	1.182	1	0.8184	0.6627	0.528	0.3756	0.2327	0	
+	0.2	1.131	0.9599	0.789	0.6406	0.5116	0.3645	0.2258	0	
+	0.4	1.115	0.9474	0.7798	0.634	0.507	0.3615	0.224	0	
+	0.6	1.128	0.9589	0.7894	0.642	0.5134	0.3661	0.2268	0	
+	0.8	1.171	0.9942	0.8177	0.6647	0.5309	0.3784	0.2345	0	
+	1	1.241	1.053	0.8648	0.7017	0.5596	0.3983	0.2467	0	
+	1.2	1.329	1.125	0.9221	0.7462	0.5936	0.4219	0.2614	0	
+	1.4	1.437	1.215	0.9933	0.8021	0.636	0.4509	0.2794	0	
+	1.6	1.571	1.326	1.081	0.87	0.6874	0.486	0.3011	0	
+	1.8	1.73	1.458	1.186	0.9512	0.7495	0.5289	0.3277	0	
+	2	1.831	1.57	1.309	1.047	0.8216	0.5786	0.3585	0	
+	2.2	1.97	1.69	1.41	1.24	0.91	0.6359	0.394	0	
+	2.4	2.07	1.8	1.53	1.34	1	0.72	0.46	0	
+	2.6	2.2	1.92	1.64	1.44	1.1	0.8	0.52	0	
+    Function: propulsion/engine[0]/AugThrust
+      X = 0
+      Y = 0
+      Z = 0
+      Pitch = 0 degrees
+      Yaw = 0 degrees
+
+    Declared properties
+
+      /sim/model/pushback/target-speed-fps (initial value: 0)
+
+      /sim/model/pushback/position-norm (initial value: 0)
+
+
+    Overriding properties
+
+      /sim/model/pushback/kp (initial value: 0)
+
+      /sim/model/pushback/ki (initial value: 0)
+
+      /sim/model/pushback/kd (initial value: 0)
+
+
+  System: pushback
+
+    Channel Pushback
+
+    Loading Component "systems/pushback/linked" of type: SWITCH
+        position-norm gt constant value 0.950000        WOW == constant value 1.000000        wheel-speed-fps lt constant value 50.000000      if all of the following are true: {
+
+
+
+      }      Switch default value is: constant value -1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: linked
+
+    Loading Component "systems/pushback/speed-error" of type: SUMMER
+      INPUTS: 
+       target-speed-fps
+       -wheel-speed-fps
+      OUTPUT: speed-error
+
+    Loading Component "systems/pushback/force" of type: PID
+      INPUT: speed-error
+      OUTPUT: force
+      OUTPUT: force
+
+    Loading Component "systems/pushback/force-output" of type: SWITCH
+        linked == constant value 0.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (force)
+
+      OUTPUT: magnitude
+      OUTPUT: force-output
+
+    Declared properties
+
+      systems/hook/tailhook-cmd-norm (initial value: 0)
+
+      systems/hook/tailhook-length-ft (initial value: 4.537)
+
+      systems/hook/tailhook-pos-min-deg (initial value: -3.806)
+
+      systems/hook/tailhook-pos-max-deg (initial value: 53.369)
+
+      systems/hook/tailhook-offset-x-in (initial value: 100.669)
+
+      systems/hook/tailhook-offset-y-in (initial value: 0)
+
+      systems/hook/tailhook-offset-z-in (initial value: -28.818)
+
+      systems/hook/tailhook-pos-deg (initial value: -3.806)
+
+
+  System: hook
+
+    Channel Hook
+
+    Loading Component "systems/hook/tailhook-control" of type: KINEMATIC
+      INPUT: tailhook-cmd-norm
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 1.5000
+      OUTPUT: tailhook-pos-norm
+      OUTPUT: tailhook-control
+
+    Loading Component "systems/hook/ready" of type: SWITCH
+        tailhook-pos-norm gt constant value 0.990000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: ready
+
+    Loading Component "systems/hook/hook-decel-multiplier" of type: SCHEDULED_GAIN
+    1 dimensional table with 3 rows.
+	0	0	
+	1	0	
+	80	2.2	
+    1 dimensional table with 3 rows.
+	0	0	
+	1	0	
+	80	2.2	
+      INPUT: ready
+      GAIN: constant value 1.000000
+      OUTPUT: hook-decel-multiplier
+      Scheduled by table:
+
+    Loading Component "systems/hook/hook-decel-force" of type: PURE_GAIN
+      INPUT: hook-decel-multiplier
+      GAIN: weight-lbs
+      OUTPUT: hook-decel-force
+
+    Loading Component "systems/hook/force" of type: SUMMER
+      INPUTS: 
+       hook-decel-force
+       fbx-prop-lbs
+      OUTPUT: force
+
+    Loading Component "systems/hook/animation-norm" of type: FCS_FUNCTION
+      OUTPUT: tailhook-pos-norm
+      OUTPUT: animation-norm
+
+    Declared properties
+
+      fcs/alpha-norm (initial value: 0)
+
+      fcs/hook-engage (initial value: 0)
+
+      fcs/canopy-engage (initial value: 0)
+
+      fcs/fbw-override (initial value: 0)
+
+
+  FCS: F-16 FC
+
+    Channel Flaps
+
+    Loading Component "fcs/tef-pos-rad" of type: SWITCH
+        vc-kts lt constant value 250.000000      if all of the following are true: {
+
+      }        mach gt constant value 0.900000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 0.349000)
+
+      Switch takes test 2 value (constant value -0.034900)
+
+      OUTPUT: tef-pos-rad
+
+    Loading Component "fcs/tef-pos-norm" of type: PURE_GAIN
+      INPUT: tef-pos-rad
+      GAIN: constant value 2.864789
+      OUTPUT: tef-pos-norm
+
+    Loading Component "fcs/tef-control" of type: KINEMATIC
+      INPUT: tef-pos-norm
+      DETENTS: 3
+        -1.0000 3.0000
+        0.0000 0.0000
+        1.0000 3.0000
+      OUTPUT: tef-control
+
+    Channel Roll
+
+    Loading Component "fcs/roll-rate-norm" of type: PURE_GAIN
+      INPUT: p-aero-rad_sec
+      GAIN: constant value 0.318210
+      OUTPUT: roll-rate-norm
+
+    Loading Component "fcs/roll-trim-error" of type: SUMMER
+      INPUTS: 
+       aileron-cmd-norm
+       -roll-rate-norm
+      OUTPUT: roll-trim-error
+
+    Loading Component "fcs/aileron-pid-trigger" of type: SWITCH
+        vc-kts lt constant value 20.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: aileron-pid-trigger
+
+    Loading Component "fcs/roll-rate-pid" of type: PID
+      INPUT: roll-trim-error
+      OUTPUT: roll-rate-pid
+
+    Loading Component "fcs/roll-rate-command" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       roll-rate-pid
+       aileron-cmd-norm
+      OUTPUT: roll-rate-command
+
+    Loading Component "fcs/aileron-control" of type: AEROSURFACE_SCALE
+      INPUT: roll-rate-command
+      GAIN: constant value 1.000000
+      OUTPUT: aileron-pos-rad
+      OUTPUT: aileron-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.3750
+        Output MAX: 0.3750
+
+    Loading Component "fcs/roll-rate-command-switch" of type: SWITCH
+        fbw-override == constant value 1.000000      if all of the following are true: {
+
+      }      Switch default value is: roll-rate-command
+      Switch takes test 1 value (aileron-cmd-norm)
+
+      OUTPUT: roll-rate-command-switch
+
+    Loading Component "fcs/aileron-position" of type: KINEMATIC
+      INPUT: roll-rate-command-switch
+      DETENTS: 2
+        -1.0000 0.3000
+        1.0000 0.3000
+      OUTPUT: left-aileron-pos-norm
+      OUTPUT: aileron-position
+
+    Loading Component "fcs/aileron-speed-compensated" of type: SCHEDULED_GAIN
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.15	
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.15	
+      INPUT: left-aileron-pos-norm
+      GAIN: constant value 1.000000
+      OUTPUT: aileron-speed-compensated
+      Scheduled by table:
+
+    Loading Component "fcs/left-flaperon-norm" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       -tef-control
+       -aileron-speed-compensated
+      OUTPUT: left-flaperon-norm
+
+    Loading Component "fcs/right-flaperon-norm" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       tef-control
+       -aileron-speed-compensated
+      OUTPUT: right-flaperon-norm
+
+    Loading Component "fcs/flaperon-summer" of type: SUMMER
+      INPUTS: 
+       left-flaperon-norm
+       right-flaperon-norm
+      OUTPUT: flaperon-summer
+
+    Loading Component "fcs/flaperon-mix-rad" of type: PURE_GAIN
+      INPUT: flaperon-summer
+      GAIN: constant value 1.432400
+      OUTPUT: flaperon-mix-rad
+
+    Loading Component "fcs/left-aileron-control" of type: AEROSURFACE_SCALE
+      INPUT: aileron-speed-compensated
+      GAIN: constant value 1.000000
+      OUTPUT: left-aileron-pos-rad
+      OUTPUT: left-aileron-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.3750
+        Output MAX: 0.3750
+
+    Loading Component "fcs/right-aileron-control" of type: AEROSURFACE_SCALE
+      INPUT: -aileron-speed-compensated
+      GAIN: constant value 1.000000
+      OUTPUT: right-aileron-pos-rad
+      OUTPUT: right-aileron-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.3750
+        Output MAX: 0.3750
+
+    Channel Pitch
+
+    Loading Component "fcs/n-pilot-z-correction" of type: FCS_FUNCTION
+      OUTPUT: n-pilot-z-correction
+
+    Loading Component "fcs/g-load-corrected" of type: SUMMER
+      INPUTS: 
+       n-pilot-z-norm
+       -n-pilot-z-correction
+      OUTPUT: g-load-corrected
+
+    Loading Component "fcs/elevator-cmd-limiter" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 0.440000
+      INPUTS: 
+       elevator-cmd-norm
+       pitch-trim-cmd-norm
+      OUTPUT: elevator-cmd-limiter
+
+    Loading Component "fcs/elevator-scheduler" of type: SCHEDULED_GAIN
+    1 dimensional table with 5 rows.
+	-0.5236	0	
+	-0.5	0.11	
+	0	1	
+	0.5	0.11	
+	0.5236	0	
+    1 dimensional table with 5 rows.
+	-0.5236	0	
+	-0.5	0.11	
+	0	1	
+	0.5	0.11	
+	0.5236	0	
+      INPUT: elevator-cmd-limiter
+      GAIN: constant value 1.000000
+      OUTPUT: elevator-scheduler
+      Scheduled by table:
+
+    Loading Component "fcs/alpha-limiter-norm" of type: PURE_GAIN
+      INPUT: alpha-rad
+      GAIN: constant value 1.047200
+      OUTPUT: alpha-limiter-norm
+
+    Loading Component "fcs/pitch-rate-norm" of type: PURE_GAIN
+      INPUT: q-aero-rad_sec
+      GAIN: constant value 6.200000
+      OUTPUT: pitch-rate-norm
+
+    Loading Component "fcs/g-load-norm" of type: PURE_GAIN
+      INPUT: g-load-corrected
+      GAIN: constant value 0.020000
+      OUTPUT: g-load-norm
+
+    Loading Component "fcs/pitch-trim-error" of type: SUMMER
+      INPUTS: 
+       elevator-scheduler
+       pitch-rate-norm
+       -g-load-norm
+      OUTPUT: pitch-trim-error
+
+    Loading Component "fcs/elevator-pid-trigger" of type: SWITCH
+        vc-kts lt constant value 5.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: elevator-pid-trigger
+
+    Loading Component "fcs/g-load-pid" of type: PID
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUT: pitch-trim-error
+      OUTPUT: g-load-pid
+
+    Loading Component "fcs/pitch-scheduler" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       elevator-scheduler
+       alpha-limiter-norm
+       g-load-pid
+      OUTPUT: pitch-scheduler
+
+    Loading Component "fcs/pitch-scheduler-switch" of type: SWITCH
+        fbw-override == constant value 1.000000      if all of the following are true: {
+
+      }      Switch default value is: pitch-scheduler
+      Switch takes test 1 value (elevator-cmd-limiter)
+
+      OUTPUT: pitch-scheduler-switch
+
+    Loading Component "fcs/elevator-position-normalized" of type: KINEMATIC
+      INPUT: pitch-scheduler-switch
+      DETENTS: 2
+        -1.0000 0.3000
+        1.0000 0.3000
+      OUTPUT: elevator-pos-norm
+      OUTPUT: elevator-position-normalized
+
+    Loading Component "fcs/elevator-position" of type: AEROSURFACE_SCALE
+      INPUT: elevator-pos-norm
+      GAIN: constant value 1.000000
+      OUTPUT: elevator-pos-rad
+      OUTPUT: elevator-position
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.4360
+        Output MAX: 0.4360
+
+    Loading Component "fcs/dht-left-pos-rad" of type: SUMMER
+      Minimum limit: constant value -0.436000
+      Maximum limit: constant value 0.436000
+      INPUTS: 
+       -elevator-pos-rad
+       -left-aileron-pos-rad
+      OUTPUT: dht-left-pos-rad
+
+    Loading Component "fcs/dht-right-pos-rad" of type: SUMMER
+      Minimum limit: constant value -0.436000
+      Maximum limit: constant value 0.436000
+      INPUTS: 
+       elevator-pos-rad
+       right-aileron-pos-rad
+      OUTPUT: dht-right-pos-rad
+
+    Channel Yaw
+
+    Loading Component "fcs/yaw-rate-norm" of type: SCHEDULED_GAIN
+    1 dimensional table with 3 rows.
+	80	0	
+	100	15	
+	150	100	
+    1 dimensional table with 3 rows.
+	80	0	
+	100	15	
+	150	100	
+      INPUT: r-aero-rad_sec
+      GAIN: constant value 1.000000
+      OUTPUT: yaw-rate-norm
+      Scheduled by table:
+
+    Loading Component "fcs/yaw-load-norm" of type: PURE_GAIN
+      INPUT: n-pilot-y-norm
+      GAIN: constant value 0.250000
+      OUTPUT: yaw-load-norm
+
+    Loading Component "fcs/yaw-trim-error" of type: SUMMER
+      INPUTS: 
+       rudder-cmd-norm
+       yaw-rate-norm
+       yaw-load-norm
+      OUTPUT: yaw-trim-error
+
+    Loading Component "fcs/rudder-pid-trigger" of type: SWITCH
+        vc-kts lt constant value 10.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: rudder-pid-trigger
+
+    Loading Component "fcs/yaw-load-pid" of type: PID
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUT: yaw-trim-error
+      OUTPUT: rudder-pos-norm
+      OUTPUT: yaw-load-pid
+
+    Loading Component "fcs/yaw-scheduler" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       rudder-cmd-norm
+       yaw-trim-cmd-norm
+       yaw-load-pid
+      OUTPUT: yaw-scheduler
+
+    Loading Component "fcs/rudder-position" of type: KINEMATIC
+      INPUT: yaw-scheduler
+      DETENTS: 2
+        -1.0000 0.4000
+        1.0000 0.4000
+      OUTPUT: rudder-pos-norm
+      OUTPUT: rudder-position
+
+    Loading Component "fcs/rudder-control" of type: AEROSURFACE_SCALE
+      INPUT: rudder-pos-norm
+      GAIN: constant value 1.000000
+      OUTPUT: rudder-pos-rad
+      OUTPUT: rudder-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.5240
+        Output MAX: 0.5240
+
+    Channel Landing Gear
+
+    Loading Component "fcs/gear-wow" of type: SWITCH
+        WOW eq constant value 1.000000        WOW eq constant value 1.000000      if all of the following are true: {
+
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: gear-wow
+
+    Loading Component "fcs/gear-control" of type: KINEMATIC
+      INPUT: gear-cmd-norm
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 5.0000
+      OUTPUT: gear-pos-norm
+      OUTPUT: gear-control
+
+    Loading Component "fcs/scheduled-steer-pos-deg" of type: SCHEDULED_GAIN
+    1 dimensional table with 3 rows.
+	10	80	
+	50	15	
+	150	2	
+    1 dimensional table with 3 rows.
+	10	80	
+	50	15	
+	150	2	
+      INPUT: steer-cmd-norm
+      GAIN: constant value 1.000000
+      OUTPUT: steer-pos-deg
+      OUTPUT: scheduled-steer-pos-deg
+      Scheduled by table:
+
+    Channel Leading Edge Flap
+
+    Loading Component "fcs/lef-pos-rad" of type: SWITCH
+        gear-wow eq constant value 1.000000        gear-pos-norm gt constant value 0.000000      if all of the following are true: {
+
+
+      }        gear-pos-norm eq constant value 0.000000        alpha-rad gt constant value 0.261800      if all of the following are true: {
+
+
+      }        gear-wow eq constant value 0.000000        alpha-rad gt constant value 0.087300      if all of the following are true: {
+
+
+      }        mach gt constant value 0.900000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value -0.034900)
+
+      Switch takes test 2 value (constant value 0.436000)
+
+      Switch takes test 3 value (constant value 0.262000)
+
+      Switch takes test 4 value (constant value -0.034900)
+
+      OUTPUT: lef-pos-rad
+
+    Loading Component "fcs/lef-pos-norm" of type: PURE_GAIN
+      INPUT: lef-pos-rad
+      GAIN: constant value 2.293578
+      OUTPUT: lef-pos-norm
+
+    Loading Component "fcs/lef-control" of type: KINEMATIC
+      INPUT: lef-pos-norm
+      DETENTS: 2
+        -1.0000 3.0000
+        1.0000 3.0000
+      OUTPUT: lef-control
+
+    Loading Component "fcs/lef-pos-deg" of type: AEROSURFACE_SCALE
+      INPUT: lef-control
+      GAIN: constant value 1.000000
+      OUTPUT: lef-pos-deg
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -25.0000
+        Output MAX: 25.0000
+
+    Channel Throttle
+
+    Loading Component "fcs/throttle1" of type: PURE_GAIN
+      INPUT: throttle-cmd-norm
+      GAIN: constant value 2.000000
+      OUTPUT: throttle-pos-norm
+      OUTPUT: throttle1
+
+    Channel Speedbrake
+
+    Loading Component "fcs/speedbrake-alpha-limiter" of type: SWITCH
+        alpha-deg ge constant value 53.000000        v-fps le constant value 18.000000      if all of the following are true: {
+
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: speedbrake-alpha-limiter
+
+    Loading Component "fcs/speedbrake-initiate" of type: SWITCH
+        speedbrake-alpha-limiter eq constant value 1.000000        speedbrake-cmd-norm eq constant value 1.000000      if any of the following are true: {
+
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: speedbrake-initiate
+
+    Loading Component "fcs/speedbrake-scheduler" of type: SCHEDULED_GAIN
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.7167	
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.7167	
+      INPUT: speedbrake-initiate
+      GAIN: constant value 1.000000
+      OUTPUT: speedbrake-scheduler
+      Scheduled by table:
+
+    Loading Component "fcs/speedbrake-control" of type: KINEMATIC
+      INPUT: speedbrake-scheduler
+      DETENTS: 2
+        0.0000 0.0000
+        60.0000 1.0000
+      OUTPUT: speedbrake-pos-deg
+      OUTPUT: speedbrake-control
+
+    Loading Component "fcs/speedbrake-position-normalizer" of type: AEROSURFACE_SCALE
+      INPUT: speedbrake-control
+      GAIN: constant value 1.000000
+      OUTPUT: speedbrake-pos-norm
+      OUTPUT: speedbrake-position-normalizer
+      In/Out Mapping:
+        Input MIN: 0.0000
+        Input MAX: 60.0000
+        Output MIN: 0.0000
+        Output MAX: 1.0000
+
+    Channel Hook
+
+    Loading Component "fcs/hook-control" of type: KINEMATIC
+      INPUT: hook-engage
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 2.5000
+      OUTPUT: hook-pos-norm
+      OUTPUT: hook-control
+
+    Channel Canopy
+
+    Loading Component "fcs/canopy-trigger" of type: SWITCH
+        u-fps gt constant value 1.000000      if all of the following are true: {
+
+      }      Switch default value is: canopy-engage
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: canopy-trigger
+
+    Loading Component "fcs/canopy-control" of type: KINEMATIC
+      INPUT: canopy-trigger
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 10.0000
+      OUTPUT: canopy-pos-norm
+      OUTPUT: canopy-control
+    1 dimensional table with 13 rows.
+	0	1.229	
+	0.1	1.124	
+	0.15	1.116	
+	0.2	1.124	
+	0.3	1.105	
+	0.4	1.041	
+	0.5	1.034	
+	0.6	1.019	
+	0.7	1.008	
+	0.8	1.003	
+	0.9	1.001	
+	1	1	
+	1.1	1	
+    Function: aero/function/kCLge
+
+  Aerodynamics (Lift|Side|Drag axes):
+
+    2 dimensional table with 12 rows, 5 columns.
+		-0.436	-0.218	0	0.218	0.436	
+	-0.175	0.217	0.174	0.156	0.181	0.23	
+	-0.087	0.094	0.055	0.041	0.062	0.101	
+	0	0.081	0.04	0.021	0.039	0.076	
+	0.087	0.106	0.061	0.04	0.057	0.101	
+	0.175	0.166	0.119	0.096	0.114	0.158	
+	0.262	0.252	0.203	0.182	0.202	0.24	
+	0.349	0.404	0.362	0.347	0.371	0.416	
+	0.436	0.628	0.588	0.577	0.601	0.637	
+	0.524	0.875	0.84	0.826	0.852	0.88	
+	0.611	1.127	1.095	1.084	1.102	1.125	
+	0.698	1.365	1.334	1.326	1.338	1.356	
+	0.785	1.517	1.487	1.478	1.482	1.489	
+    Function: aero/coefficient/CDDh
+    1 dimensional table with 4 rows.
+	0	0	
+	0.81	0	
+	1.1	0.023	
+	1.8	0.015	
+    Function: aero/coefficient/CDmach
+    1 dimensional table with 12 rows.
+	-0.175	0.003	
+	-0.087	0.001	
+	0	0	
+	0.087	0.001	
+	0.175	0.002	
+	0.262	0.004	
+	0.349	0.007	
+	0.436	0.011	
+	0.524	0.015	
+	0.611	0.019	
+	0.698	0.023	
+	0.785	0.024	
+    Function: aero/coefficient/CDDlef
+    Function: aero/coefficient/CDDflaps
+    Function: aero/coefficient/CDgear
+    1 dimensional table with 12 rows.
+	-0.175	-0.0545	
+	-0.087	-0.0225	
+	0	0.0096	
+	0.087	0.059	
+	0.175	0.1244	
+	0.262	0.2182	
+	0.349	0.2324	
+	0.436	0.2029	
+	0.524	0.1435	
+	0.611	0.1046	
+	0.698	0.1363	
+	0.785	0.1196	
+    Function: aero/coefficient/CDDsb
+    1 dimensional table with 12 rows.
+	-0.175	-1.265	
+	-0.087	-2.139	
+	0	-0.308	
+	0.087	1.402	
+	0.175	3.369	
+	0.262	5.135	
+	0.349	6.88	
+	0.436	10.06	
+	0.524	13.2	
+	0.611	15.87	
+	0.698	23.22	
+	0.785	24.11	
+    Function: aero/coefficient/CDq
+    1 dimensional table with 12 rows.
+	-0.175	0.067	
+	-0.087	0.034	
+	0	0.028	
+	0.087	0.029	
+	0.175	0.033	
+	0.262	0.059	
+	0.349	0.061	
+	0.436	0.027	
+	0.524	0.036	
+	0.611	0.047	
+	0.698	0.029	
+	0.785	0.015	
+    Function: aero/coefficient/CDq_Dlef
+    Function: aero/coefficient/CYb
+    1 dimensional table with 3 rows.
+	0.4	0	
+	1.2	0.0573	
+	1.6	-0.1719	
+    Function: aero/coefficient/CYb_M
+    Function: aero/coefficient/CYDa
+    Function: aero/coefficient/CYdr
+    1 dimensional table with 12 rows.
+	-0.175	-0.108	
+	-0.087	-0.108	
+	0	-0.188	
+	0.087	0.11	
+	0.175	0.258	
+	0.262	0.226	
+	0.349	0.344	
+	0.436	0.362	
+	0.524	0.611	
+	0.611	0.529	
+	0.698	0.298	
+	0.785	-0.227	
+    Function: aero/coefficient/CYp
+    1 dimensional table with 12 rows.
+	-0.175	0.882	
+	-0.087	0.852	
+	0	0.876	
+	0.087	0.958	
+	0.175	0.962	
+	0.262	0.974	
+	0.349	0.819	
+	0.436	0.483	
+	0.524	0.59	
+	0.611	1.21	
+	0.698	-0.493	
+	0.785	-1.04	
+    Function: aero/coefficient/CYr
+    2 dimensional table with 12 rows, 5 columns.
+		-0.436	-0.218	0	0.218	0.436	
+	-0.175	-0.659	-0.709	-0.754	-0.792	-0.825	
+	-0.087	-0.151	-0.196	-0.238	-0.278	-0.316	
+	0	0.183	0.141	0.1	0.059	0.017	
+	0.087	0.491	0.454	0.414	0.371	0.326	
+	0.175	0.797	0.763	0.725	0.68	0.63	
+	0.262	1.108	1.079	1.041	0.993	0.94	
+	0.349	1.395	1.366	1.327	1.274	1.214	
+	0.436	1.615	1.587	1.547	1.49	1.427	
+	0.524	1.804	1.777	1.737	1.674	1.61	
+	0.611	1.9	1.872	1.829	1.766	1.699	
+	0.698	1.898	1.869	1.822	1.757	1.689	
+	0.785	1.753	1.724	1.674	1.612	1.546	
+    Function: aero/coefficient/CLDh
+    1 dimensional table with 12 rows.
+	-0.175	-0.012	
+	-0.087	-0.004	
+	0	0.002	
+	0.087	0.007	
+	0.175	0.012	
+	0.262	0.018	
+	0.349	0.022	
+	0.436	0.025	
+	0.524	0.026	
+	0.611	0.028	
+	0.698	0.028	
+	0.785	0.025	
+    Function: aero/coefficient/CLDlef
+    Function: aero/coefficient/CLDflaps
+    1 dimensional table with 12 rows.
+	-0.175	0.3645	
+	-0.087	0.3678	
+	0	0.3684	
+	0.087	0.2522	
+	0.175	0.271	
+	0.262	0.3615	
+	0.349	0.1283	
+	0.436	0.0075	
+	0.524	-0.1311	
+	0.611	-0.1836	
+	0.698	-0.1161	
+	0.785	-0.1064	
+    Function: aero/coefficient/CLDsb
+    1 dimensional table with 12 rows.
+	-0.175	8.713	
+	-0.087	25.71	
+	0	28.9	
+	0.087	31.4	
+	0.175	31.09	
+	0.262	30.41	
+	0.349	26.97	
+	0.436	26.42	
+	0.524	25.86	
+	0.611	25.27	
+	0.698	30.52	
+	0.785	25.82	
+    Function: aero/coefficient/CLq
+    1 dimensional table with 12 rows.
+	-0.175	-0.256	
+	-0.087	-0.062	
+	0	-0.01	
+	0.087	0.02	
+	0.175	-0.011	
+	0.262	0.053	
+	0.349	0.063	
+	0.436	-0.009	
+	0.524	0.034	
+	0.611	0.042	
+	0.698	0.005	
+	0.785	0.001	
+    Function: aero/coefficient/CLq_Dsb
+    2 dimensional table with 12 rows, 13 columns.
+		-0.524	-0.436	-0.349	-0.262	-0.175	-0.087	0	0.087	0.175	0.262	0.349	0.436	0.524	
+	-0.175	-0.009	-0.007	-0	0.001	0.003	0.001	0	-0.001	-0.003	-0.001	0	0.007	0.009	
+	-0.087	0.011	0.01	0.01	0.01	0.009	0.004	0	-0.004	-0.009	-0.01	-0.01	-0.01	-0.011	
+	0	0.023	0.023	0.022	0.02	0.017	0.008	0	-0.008	-0.017	-0.02	-0.022	-0.023	-0.023	
+	0.087	0.037	0.034	0.034	0.03	0.024	0.012	0	-0.012	-0.024	-0.03	-0.034	-0.034	-0.037	
+	0.175	0.05	0.049	0.047	0.039	0.03	0.016	0	-0.016	-0.03	-0.039	-0.047	-0.049	-0.05	
+	0.262	0.068	0.063	0.06	0.054	0.041	0.022	0	-0.022	-0.041	-0.054	-0.06	-0.063	-0.068	
+	0.349	0.089	0.081	0.069	0.057	0.045	0.022	0	-0.022	-0.045	-0.057	-0.069	-0.081	-0.089	
+	0.436	0.088	0.079	0.067	0.054	0.04	0.021	0	-0.021	-0.04	-0.054	-0.067	-0.079	-0.088	
+	0.524	0.091	0.06	0.033	0.023	0.016	0.015	0	-0.015	-0.016	-0.023	-0.033	-0.06	-0.091	
+	0.611	0.076	0.058	0.036	0.006	0.002	0.008	0	-0.008	-0.002	-0.006	-0.036	-0.058	-0.076	
+	0.698	0.077	0.062	0.035	0.014	0.01	0.013	0	-0.013	-0.01	-0.014	-0.035	-0.062	-0.077	
+	0.785	0.076	0.059	0.035	0.027	0.019	0.015	0	-0.015	-0.019	-0.027	-0.035	-0.059	-0.076	
+    Function: aero/coefficient/Clb
+    1 dimensional table with 6 rows.
+	0.6	0	
+	0.8	0.1891	
+	1	0.1776	
+	1.2	0.1375	
+	1.4	0.1203	
+	1.6	0.0859	
+    Function: aero/coefficient/Clb_M
+    1 dimensional table with 12 rows.
+	-0.175	-0.36	
+	-0.087	-0.359	
+	0	-0.443	
+	0.087	-0.42	
+	0.175	-0.383	
+	0.262	-0.375	
+	0.349	-0.329	
+	0.436	-0.294	
+	0.524	-0.23	
+	0.611	-0.21	
+	0.698	-0.12	
+	0.785	-0.1	
+    Function: aero/coefficient/Clp
+    1 dimensional table with 12 rows.
+	-0.175	-0.126	
+	-0.087	-0.026	
+	0	0.063	
+	0.087	0.113	
+	0.175	0.208	
+	0.262	0.23	
+	0.349	0.319	
+	0.436	0.437	
+	0.524	0.68	
+	0.611	0.1	
+	0.698	0.447	
+	0.785	-0.33	
+    Function: aero/coefficient/Clr
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	0.041	0.041	0.042	0.04	0.043	0.044	0.043	
+	-0.087	0.052	0.053	0.053	0.052	0.049	0.048	0.049	
+	0	0.053	0.053	0.052	0.051	0.048	0.048	0.047	
+	0.087	0.056	0.053	0.051	0.052	0.049	0.047	0.045	
+	0.175	0.05	0.05	0.049	0.048	0.043	0.042	0.042	
+	0.262	0.056	0.051	0.049	0.048	0.042	0.041	0.037	
+	0.349	0.082	0.066	0.043	0.042	0.042	0.02	0.003	
+	0.436	0.059	0.043	0.035	0.037	0.036	0.028	0.013	
+	0.524	0.042	0.038	0.026	0.031	0.025	0.013	0.01	
+	0.611	0.038	0.027	0.016	0.026	0.021	0.014	0.003	
+	0.698	0.027	0.023	0.018	0.017	0.016	0.011	0.007	
+	0.785	0.017	0.016	0.014	0.012	0.011	-0.01	0.008	
+    Function: aero/coefficient/Clda
+    1 dimensional table with 3 rows.
+	0.6	0	
+	1.2	-0.063	
+	1.6	-0.063	
+    Function: aero/coefficient/Clda_M
+    1 dimensional table with 2 rows.
+	0.6	0	
+	1.6	-0.0201	
+    Function: aero/coefficient/Cldr_M
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	0.005	0.007	0.013	0.018	0.015	0.021	0.023	
+	-0.087	0.017	0.016	0.013	0.015	0.014	0.011	0.01	
+	0	0.014	0.014	0.011	0.015	0.013	0.01	0.011	
+	0.087	0.01	0.014	0.012	0.014	0.013	0.011	0.011	
+	0.175	-0.005	0.013	0.011	0.014	0.012	0.01	0.011	
+	0.262	0.009	0.009	0.009	0.014	0.011	0.009	0.01	
+	0.349	0.019	0.012	0.008	0.014	0.011	0.008	0.008	
+	0.436	0.005	0.005	0.005	0.015	0.01	0.01	0.01	
+	0.524	0	0	0	0.013	0.008	0.006	0.006	
+	0.611	-0.005	0.004	0.005	0.011	0.008	0.005	0.014	
+	0.698	-0.011	0.009	0.003	0.006	0.007	0	0.02	
+	0.785	0.008	0.007	0.005	0.001	0.003	0.001	0	
+    Function: aero/coefficient/Cldr
+    2 dimensional table with 12 rows, 5 columns.
+		-0.436	-0.218	0	0.218	0.436	
+	-0.175	0.205	0.081	-0.046	-0.174	-0.259	
+	-0.087	0.168	0.077	-0.02	-0.145	-0.202	
+	0	0.186	0.107	-0.009	-0.121	-0.184	
+	0.087	0.196	0.11	-0.005	-0.127	-0.193	
+	0.175	0.213	0.11	-0.006	-0.129	-0.199	
+	0.262	0.251	0.141	0.01	-0.102	-0.15	
+	0.349	0.245	0.127	0.006	-0.097	-0.16	
+	0.436	0.238	0.119	-0.001	-0.113	-0.167	
+	0.524	0.252	0.133	0.014	-0.087	-0.104	
+	0.611	0.231	0.108	0	-0.084	-0.076	
+	0.698	0.198	0.081	-0.013	-0.069	-0.041	
+	0.785	0.192	0.093	0.032	-0.006	-0.005	
+    Function: aero/coefficient/CmDh
+    1 dimensional table with 6 rows.
+	0.6	0	
+	0.8	0.0974	
+	0.9	-0.3323	
+	1	-0.9626	
+	1.1	-0.848	
+	1.2	-0.7907	
+    Function: aero/coefficient/Cma_M
+    1 dimensional table with 12 rows.
+	-0.175	-0.0036	
+	-0.087	-0.0036	
+	0	-0.0036	
+	0.087	0.0303	
+	0.175	0.0225	
+	0.262	0.0128	
+	0.349	0.0252	
+	0.436	0.0275	
+	0.524	-0.0171	
+	0.611	-0.0448	
+	0.698	-0.0737	
+	0.785	-0.0884	
+    Function: aero/coefficient/CmDsb
+    1 dimensional table with 12 rows.
+	-0.175	-7.21	
+	-0.087	-5.4	
+	0	-5.23	
+	0.087	-5.26	
+	0.175	-6.11	
+	0.262	-6.64	
+	0.349	-5.69	
+	0.436	-6	
+	0.524	-6.2	
+	0.611	-6.4	
+	0.698	-6.6	
+	0.785	-6	
+    Function: aero/coefficient/Cmq
+    2 dimensional table with 12 rows, 13 columns.
+		-0.524	-0.436	-0.349	-0.262	-0.175	-0.087	0	0.087	0.175	0.262	0.349	0.436	0.524	
+	-0.175	-0.079	-0.074	-0.064	-0.056	-0.038	-0.018	0	0.018	0.038	0.056	0.064	0.074	0.079	
+	-0.087	-0.09	-0.086	-0.077	-0.057	-0.042	-0.019	0	0.019	0.042	0.057	0.077	0.086	0.09	
+	0	-0.106	-0.093	-0.076	-0.059	-0.042	-0.018	0	0.018	0.042	0.059	0.076	0.093	0.106	
+	0.087	-0.106	-0.089	-0.074	-0.058	-0.042	-0.019	0	0.019	0.042	0.058	0.074	0.089	0.106	
+	0.175	-0.096	-0.08	-0.073	-0.058	-0.043	-0.019	0	0.019	0.043	0.058	0.073	0.08	0.096	
+	0.262	-0.08	-0.062	-0.057	-0.053	-0.039	-0.018	0	0.018	0.039	0.053	0.057	0.062	0.08	
+	0.349	-0.068	-0.049	-0.029	-0.032	-0.03	-0.013	0	0.013	0.03	0.032	0.029	0.049	0.068	
+	0.436	-0.03	-0.022	-0.007	-0.012	-0.017	-0.007	0	0.007	0.017	0.012	0.007	0.022	0.03	
+	0.524	-0.064	-0.028	-0.012	-0.002	-0.004	-0.004	0	0.004	0.004	0.002	0.012	0.028	0.064	
+	0.611	-0.015	0.012	0.034	0.046	0.035	0.014	0	-0.014	-0.035	-0.046	-0.034	-0.012	0.015	
+	0.698	-0.011	0.002	0.065	0.071	0.047	0.017	0	-0.017	-0.047	-0.071	-0.065	-0.002	0.011	
+	0.785	0.001	0.013	0.041	0.073	0.057	0.033	0	-0.033	-0.057	-0.073	-0.041	-0.013	-0.001	
+    Function: aero/coefficient/Cnb
+    1 dimensional table with 8 rows.
+	0.6	0	
+	0.7	-0.0688	
+	0.8	-0.0172	
+	0.9	0.0229	
+	1	0	
+	1.2	-0.0688	
+	1.4	0.0057	
+	1.6	0.0688	
+    Function: aero/coefficient/Cnb_M
+    1 dimensional table with 12 rows.
+	-0.175	-0.061	
+	-0.087	-0.052	
+	0	-0.052	
+	0.087	0.012	
+	0.175	0.013	
+	0.262	0.024	
+	0.349	-0.05	
+	0.436	-0.15	
+	0.524	-0.13	
+	0.611	-0.158	
+	0.698	-0.24	
+	0.785	-0.15	
+    Function: aero/coefficient/Cnp
+    1 dimensional table with 12 rows.
+	-0.175	-0.38	
+	-0.087	-0.363	
+	0	-0.378	
+	0.087	-0.386	
+	0.175	-0.37	
+	0.262	-0.453	
+	0.349	-0.55	
+	0.436	-0.582	
+	0.524	-0.595	
+	0.611	-0.637	
+	0.698	-1.02	
+	0.785	-0.84	
+    Function: aero/coefficient/Cnr
+    1 dimensional table with 6 rows.
+	0.6	0	
+	0.8	0.0149	
+	1	-0.0011	
+	1.2	0.0097	
+	1.4	0.0126	
+	1.6	-0.004	
+    Function: aero/coefficient/Cnda_M
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	0.001	0.002	0.006	0.011	0.015	0.024	-0.022	
+	-0.087	0.027	0.014	0.008	0.011	0.015	0.01	-0.002	
+	0	0.017	0.016	0.006	0.01	0.014	0.004	0.003	
+	0.087	0.013	0.016	0.006	0.009	0.012	0.002	0.005	
+	0.175	0.012	0.014	0.005	0.008	0.011	0.001	0.003	
+	0.262	0.016	0.019	0.008	0.006	0.008	-0.003	0.001	
+	0.349	-0.001	0.021	0.005	-0	0.002	-0.014	0.009	
+	0.436	-0.017	-0.002	-0.007	-0.004	-0.002	-0.006	0.009	
+	0.524	-0.011	-0.012	-0.004	-0.007	-0.006	0.001	0.001	
+	0.611	-0.017	-0.016	-0.007	-0.01	-0.012	-0.004	-0.003	
+	0.698	-0.008	-0.015	-0.006	-0.004	-0.011	-0.004	0.002	
+	0.785	-0.016	-0.011	-0.006	-0.01	-0.011	-0.006	-0.001	
+    Function: aero/coefficient/Cnda
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	-0.018	-0.028	-0.037	-0.048	-0.043	-0.052	-0.062	
+	-0.087	-0.052	-0.051	-0.041	-0.045	-0.044	-0.034	-0.034	
+	0	-0.052	-0.043	-0.038	-0.045	-0.041	-0.036	-0.027	
+	0.087	-0.052	-0.046	-0.04	-0.045	-0.041	-0.036	-0.028	
+	0.175	-0.054	-0.045	-0.04	-0.044	-0.04	-0.035	-0.027	
+	0.262	-0.049	-0.049	-0.038	-0.045	-0.038	-0.028	-0.027	
+	0.349	-0.059	-0.057	-0.037	-0.047	-0.034	-0.024	-0.023	
+	0.436	-0.051	-0.052	-0.03	-0.048	-0.035	-0.023	-0.023	
+	0.524	-0.03	-0.03	-0.027	-0.049	-0.035	-0.02	-0.019	
+	0.611	-0.037	-0.033	-0.024	-0.045	-0.029	-0.016	-0.009	
+	0.698	-0.026	-0.03	-0.019	-0.033	-0.022	-0.01	-0.025	
+	0.785	-0.013	-0.008	-0.013	-0.016	-0.009	-0.014	-0.01	
+    Function: aero/coefficient/Cndr
+    1 dimensional table with 3 rows.
+	0.6	0	
+	1.2	0.0401	
+	1.6	0.0716	
+    Function: aero/coefficient/Cndr_M
+[TRIM] Native do_trim(1) ...
+GEAR_CONTACT: 0.000000 seconds: NOSE_LG 1
+GEAR_CONTACT: 0.000000 seconds: LEFT_MLG 1
+GEAR_CONTACT: 0.000000 seconds: RIGHT_MLG 1
+GEAR_CONTACT: 0.000000 seconds: LEFT_VFT 1
+GEAR_CONTACT: 0.000000 seconds: RIGHT_VFT 1
+GEAR_CONTACT: 0.000000 seconds: INTAKE 1
+GEAR_CONTACT: 0.000000 seconds: RADOME 1
+
+  Mass Properties Report (English units: lbf, in, slug-ft^2)
+                                      Weight    CG-X    CG-Y    CG-Z         Ixx         Iyy         Izz         Ixy         Ixz         Iyz
+    Base Vehicle                       17400.0  -193.0     0.0    -5.1      9496.0     55814.0     63100.0        -0.0      -982.0        -0.0
+0   Pilot                                230.0  -336.2     0.0     0.0         0.0         0.0         0.0        -0.0         0.0        -0.0
+[1m0   Fuel                          [22m        1500  -174.4      65       5           0           0           0
+[1m1   Fuel                          [22m        1500  -174.4     -65       5           0           0           0
+[1m2   Fuel                          [22m           0  -174.4      65     -15           0           0           0
+[1m3   Fuel                          [22m           0  -174.4     -65     -15           0           0           0
+                                                                                                                                            
+    Total:                           20630.0  -191.9     0.0    -3.6     12288.8     57107.5     67072.3         0.0     -1059.9         0.0
+
+End of vehicle configuration loading.
+-------------------------------------------------------------------------------
+GEAR_CONTACT: 0.000000 seconds: LEFT_VFT 0
+GEAR_CONTACT: 0.000000 seconds: RIGHT_VFT 0
+GEAR_CONTACT: 0.000000 seconds: INTAKE 0
+GEAR_CONTACT: 0.000000 seconds: RADOME 0
+
+  Mass Properties Report (English units: lbf, in, slug-ft^2)
+                                      Weight    CG-X    CG-Y    CG-Z         Ixx         Iyy         Izz         Ixy         Ixz         Iyz
+    Base Vehicle                       17400.0  -193.0     0.0    -5.1      9496.0     55814.0     63100.0        -0.0      -982.0        -0.0
+0   Pilot                                230.0  -336.2     0.0     0.0         0.0         0.0         0.0        -0.0         0.0        -0.0
+[1m0   Fuel                          [22m        1500  -174.4      65       5           0           0           0
+[1m1   Fuel                          [22m        1500  -174.4     -65       5           0           0           0
+[1m2   Fuel                          [22m           0  -174.4      65     -15           0           0           0
+[1m3   Fuel                          [22m           0  -174.4     -65     -15           0           0           0
+                                                                                                                                            
+    Total:                           20630.0  -191.9     0.0    -3.6     12288.8     57107.5     67072.3         0.0     -1059.9         0.0
+
+End of vehicle configuration loading.
+-------------------------------------------------------------------------------
+  Full Trim
+
+  Trim successful
+  Angle of Attack     : 0.49   wdot : -2.17e-04 Tolerance: 1e-03  Passed
+  Throttle            : 0.33   udot : -1.22e-04 Tolerance: 1e-03  Passed
+  Pitch Trim          : -0.021 qdot : -7.47e-12 Tolerance: 1e-04  Passed
+  Roll Angle          : -2.3e-08 vdot : 9.97e-08  Tolerance: 1e-03  Passed
+  Ailerons            : -1.3e-10 pdot : 2.87e-08  Tolerance: 1e-04  Passed
+  Rudder              : 8.9e-10 rdot : -1.68e-08 Tolerance: 1e-04  Passed
+  Trim Results:
+[TRIM] attempt 0: gamma_bias=+0.00 theta=+0.49 hdot=+0.00 Vc=400.0 elev_cmd=-0.0200 thr=0.3293
+[TRIM] ACCEPTED thr=0.3293 elev=-0.0200 ptrim=-0.0214 theta0=+0.49 hdot=+0.00 (genuinely level)
+[SETTLE] 18s closed-loop settle...
+[SETTLE] h=15093ft Vc=488.1kts theta=+0.38deg
+[LOG] Wrote 7200 rows
+
+METRICS (TECS_MRAC): max|dh|=572.4ft  θ=[-0.1,0.4]  roll_max=3.3  interlock=False  crash=False  residual_steps=0
+
+======================================================================
+  CASE : HYBRID
+======================================================================
+  physical γ_remaining=0.50 (50% effectiveness loss) after t=15s
+
+
+     JSBSim Flight Dynamics Model v1.3.1 [GitHub build 1837/commit 3b25f25e49b42d0489c04ac805674fc1450ca579] May 17 2026 14:28:34
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+Reading Aircraft Configuration File: General Dynamics F-16A
+                            Version: 2.0
+
+
+This aircraft model is a PRODUCTION release.
+
+  Description:   Models an F-16A Block-32 (Basic US configuration)
+  Model Author:  Erik Hofman
+  Creation Date: 2001-12-28
+  Version:       $Revision: 1.95 $
+
+  Aircraft Metrics:
+    WingArea: 300.000000
+    WingSpan: 30.000000
+    Incidence: 0.000000
+    Chord: 11.320000
+    H. Tail Area: 63.700000
+    H. Tail Arm: 16.460000
+    V. Tail Area: 54.750000
+    V. Tail Arm: 0.000000
+    Eyepoint (x, y, z): -336.200000 , 0.000000 , 29.500000
+    Ref Pt (x, y, z): -189.500000 , 0.000000 , 3.900000
+    Visual Ref Pt (x, y, z): -180.000000 , 0.000000 , 0.000000
+
+  Mass and Balance:
+    baseIxx: 9496.000000 slug-ft2
+    baseIyy: 55814.000000 slug-ft2
+    baseIzz: 63100.000000 slug-ft2
+    baseIxy: -0.000000 slug-ft2
+    baseIxz: -982.000000 slug-ft2
+    baseIyz: -0.000000 slug-ft2
+    Empty Weight: 17400.000000 lbm
+    CG (x, y, z): -193.000000 , 0.000000 , -5.100000
+    Point Mass Object: 230.000000 lbs. at X, Y, Z (in.): -336.200000  0.000000  0.000000
+
+  Ground Reactions: 
+    BOGEY NOSE_LG
+      Location: -299.600000 , 0.000000 , -72.000000
+      Spring Constant:  17250.000000
+      Damping Constant: 4250.000000 (linear)
+      Rebound Damping Constant: 4250.000000 (linear)
+      Dynamic Friction: 0.500000
+      Static Friction:  0.800000
+      Rolling Friction: 0.020000
+      Steering Type:    STEERABLE
+      Grouping:         CENTER
+      Max Steer Angle:  80.000000
+      Retractable:      1
+    BOGEY LEFT_MLG
+      Location: -158.600000 , -48.000000 , -71.600000
+      Spring Constant:  37500.000000
+      Damping Constant: 7500.000000 (linear)
+      Rebound Damping Constant: 7500.000000 (linear)
+      Dynamic Friction: 0.500000
+      Static Friction:  0.800000
+      Rolling Friction: 0.020000
+      Steering Type:    FIXED
+      Grouping:         LEFT
+      Max Steer Angle:  0.000000
+      Retractable:      1
+    BOGEY RIGHT_MLG
+      Location: -158.600000 , 48.000000 , -71.600000
+      Spring Constant:  37500.000000
+      Damping Constant: 7500.000000 (linear)
+      Rebound Damping Constant: 7500.000000 (linear)
+      Dynamic Friction: 0.500000
+      Static Friction:  0.800000
+      Rolling Friction: 0.020000
+      Steering Type:    FIXED
+      Grouping:         RIGHT
+      Max Steer Angle:  0.000000
+      Retractable:      1
+    STRUCTURE LEFT_WT
+      Location: -121.300000 , -189.000000 , 0.000000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE RIGHT_WT
+      Location: -121.300000 , 189.000000 , 0.000000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE TOP_VS
+      Location: -27.200000 , 0.000000 , 123.200000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE LEFT_VFT
+      Location: -97.600000 , -24.800000 , -52.000000
+      Spring Constant:  200.000000
+      Damping Constant: 5000.000000 (linear)
+      Rebound Damping Constant: 5000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE RIGHT_VFT
+      Location: -97.600000 , 24.800000 , -52.000000
+      Spring Constant:  200.000000
+      Damping Constant: 5000.000000 (linear)
+      Rebound Damping Constant: 5000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE INTAKE
+      Location: -322.400000 , 0.000000 , -36.600000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE RADOME
+      Location: -486.600000 , 0.000000 , -8.700000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+
+  External Reactions: 
+    
+    Frame: BODY
+    Location: (0.000000, 0.000000, 0.000000)
+    
+    Frame: BODY
+    Location: (0.000000, 0.000000, 0.000000)
+
+  Propulsion:
+       (FUEL) tank holds 3486 lbs. FUEL
+      currently at 43.0293% of maximum capacity
+      Tank location (X, Y, Z): -174.4, 65, 5
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+       (FUEL) tank holds 3486 lbs. FUEL
+      currently at 43.0293% of maximum capacity
+      Tank location (X, Y, Z): -174.4, -65, 5
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+       (FUEL) tank holds 2991 lbs. FUEL
+      currently at 0% of maximum capacity
+      Tank location (X, Y, Z): -174.4, 65, -15
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+       (FUEL) tank holds 2991 lbs. FUEL
+      currently at 0% of maximum capacity
+      Tank location (X, Y, Z): -174.4, -65, -15
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+    2 dimensional table with 6 rows, 8 columns.
+		-1e+04	0	1e+04	2e+04	3e+04	4e+04	5e+04	6e+04	
+	0	0.043	0.0488	0.0528	0.0694	0.0899	0.1183	0.1467	0	
+	0.2	0.05	0.0501	0.0335	0.0544	0.0797	0.1049	0.1342	0	
+	0.4	0.004	0.0047	0.002	0.0272	0.0595	0.0891	0.1203	0	
+	0.6	-0.0804	-0.0804	-0.056	-0.0237	0.0276	0.0718	0.1073	0	
+	0.8	-0.2129	-0.2129	-0.1498	-0.1025	0.0474	0.0868	0.09	0	
+	1	-0.2839	-0.2839	-0.1104	-0.0469	-0.027	0.0552	0.08	0	
+    Function: propulsion/engine[0]/IdleThrust
+    2 dimensional table with 8 rows, 8 columns.
+		-1e+04	0	1e+04	2e+04	3e+04	4e+04	5e+04	6e+04	
+	0	1.26	1	0.74	0.534	0.372	0.241	0.149	0	
+	0.2	1.171	0.934	0.697	0.506	0.355	0.231	0.143	0	
+	0.4	1.15	0.921	0.692	0.506	0.357	0.233	0.145	0	
+	0.6	1.181	0.951	0.721	0.532	0.378	0.248	0.154	0	
+	0.8	1.258	1.02	0.782	0.582	0.417	0.275	0.17	0	
+	1	1.369	1.12	0.871	0.651	0.475	0.315	0.195	0	
+	1.2	1.485	1.23	0.975	0.744	0.545	0.364	0.225	0	
+	1.4	1.594	1.34	1.086	0.845	0.628	0.424	0.263	0	
+    Function: propulsion/engine[0]/MilThrust
+    2 dimensional table with 14 rows, 8 columns.
+		-1e+04	0	1e+04	2e+04	3e+04	4e+04	5e+04	6e+04	
+	0	1.182	1	0.8184	0.6627	0.528	0.3756	0.2327	0	
+	0.2	1.131	0.9599	0.789	0.6406	0.5116	0.3645	0.2258	0	
+	0.4	1.115	0.9474	0.7798	0.634	0.507	0.3615	0.224	0	
+	0.6	1.128	0.9589	0.7894	0.642	0.5134	0.3661	0.2268	0	
+	0.8	1.171	0.9942	0.8177	0.6647	0.5309	0.3784	0.2345	0	
+	1	1.241	1.053	0.8648	0.7017	0.5596	0.3983	0.2467	0	
+	1.2	1.329	1.125	0.9221	0.7462	0.5936	0.4219	0.2614	0	
+	1.4	1.437	1.215	0.9933	0.8021	0.636	0.4509	0.2794	0	
+	1.6	1.571	1.326	1.081	0.87	0.6874	0.486	0.3011	0	
+	1.8	1.73	1.458	1.186	0.9512	0.7495	0.5289	0.3277	0	
+	2	1.831	1.57	1.309	1.047	0.8216	0.5786	0.3585	0	
+	2.2	1.97	1.69	1.41	1.24	0.91	0.6359	0.394	0	
+	2.4	2.07	1.8	1.53	1.34	1	0.72	0.46	0	
+	2.6	2.2	1.92	1.64	1.44	1.1	0.8	0.52	0	
+    Function: propulsion/engine[0]/AugThrust
+      X = 0
+      Y = 0
+      Z = 0
+      Pitch = 0 degrees
+      Yaw = 0 degrees
+
+    Declared properties
+
+      /sim/model/pushback/target-speed-fps (initial value: 0)
+
+      /sim/model/pushback/position-norm (initial value: 0)
+
+
+    Overriding properties
+
+      /sim/model/pushback/kp (initial value: 0)
+
+      /sim/model/pushback/ki (initial value: 0)
+
+      /sim/model/pushback/kd (initial value: 0)
+
+
+  System: pushback
+
+    Channel Pushback
+
+    Loading Component "systems/pushback/linked" of type: SWITCH
+        position-norm gt constant value 0.950000        WOW == constant value 1.000000        wheel-speed-fps lt constant value 50.000000      if all of the following are true: {
+
+
+
+      }      Switch default value is: constant value -1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: linked
+
+    Loading Component "systems/pushback/speed-error" of type: SUMMER
+      INPUTS: 
+       target-speed-fps
+       -wheel-speed-fps
+      OUTPUT: speed-error
+
+    Loading Component "systems/pushback/force" of type: PID
+      INPUT: speed-error
+      OUTPUT: force
+      OUTPUT: force
+
+    Loading Component "systems/pushback/force-output" of type: SWITCH
+        linked == constant value 0.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (force)
+
+      OUTPUT: magnitude
+      OUTPUT: force-output
+
+    Declared properties
+
+      systems/hook/tailhook-cmd-norm (initial value: 0)
+
+      systems/hook/tailhook-length-ft (initial value: 4.537)
+
+      systems/hook/tailhook-pos-min-deg (initial value: -3.806)
+
+      systems/hook/tailhook-pos-max-deg (initial value: 53.369)
+
+      systems/hook/tailhook-offset-x-in (initial value: 100.669)
+
+      systems/hook/tailhook-offset-y-in (initial value: 0)
+
+      systems/hook/tailhook-offset-z-in (initial value: -28.818)
+
+      systems/hook/tailhook-pos-deg (initial value: -3.806)
+
+
+  System: hook
+
+    Channel Hook
+
+    Loading Component "systems/hook/tailhook-control" of type: KINEMATIC
+      INPUT: tailhook-cmd-norm
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 1.5000
+      OUTPUT: tailhook-pos-norm
+      OUTPUT: tailhook-control
+
+    Loading Component "systems/hook/ready" of type: SWITCH
+        tailhook-pos-norm gt constant value 0.990000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: ready
+
+    Loading Component "systems/hook/hook-decel-multiplier" of type: SCHEDULED_GAIN
+    1 dimensional table with 3 rows.
+	0	0	
+	1	0	
+	80	2.2	
+    1 dimensional table with 3 rows.
+	0	0	
+	1	0	
+	80	2.2	
+      INPUT: ready
+      GAIN: constant value 1.000000
+      OUTPUT: hook-decel-multiplier
+      Scheduled by table:
+
+    Loading Component "systems/hook/hook-decel-force" of type: PURE_GAIN
+      INPUT: hook-decel-multiplier
+      GAIN: weight-lbs
+      OUTPUT: hook-decel-force
+
+    Loading Component "systems/hook/force" of type: SUMMER
+      INPUTS: 
+       hook-decel-force
+       fbx-prop-lbs
+      OUTPUT: force
+
+    Loading Component "systems/hook/animation-norm" of type: FCS_FUNCTION
+      OUTPUT: tailhook-pos-norm
+      OUTPUT: animation-norm
+
+    Declared properties
+
+      fcs/alpha-norm (initial value: 0)
+
+      fcs/hook-engage (initial value: 0)
+
+      fcs/canopy-engage (initial value: 0)
+
+      fcs/fbw-override (initial value: 0)
+
+
+  FCS: F-16 FC
+
+    Channel Flaps
+
+    Loading Component "fcs/tef-pos-rad" of type: SWITCH
+        vc-kts lt constant value 250.000000      if all of the following are true: {
+
+      }        mach gt constant value 0.900000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 0.349000)
+
+      Switch takes test 2 value (constant value -0.034900)
+
+      OUTPUT: tef-pos-rad
+
+    Loading Component "fcs/tef-pos-norm" of type: PURE_GAIN
+      INPUT: tef-pos-rad
+      GAIN: constant value 2.864789
+      OUTPUT: tef-pos-norm
+
+    Loading Component "fcs/tef-control" of type: KINEMATIC
+      INPUT: tef-pos-norm
+      DETENTS: 3
+        -1.0000 3.0000
+        0.0000 0.0000
+        1.0000 3.0000
+      OUTPUT: tef-control
+
+    Channel Roll
+
+    Loading Component "fcs/roll-rate-norm" of type: PURE_GAIN
+      INPUT: p-aero-rad_sec
+      GAIN: constant value 0.318210
+      OUTPUT: roll-rate-norm
+
+    Loading Component "fcs/roll-trim-error" of type: SUMMER
+      INPUTS: 
+       aileron-cmd-norm
+       -roll-rate-norm
+      OUTPUT: roll-trim-error
+
+    Loading Component "fcs/aileron-pid-trigger" of type: SWITCH
+        vc-kts lt constant value 20.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: aileron-pid-trigger
+
+    Loading Component "fcs/roll-rate-pid" of type: PID
+      INPUT: roll-trim-error
+      OUTPUT: roll-rate-pid
+
+    Loading Component "fcs/roll-rate-command" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       roll-rate-pid
+       aileron-cmd-norm
+      OUTPUT: roll-rate-command
+
+    Loading Component "fcs/aileron-control" of type: AEROSURFACE_SCALE
+      INPUT: roll-rate-command
+      GAIN: constant value 1.000000
+      OUTPUT: aileron-pos-rad
+      OUTPUT: aileron-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.3750
+        Output MAX: 0.3750
+
+    Loading Component "fcs/roll-rate-command-switch" of type: SWITCH
+        fbw-override == constant value 1.000000      if all of the following are true: {
+
+      }      Switch default value is: roll-rate-command
+      Switch takes test 1 value (aileron-cmd-norm)
+
+      OUTPUT: roll-rate-command-switch
+
+    Loading Component "fcs/aileron-position" of type: KINEMATIC
+      INPUT: roll-rate-command-switch
+      DETENTS: 2
+        -1.0000 0.3000
+        1.0000 0.3000
+      OUTPUT: left-aileron-pos-norm
+      OUTPUT: aileron-position
+
+    Loading Component "fcs/aileron-speed-compensated" of type: SCHEDULED_GAIN
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.15	
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.15	
+      INPUT: left-aileron-pos-norm
+      GAIN: constant value 1.000000
+      OUTPUT: aileron-speed-compensated
+      Scheduled by table:
+
+    Loading Component "fcs/left-flaperon-norm" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       -tef-control
+       -aileron-speed-compensated
+      OUTPUT: left-flaperon-norm
+
+    Loading Component "fcs/right-flaperon-norm" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       tef-control
+       -aileron-speed-compensated
+      OUTPUT: right-flaperon-norm
+
+    Loading Component "fcs/flaperon-summer" of type: SUMMER
+      INPUTS: 
+       left-flaperon-norm
+       right-flaperon-norm
+      OUTPUT: flaperon-summer
+
+    Loading Component "fcs/flaperon-mix-rad" of type: PURE_GAIN
+      INPUT: flaperon-summer
+      GAIN: constant value 1.432400
+      OUTPUT: flaperon-mix-rad
+
+    Loading Component "fcs/left-aileron-control" of type: AEROSURFACE_SCALE
+      INPUT: aileron-speed-compensated
+      GAIN: constant value 1.000000
+      OUTPUT: left-aileron-pos-rad
+      OUTPUT: left-aileron-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.3750
+        Output MAX: 0.3750
+
+    Loading Component "fcs/right-aileron-control" of type: AEROSURFACE_SCALE
+      INPUT: -aileron-speed-compensated
+      GAIN: constant value 1.000000
+      OUTPUT: right-aileron-pos-rad
+      OUTPUT: right-aileron-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.3750
+        Output MAX: 0.3750
+
+    Channel Pitch
+
+    Loading Component "fcs/n-pilot-z-correction" of type: FCS_FUNCTION
+      OUTPUT: n-pilot-z-correction
+
+    Loading Component "fcs/g-load-corrected" of type: SUMMER
+      INPUTS: 
+       n-pilot-z-norm
+       -n-pilot-z-correction
+      OUTPUT: g-load-corrected
+
+    Loading Component "fcs/elevator-cmd-limiter" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 0.440000
+      INPUTS: 
+       elevator-cmd-norm
+       pitch-trim-cmd-norm
+      OUTPUT: elevator-cmd-limiter
+
+    Loading Component "fcs/elevator-scheduler" of type: SCHEDULED_GAIN
+    1 dimensional table with 5 rows.
+	-0.5236	0	
+	-0.5	0.11	
+	0	1	
+	0.5	0.11	
+	0.5236	0	
+    1 dimensional table with 5 rows.
+	-0.5236	0	
+	-0.5	0.11	
+	0	1	
+	0.5	0.11	
+	0.5236	0	
+      INPUT: elevator-cmd-limiter
+      GAIN: constant value 1.000000
+      OUTPUT: elevator-scheduler
+      Scheduled by table:
+
+    Loading Component "fcs/alpha-limiter-norm" of type: PURE_GAIN
+      INPUT: alpha-rad
+      GAIN: constant value 1.047200
+      OUTPUT: alpha-limiter-norm
+
+    Loading Component "fcs/pitch-rate-norm" of type: PURE_GAIN
+      INPUT: q-aero-rad_sec
+      GAIN: constant value 6.200000
+      OUTPUT: pitch-rate-norm
+
+    Loading Component "fcs/g-load-norm" of type: PURE_GAIN
+      INPUT: g-load-corrected
+      GAIN: constant value 0.020000
+      OUTPUT: g-load-norm
+
+    Loading Component "fcs/pitch-trim-error" of type: SUMMER
+      INPUTS: 
+       elevator-scheduler
+       pitch-rate-norm
+       -g-load-norm
+      OUTPUT: pitch-trim-error
+
+    Loading Component "fcs/elevator-pid-trigger" of type: SWITCH
+        vc-kts lt constant value 5.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: elevator-pid-trigger
+
+    Loading Component "fcs/g-load-pid" of type: PID
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUT: pitch-trim-error
+      OUTPUT: g-load-pid
+
+    Loading Component "fcs/pitch-scheduler" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       elevator-scheduler
+       alpha-limiter-norm
+       g-load-pid
+      OUTPUT: pitch-scheduler
+
+    Loading Component "fcs/pitch-scheduler-switch" of type: SWITCH
+        fbw-override == constant value 1.000000      if all of the following are true: {
+
+      }      Switch default value is: pitch-scheduler
+      Switch takes test 1 value (elevator-cmd-limiter)
+
+      OUTPUT: pitch-scheduler-switch
+
+    Loading Component "fcs/elevator-position-normalized" of type: KINEMATIC
+      INPUT: pitch-scheduler-switch
+      DETENTS: 2
+        -1.0000 0.3000
+        1.0000 0.3000
+      OUTPUT: elevator-pos-norm
+      OUTPUT: elevator-position-normalized
+
+    Loading Component "fcs/elevator-position" of type: AEROSURFACE_SCALE
+      INPUT: elevator-pos-norm
+      GAIN: constant value 1.000000
+      OUTPUT: elevator-pos-rad
+      OUTPUT: elevator-position
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.4360
+        Output MAX: 0.4360
+
+    Loading Component "fcs/dht-left-pos-rad" of type: SUMMER
+      Minimum limit: constant value -0.436000
+      Maximum limit: constant value 0.436000
+      INPUTS: 
+       -elevator-pos-rad
+       -left-aileron-pos-rad
+      OUTPUT: dht-left-pos-rad
+
+    Loading Component "fcs/dht-right-pos-rad" of type: SUMMER
+      Minimum limit: constant value -0.436000
+      Maximum limit: constant value 0.436000
+      INPUTS: 
+       elevator-pos-rad
+       right-aileron-pos-rad
+      OUTPUT: dht-right-pos-rad
+
+    Channel Yaw
+
+    Loading Component "fcs/yaw-rate-norm" of type: SCHEDULED_GAIN
+    1 dimensional table with 3 rows.
+	80	0	
+	100	15	
+	150	100	
+    1 dimensional table with 3 rows.
+	80	0	
+	100	15	
+	150	100	
+      INPUT: r-aero-rad_sec
+      GAIN: constant value 1.000000
+      OUTPUT: yaw-rate-norm
+      Scheduled by table:
+
+    Loading Component "fcs/yaw-load-norm" of type: PURE_GAIN
+      INPUT: n-pilot-y-norm
+      GAIN: constant value 0.250000
+      OUTPUT: yaw-load-norm
+
+    Loading Component "fcs/yaw-trim-error" of type: SUMMER
+      INPUTS: 
+       rudder-cmd-norm
+       yaw-rate-norm
+       yaw-load-norm
+      OUTPUT: yaw-trim-error
+
+    Loading Component "fcs/rudder-pid-trigger" of type: SWITCH
+        vc-kts lt constant value 10.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: rudder-pid-trigger
+
+    Loading Component "fcs/yaw-load-pid" of type: PID
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUT: yaw-trim-error
+      OUTPUT: rudder-pos-norm
+      OUTPUT: yaw-load-pid
+
+    Loading Component "fcs/yaw-scheduler" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       rudder-cmd-norm
+       yaw-trim-cmd-norm
+       yaw-load-pid
+      OUTPUT: yaw-scheduler
+
+    Loading Component "fcs/rudder-position" of type: KINEMATIC
+      INPUT: yaw-scheduler
+      DETENTS: 2
+        -1.0000 0.4000
+        1.0000 0.4000
+      OUTPUT: rudder-pos-norm
+      OUTPUT: rudder-position
+
+    Loading Component "fcs/rudder-control" of type: AEROSURFACE_SCALE
+      INPUT: rudder-pos-norm
+      GAIN: constant value 1.000000
+      OUTPUT: rudder-pos-rad
+      OUTPUT: rudder-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.5240
+        Output MAX: 0.5240
+
+    Channel Landing Gear
+
+    Loading Component "fcs/gear-wow" of type: SWITCH
+        WOW eq constant value 1.000000        WOW eq constant value 1.000000      if all of the following are true: {
+
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: gear-wow
+
+    Loading Component "fcs/gear-control" of type: KINEMATIC
+      INPUT: gear-cmd-norm
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 5.0000
+      OUTPUT: gear-pos-norm
+      OUTPUT: gear-control
+
+    Loading Component "fcs/scheduled-steer-pos-deg" of type: SCHEDULED_GAIN
+    1 dimensional table with 3 rows.
+	10	80	
+	50	15	
+	150	2	
+    1 dimensional table with 3 rows.
+	10	80	
+	50	15	
+	150	2	
+      INPUT: steer-cmd-norm
+      GAIN: constant value 1.000000
+      OUTPUT: steer-pos-deg
+      OUTPUT: scheduled-steer-pos-deg
+      Scheduled by table:
+
+    Channel Leading Edge Flap
+
+    Loading Component "fcs/lef-pos-rad" of type: SWITCH
+        gear-wow eq constant value 1.000000        gear-pos-norm gt constant value 0.000000      if all of the following are true: {
+
+
+      }        gear-pos-norm eq constant value 0.000000        alpha-rad gt constant value 0.261800      if all of the following are true: {
+
+
+      }        gear-wow eq constant value 0.000000        alpha-rad gt constant value 0.087300      if all of the following are true: {
+
+
+      }        mach gt constant value 0.900000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value -0.034900)
+
+      Switch takes test 2 value (constant value 0.436000)
+
+      Switch takes test 3 value (constant value 0.262000)
+
+      Switch takes test 4 value (constant value -0.034900)
+
+      OUTPUT: lef-pos-rad
+
+    Loading Component "fcs/lef-pos-norm" of type: PURE_GAIN
+      INPUT: lef-pos-rad
+      GAIN: constant value 2.293578
+      OUTPUT: lef-pos-norm
+
+    Loading Component "fcs/lef-control" of type: KINEMATIC
+      INPUT: lef-pos-norm
+      DETENTS: 2
+        -1.0000 3.0000
+        1.0000 3.0000
+      OUTPUT: lef-control
+
+    Loading Component "fcs/lef-pos-deg" of type: AEROSURFACE_SCALE
+      INPUT: lef-control
+      GAIN: constant value 1.000000
+      OUTPUT: lef-pos-deg
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -25.0000
+        Output MAX: 25.0000
+
+    Channel Throttle
+
+    Loading Component "fcs/throttle1" of type: PURE_GAIN
+      INPUT: throttle-cmd-norm
+      GAIN: constant value 2.000000
+      OUTPUT: throttle-pos-norm
+      OUTPUT: throttle1
+
+    Channel Speedbrake
+
+    Loading Component "fcs/speedbrake-alpha-limiter" of type: SWITCH
+        alpha-deg ge constant value 53.000000        v-fps le constant value 18.000000      if all of the following are true: {
+
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: speedbrake-alpha-limiter
+
+    Loading Component "fcs/speedbrake-initiate" of type: SWITCH
+        speedbrake-alpha-limiter eq constant value 1.000000        speedbrake-cmd-norm eq constant value 1.000000      if any of the following are true: {
+
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: speedbrake-initiate
+
+    Loading Component "fcs/speedbrake-scheduler" of type: SCHEDULED_GAIN
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.7167	
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.7167	
+      INPUT: speedbrake-initiate
+      GAIN: constant value 1.000000
+      OUTPUT: speedbrake-scheduler
+      Scheduled by table:
+
+    Loading Component "fcs/speedbrake-control" of type: KINEMATIC
+      INPUT: speedbrake-scheduler
+      DETENTS: 2
+        0.0000 0.0000
+        60.0000 1.0000
+      OUTPUT: speedbrake-pos-deg
+      OUTPUT: speedbrake-control
+
+    Loading Component "fcs/speedbrake-position-normalizer" of type: AEROSURFACE_SCALE
+      INPUT: speedbrake-control
+      GAIN: constant value 1.000000
+      OUTPUT: speedbrake-pos-norm
+      OUTPUT: speedbrake-position-normalizer
+      In/Out Mapping:
+        Input MIN: 0.0000
+        Input MAX: 60.0000
+        Output MIN: 0.0000
+        Output MAX: 1.0000
+
+    Channel Hook
+
+    Loading Component "fcs/hook-control" of type: KINEMATIC
+      INPUT: hook-engage
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 2.5000
+      OUTPUT: hook-pos-norm
+      OUTPUT: hook-control
+
+    Channel Canopy
+
+    Loading Component "fcs/canopy-trigger" of type: SWITCH
+        u-fps gt constant value 1.000000      if all of the following are true: {
+
+      }      Switch default value is: canopy-engage
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: canopy-trigger
+
+    Loading Component "fcs/canopy-control" of type: KINEMATIC
+      INPUT: canopy-trigger
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 10.0000
+      OUTPUT: canopy-pos-norm
+      OUTPUT: canopy-control
+    1 dimensional table with 13 rows.
+	0	1.229	
+	0.1	1.124	
+	0.15	1.116	
+	0.2	1.124	
+	0.3	1.105	
+	0.4	1.041	
+	0.5	1.034	
+	0.6	1.019	
+	0.7	1.008	
+	0.8	1.003	
+	0.9	1.001	
+	1	1	
+	1.1	1	
+    Function: aero/function/kCLge
+
+  Aerodynamics (Lift|Side|Drag axes):
+
+    2 dimensional table with 12 rows, 5 columns.
+		-0.436	-0.218	0	0.218	0.436	
+	-0.175	0.217	0.174	0.156	0.181	0.23	
+	-0.087	0.094	0.055	0.041	0.062	0.101	
+	0	0.081	0.04	0.021	0.039	0.076	
+	0.087	0.106	0.061	0.04	0.057	0.101	
+	0.175	0.166	0.119	0.096	0.114	0.158	
+	0.262	0.252	0.203	0.182	0.202	0.24	
+	0.349	0.404	0.362	0.347	0.371	0.416	
+	0.436	0.628	0.588	0.577	0.601	0.637	
+	0.524	0.875	0.84	0.826	0.852	0.88	
+	0.611	1.127	1.095	1.084	1.102	1.125	
+	0.698	1.365	1.334	1.326	1.338	1.356	
+	0.785	1.517	1.487	1.478	1.482	1.489	
+    Function: aero/coefficient/CDDh
+    1 dimensional table with 4 rows.
+	0	0	
+	0.81	0	
+	1.1	0.023	
+	1.8	0.015	
+    Function: aero/coefficient/CDmach
+    1 dimensional table with 12 rows.
+	-0.175	0.003	
+	-0.087	0.001	
+	0	0	
+	0.087	0.001	
+	0.175	0.002	
+	0.262	0.004	
+	0.349	0.007	
+	0.436	0.011	
+	0.524	0.015	
+	0.611	0.019	
+	0.698	0.023	
+	0.785	0.024	
+    Function: aero/coefficient/CDDlef
+    Function: aero/coefficient/CDDflaps
+    Function: aero/coefficient/CDgear
+    1 dimensional table with 12 rows.
+	-0.175	-0.0545	
+	-0.087	-0.0225	
+	0	0.0096	
+	0.087	0.059	
+	0.175	0.1244	
+	0.262	0.2182	
+	0.349	0.2324	
+	0.436	0.2029	
+	0.524	0.1435	
+	0.611	0.1046	
+	0.698	0.1363	
+	0.785	0.1196	
+    Function: aero/coefficient/CDDsb
+    1 dimensional table with 12 rows.
+	-0.175	-1.265	
+	-0.087	-2.139	
+	0	-0.308	
+	0.087	1.402	
+	0.175	3.369	
+	0.262	5.135	
+	0.349	6.88	
+	0.436	10.06	
+	0.524	13.2	
+	0.611	15.87	
+	0.698	23.22	
+	0.785	24.11	
+    Function: aero/coefficient/CDq
+    1 dimensional table with 12 rows.
+	-0.175	0.067	
+	-0.087	0.034	
+	0	0.028	
+	0.087	0.029	
+	0.175	0.033	
+	0.262	0.059	
+	0.349	0.061	
+	0.436	0.027	
+	0.524	0.036	
+	0.611	0.047	
+	0.698	0.029	
+	0.785	0.015	
+    Function: aero/coefficient/CDq_Dlef
+    Function: aero/coefficient/CYb
+    1 dimensional table with 3 rows.
+	0.4	0	
+	1.2	0.0573	
+	1.6	-0.1719	
+    Function: aero/coefficient/CYb_M
+    Function: aero/coefficient/CYDa
+    Function: aero/coefficient/CYdr
+    1 dimensional table with 12 rows.
+	-0.175	-0.108	
+	-0.087	-0.108	
+	0	-0.188	
+	0.087	0.11	
+	0.175	0.258	
+	0.262	0.226	
+	0.349	0.344	
+	0.436	0.362	
+	0.524	0.611	
+	0.611	0.529	
+	0.698	0.298	
+	0.785	-0.227	
+    Function: aero/coefficient/CYp
+    1 dimensional table with 12 rows.
+	-0.175	0.882	
+	-0.087	0.852	
+	0	0.876	
+	0.087	0.958	
+	0.175	0.962	
+	0.262	0.974	
+	0.349	0.819	
+	0.436	0.483	
+	0.524	0.59	
+	0.611	1.21	
+	0.698	-0.493	
+	0.785	-1.04	
+    Function: aero/coefficient/CYr
+    2 dimensional table with 12 rows, 5 columns.
+		-0.436	-0.218	0	0.218	0.436	
+	-0.175	-0.659	-0.709	-0.754	-0.792	-0.825	
+	-0.087	-0.151	-0.196	-0.238	-0.278	-0.316	
+	0	0.183	0.141	0.1	0.059	0.017	
+	0.087	0.491	0.454	0.414	0.371	0.326	
+	0.175	0.797	0.763	0.725	0.68	0.63	
+	0.262	1.108	1.079	1.041	0.993	0.94	
+	0.349	1.395	1.366	1.327	1.274	1.214	
+	0.436	1.615	1.587	1.547	1.49	1.427	
+	0.524	1.804	1.777	1.737	1.674	1.61	
+	0.611	1.9	1.872	1.829	1.766	1.699	
+	0.698	1.898	1.869	1.822	1.757	1.689	
+	0.785	1.753	1.724	1.674	1.612	1.546	
+    Function: aero/coefficient/CLDh
+    1 dimensional table with 12 rows.
+	-0.175	-0.012	
+	-0.087	-0.004	
+	0	0.002	
+	0.087	0.007	
+	0.175	0.012	
+	0.262	0.018	
+	0.349	0.022	
+	0.436	0.025	
+	0.524	0.026	
+	0.611	0.028	
+	0.698	0.028	
+	0.785	0.025	
+    Function: aero/coefficient/CLDlef
+    Function: aero/coefficient/CLDflaps
+    1 dimensional table with 12 rows.
+	-0.175	0.3645	
+	-0.087	0.3678	
+	0	0.3684	
+	0.087	0.2522	
+	0.175	0.271	
+	0.262	0.3615	
+	0.349	0.1283	
+	0.436	0.0075	
+	0.524	-0.1311	
+	0.611	-0.1836	
+	0.698	-0.1161	
+	0.785	-0.1064	
+    Function: aero/coefficient/CLDsb
+    1 dimensional table with 12 rows.
+	-0.175	8.713	
+	-0.087	25.71	
+	0	28.9	
+	0.087	31.4	
+	0.175	31.09	
+	0.262	30.41	
+	0.349	26.97	
+	0.436	26.42	
+	0.524	25.86	
+	0.611	25.27	
+	0.698	30.52	
+	0.785	25.82	
+    Function: aero/coefficient/CLq
+    1 dimensional table with 12 rows.
+	-0.175	-0.256	
+	-0.087	-0.062	
+	0	-0.01	
+	0.087	0.02	
+	0.175	-0.011	
+	0.262	0.053	
+	0.349	0.063	
+	0.436	-0.009	
+	0.524	0.034	
+	0.611	0.042	
+	0.698	0.005	
+	0.785	0.001	
+    Function: aero/coefficient/CLq_Dsb
+    2 dimensional table with 12 rows, 13 columns.
+		-0.524	-0.436	-0.349	-0.262	-0.175	-0.087	0	0.087	0.175	0.262	0.349	0.436	0.524	
+	-0.175	-0.009	-0.007	-0	0.001	0.003	0.001	0	-0.001	-0.003	-0.001	0	0.007	0.009	
+	-0.087	0.011	0.01	0.01	0.01	0.009	0.004	0	-0.004	-0.009	-0.01	-0.01	-0.01	-0.011	
+	0	0.023	0.023	0.022	0.02	0.017	0.008	0	-0.008	-0.017	-0.02	-0.022	-0.023	-0.023	
+	0.087	0.037	0.034	0.034	0.03	0.024	0.012	0	-0.012	-0.024	-0.03	-0.034	-0.034	-0.037	
+	0.175	0.05	0.049	0.047	0.039	0.03	0.016	0	-0.016	-0.03	-0.039	-0.047	-0.049	-0.05	
+	0.262	0.068	0.063	0.06	0.054	0.041	0.022	0	-0.022	-0.041	-0.054	-0.06	-0.063	-0.068	
+	0.349	0.089	0.081	0.069	0.057	0.045	0.022	0	-0.022	-0.045	-0.057	-0.069	-0.081	-0.089	
+	0.436	0.088	0.079	0.067	0.054	0.04	0.021	0	-0.021	-0.04	-0.054	-0.067	-0.079	-0.088	
+	0.524	0.091	0.06	0.033	0.023	0.016	0.015	0	-0.015	-0.016	-0.023	-0.033	-0.06	-0.091	
+	0.611	0.076	0.058	0.036	0.006	0.002	0.008	0	-0.008	-0.002	-0.006	-0.036	-0.058	-0.076	
+	0.698	0.077	0.062	0.035	0.014	0.01	0.013	0	-0.013	-0.01	-0.014	-0.035	-0.062	-0.077	
+	0.785	0.076	0.059	0.035	0.027	0.019	0.015	0	-0.015	-0.019	-0.027	-0.035	-0.059	-0.076	
+    Function: aero/coefficient/Clb
+    1 dimensional table with 6 rows.
+	0.6	0	
+	0.8	0.1891	
+	1	0.1776	
+	1.2	0.1375	
+	1.4	0.1203	
+	1.6	0.0859	
+    Function: aero/coefficient/Clb_M
+    1 dimensional table with 12 rows.
+	-0.175	-0.36	
+	-0.087	-0.359	
+	0	-0.443	
+	0.087	-0.42	
+	0.175	-0.383	
+	0.262	-0.375	
+	0.349	-0.329	
+	0.436	-0.294	
+	0.524	-0.23	
+	0.611	-0.21	
+	0.698	-0.12	
+	0.785	-0.1	
+    Function: aero/coefficient/Clp
+    1 dimensional table with 12 rows.
+	-0.175	-0.126	
+	-0.087	-0.026	
+	0	0.063	
+	0.087	0.113	
+	0.175	0.208	
+	0.262	0.23	
+	0.349	0.319	
+	0.436	0.437	
+	0.524	0.68	
+	0.611	0.1	
+	0.698	0.447	
+	0.785	-0.33	
+    Function: aero/coefficient/Clr
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	0.041	0.041	0.042	0.04	0.043	0.044	0.043	
+	-0.087	0.052	0.053	0.053	0.052	0.049	0.048	0.049	
+	0	0.053	0.053	0.052	0.051	0.048	0.048	0.047	
+	0.087	0.056	0.053	0.051	0.052	0.049	0.047	0.045	
+	0.175	0.05	0.05	0.049	0.048	0.043	0.042	0.042	
+	0.262	0.056	0.051	0.049	0.048	0.042	0.041	0.037	
+	0.349	0.082	0.066	0.043	0.042	0.042	0.02	0.003	
+	0.436	0.059	0.043	0.035	0.037	0.036	0.028	0.013	
+	0.524	0.042	0.038	0.026	0.031	0.025	0.013	0.01	
+	0.611	0.038	0.027	0.016	0.026	0.021	0.014	0.003	
+	0.698	0.027	0.023	0.018	0.017	0.016	0.011	0.007	
+	0.785	0.017	0.016	0.014	0.012	0.011	-0.01	0.008	
+    Function: aero/coefficient/Clda
+    1 dimensional table with 3 rows.
+	0.6	0	
+	1.2	-0.063	
+	1.6	-0.063	
+    Function: aero/coefficient/Clda_M
+    1 dimensional table with 2 rows.
+	0.6	0	
+	1.6	-0.0201	
+    Function: aero/coefficient/Cldr_M
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	0.005	0.007	0.013	0.018	0.015	0.021	0.023	
+	-0.087	0.017	0.016	0.013	0.015	0.014	0.011	0.01	
+	0	0.014	0.014	0.011	0.015	0.013	0.01	0.011	
+	0.087	0.01	0.014	0.012	0.014	0.013	0.011	0.011	
+	0.175	-0.005	0.013	0.011	0.014	0.012	0.01	0.011	
+	0.262	0.009	0.009	0.009	0.014	0.011	0.009	0.01	
+	0.349	0.019	0.012	0.008	0.014	0.011	0.008	0.008	
+	0.436	0.005	0.005	0.005	0.015	0.01	0.01	0.01	
+	0.524	0	0	0	0.013	0.008	0.006	0.006	
+	0.611	-0.005	0.004	0.005	0.011	0.008	0.005	0.014	
+	0.698	-0.011	0.009	0.003	0.006	0.007	0	0.02	
+	0.785	0.008	0.007	0.005	0.001	0.003	0.001	0	
+    Function: aero/coefficient/Cldr
+    2 dimensional table with 12 rows, 5 columns.
+		-0.436	-0.218	0	0.218	0.436	
+	-0.175	0.205	0.081	-0.046	-0.174	-0.259	
+	-0.087	0.168	0.077	-0.02	-0.145	-0.202	
+	0	0.186	0.107	-0.009	-0.121	-0.184	
+	0.087	0.196	0.11	-0.005	-0.127	-0.193	
+	0.175	0.213	0.11	-0.006	-0.129	-0.199	
+	0.262	0.251	0.141	0.01	-0.102	-0.15	
+	0.349	0.245	0.127	0.006	-0.097	-0.16	
+	0.436	0.238	0.119	-0.001	-0.113	-0.167	
+	0.524	0.252	0.133	0.014	-0.087	-0.104	
+	0.611	0.231	0.108	0	-0.084	-0.076	
+	0.698	0.198	0.081	-0.013	-0.069	-0.041	
+	0.785	0.192	0.093	0.032	-0.006	-0.005	
+    Function: aero/coefficient/CmDh
+    1 dimensional table with 6 rows.
+	0.6	0	
+	0.8	0.0974	
+	0.9	-0.3323	
+	1	-0.9626	
+	1.1	-0.848	
+	1.2	-0.7907	
+    Function: aero/coefficient/Cma_M
+    1 dimensional table with 12 rows.
+	-0.175	-0.0036	
+	-0.087	-0.0036	
+	0	-0.0036	
+	0.087	0.0303	
+	0.175	0.0225	
+	0.262	0.0128	
+	0.349	0.0252	
+	0.436	0.0275	
+	0.524	-0.0171	
+	0.611	-0.0448	
+	0.698	-0.0737	
+	0.785	-0.0884	
+    Function: aero/coefficient/CmDsb
+    1 dimensional table with 12 rows.
+	-0.175	-7.21	
+	-0.087	-5.4	
+	0	-5.23	
+	0.087	-5.26	
+	0.175	-6.11	
+	0.262	-6.64	
+	0.349	-5.69	
+	0.436	-6	
+	0.524	-6.2	
+	0.611	-6.4	
+	0.698	-6.6	
+	0.785	-6	
+    Function: aero/coefficient/Cmq
+    2 dimensional table with 12 rows, 13 columns.
+		-0.524	-0.436	-0.349	-0.262	-0.175	-0.087	0	0.087	0.175	0.262	0.349	0.436	0.524	
+	-0.175	-0.079	-0.074	-0.064	-0.056	-0.038	-0.018	0	0.018	0.038	0.056	0.064	0.074	0.079	
+	-0.087	-0.09	-0.086	-0.077	-0.057	-0.042	-0.019	0	0.019	0.042	0.057	0.077	0.086	0.09	
+	0	-0.106	-0.093	-0.076	-0.059	-0.042	-0.018	0	0.018	0.042	0.059	0.076	0.093	0.106	
+	0.087	-0.106	-0.089	-0.074	-0.058	-0.042	-0.019	0	0.019	0.042	0.058	0.074	0.089	0.106	
+	0.175	-0.096	-0.08	-0.073	-0.058	-0.043	-0.019	0	0.019	0.043	0.058	0.073	0.08	0.096	
+	0.262	-0.08	-0.062	-0.057	-0.053	-0.039	-0.018	0	0.018	0.039	0.053	0.057	0.062	0.08	
+	0.349	-0.068	-0.049	-0.029	-0.032	-0.03	-0.013	0	0.013	0.03	0.032	0.029	0.049	0.068	
+	0.436	-0.03	-0.022	-0.007	-0.012	-0.017	-0.007	0	0.007	0.017	0.012	0.007	0.022	0.03	
+	0.524	-0.064	-0.028	-0.012	-0.002	-0.004	-0.004	0	0.004	0.004	0.002	0.012	0.028	0.064	
+	0.611	-0.015	0.012	0.034	0.046	0.035	0.014	0	-0.014	-0.035	-0.046	-0.034	-0.012	0.015	
+	0.698	-0.011	0.002	0.065	0.071	0.047	0.017	0	-0.017	-0.047	-0.071	-0.065	-0.002	0.011	
+	0.785	0.001	0.013	0.041	0.073	0.057	0.033	0	-0.033	-0.057	-0.073	-0.041	-0.013	-0.001	
+    Function: aero/coefficient/Cnb
+    1 dimensional table with 8 rows.
+	0.6	0	
+	0.7	-0.0688	
+	0.8	-0.0172	
+	0.9	0.0229	
+	1	0	
+	1.2	-0.0688	
+	1.4	0.0057	
+	1.6	0.0688	
+    Function: aero/coefficient/Cnb_M
+    1 dimensional table with 12 rows.
+	-0.175	-0.061	
+	-0.087	-0.052	
+	0	-0.052	
+	0.087	0.012	
+	0.175	0.013	
+	0.262	0.024	
+	0.349	-0.05	
+	0.436	-0.15	
+	0.524	-0.13	
+	0.611	-0.158	
+	0.698	-0.24	
+	0.785	-0.15	
+    Function: aero/coefficient/Cnp
+    1 dimensional table with 12 rows.
+	-0.175	-0.38	
+	-0.087	-0.363	
+	0	-0.378	
+	0.087	-0.386	
+	0.175	-0.37	
+	0.262	-0.453	
+	0.349	-0.55	
+	0.436	-0.582	
+	0.524	-0.595	
+	0.611	-0.637	
+	0.698	-1.02	
+	0.785	-0.84	
+    Function: aero/coefficient/Cnr
+    1 dimensional table with 6 rows.
+	0.6	0	
+	0.8	0.0149	
+	1	-0.0011	
+	1.2	0.0097	
+	1.4	0.0126	
+	1.6	-0.004	
+    Function: aero/coefficient/Cnda_M
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	0.001	0.002	0.006	0.011	0.015	0.024	-0.022	
+	-0.087	0.027	0.014	0.008	0.011	0.015	0.01	-0.002	
+	0	0.017	0.016	0.006	0.01	0.014	0.004	0.003	
+	0.087	0.013	0.016	0.006	0.009	0.012	0.002	0.005	
+	0.175	0.012	0.014	0.005	0.008	0.011	0.001	0.003	
+	0.262	0.016	0.019	0.008	0.006	0.008	-0.003	0.001	
+	0.349	-0.001	0.021	0.005	-0	0.002	-0.014	0.009	
+	0.436	-0.017	-0.002	-0.007	-0.004	-0.002	-0.006	0.009	
+	0.524	-0.011	-0.012	-0.004	-0.007	-0.006	0.001	0.001	
+	0.611	-0.017	-0.016	-0.007	-0.01	-0.012	-0.004	-0.003	
+	0.698	-0.008	-0.015	-0.006	-0.004	-0.011	-0.004	0.002	
+	0.785	-0.016	-0.011	-0.006	-0.01	-0.011	-0.006	-0.001	
+    Function: aero/coefficient/Cnda
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	-0.018	-0.028	-0.037	-0.048	-0.043	-0.052	-0.062	
+	-0.087	-0.052	-0.051	-0.041	-0.045	-0.044	-0.034	-0.034	
+	0	-0.052	-0.043	-0.038	-0.045	-0.041	-0.036	-0.027	
+	0.087	-0.052	-0.046	-0.04	-0.045	-0.041	-0.036	-0.028	
+	0.175	-0.054	-0.045	-0.04	-0.044	-0.04	-0.035	-0.027	
+	0.262	-0.049	-0.049	-0.038	-0.045	-0.038	-0.028	-0.027	
+	0.349	-0.059	-0.057	-0.037	-0.047	-0.034	-0.024	-0.023	
+	0.436	-0.051	-0.052	-0.03	-0.048	-0.035	-0.023	-0.023	
+	0.524	-0.03	-0.03	-0.027	-0.049	-0.035	-0.02	-0.019	
+	0.611	-0.037	-0.033	-0.024	-0.045	-0.029	-0.016	-0.009	
+	0.698	-0.026	-0.03	-0.019	-0.033	-0.022	-0.01	-0.025	
+	0.785	-0.013	-0.008	-0.013	-0.016	-0.009	-0.014	-0.01	
+    Function: aero/coefficient/Cndr
+    1 dimensional table with 3 rows.
+	0.6	0	
+	1.2	0.0401	
+	1.6	0.0716	
+    Function: aero/coefficient/Cndr_M
+[TRIM] Native do_trim(1) ...
+GEAR_CONTACT: 0.000000 seconds: NOSE_LG 1
+GEAR_CONTACT: 0.000000 seconds: LEFT_MLG 1
+GEAR_CONTACT: 0.000000 seconds: RIGHT_MLG 1
+GEAR_CONTACT: 0.000000 seconds: LEFT_VFT 1
+GEAR_CONTACT: 0.000000 seconds: RIGHT_VFT 1
+GEAR_CONTACT: 0.000000 seconds: INTAKE 1
+GEAR_CONTACT: 0.000000 seconds: RADOME 1
+
+  Mass Properties Report (English units: lbf, in, slug-ft^2)
+                                      Weight    CG-X    CG-Y    CG-Z         Ixx         Iyy         Izz         Ixy         Ixz         Iyz
+    Base Vehicle                       17400.0  -193.0     0.0    -5.1      9496.0     55814.0     63100.0        -0.0      -982.0        -0.0
+0   Pilot                                230.0  -336.2     0.0     0.0         0.0         0.0         0.0        -0.0         0.0        -0.0
+[1m0   Fuel                          [22m        1500  -174.4      65       5           0           0           0
+[1m1   Fuel                          [22m        1500  -174.4     -65       5           0           0           0
+[1m2   Fuel                          [22m           0  -174.4      65     -15           0           0           0
+[1m3   Fuel                          [22m           0  -174.4     -65     -15           0           0           0
+                                                                                                                                            
+    Total:                           20630.0  -191.9     0.0    -3.6     12288.8     57107.5     67072.3         0.0     -1059.9         0.0
+
+End of vehicle configuration loading.
+-------------------------------------------------------------------------------
+GEAR_CONTACT: 0.000000 seconds: LEFT_VFT 0
+GEAR_CONTACT: 0.000000 seconds: RIGHT_VFT 0
+GEAR_CONTACT: 0.000000 seconds: INTAKE 0
+GEAR_CONTACT: 0.000000 seconds: RADOME 0
+
+  Mass Properties Report (English units: lbf, in, slug-ft^2)
+                                      Weight    CG-X    CG-Y    CG-Z         Ixx         Iyy         Izz         Ixy         Ixz         Iyz
+    Base Vehicle                       17400.0  -193.0     0.0    -5.1      9496.0     55814.0     63100.0        -0.0      -982.0        -0.0
+0   Pilot                                230.0  -336.2     0.0     0.0         0.0         0.0         0.0        -0.0         0.0        -0.0
+[1m0   Fuel                          [22m        1500  -174.4      65       5           0           0           0
+[1m1   Fuel                          [22m        1500  -174.4     -65       5           0           0           0
+[1m2   Fuel                          [22m           0  -174.4      65     -15           0           0           0
+[1m3   Fuel                          [22m           0  -174.4     -65     -15           0           0           0
+                                                                                                                                            
+    Total:                           20630.0  -191.9     0.0    -3.6     12288.8     57107.5     67072.3         0.0     -1059.9         0.0
+
+End of vehicle configuration loading.
+-------------------------------------------------------------------------------
+  Full Trim
+
+  Trim successful
+  Angle of Attack     : 0.49   wdot : -2.17e-04 Tolerance: 1e-03  Passed
+  Throttle            : 0.33   udot : -1.22e-04 Tolerance: 1e-03  Passed
+  Pitch Trim          : -0.021 qdot : -7.47e-12 Tolerance: 1e-04  Passed
+  Roll Angle          : -2.3e-08 vdot : 9.97e-08  Tolerance: 1e-03  Passed
+  Ailerons            : -1.3e-10 pdot : 2.87e-08  Tolerance: 1e-04  Passed
+  Rudder              : 8.9e-10 rdot : -1.68e-08 Tolerance: 1e-04  Passed
+  Trim Results:
+[TRIM] attempt 0: gamma_bias=+0.00 theta=+0.49 hdot=+0.00 Vc=400.0 elev_cmd=-0.0200 thr=0.3293
+[TRIM] ACCEPTED thr=0.3293 elev=-0.0200 ptrim=-0.0214 theta0=+0.49 hdot=+0.00 (genuinely level)
+[SETTLE] 18s closed-loop settle...
+[SETTLE] h=15093ft Vc=488.1kts theta=+0.38deg
+[PHI-Twin] Loaded CNN-BiLSTM from C:\Users\User\Desktop\COMPLETED_PROJECTS\PHI_CTRL\PHI_CTRL_RELEASE\models\phi_twin_cnn_bilstm.pt
+[DETECTOR] Calibrated healthy gain: 20.2074
+[LOG] Wrote 7200 rows
+
+METRICS (HYBRID): max|dh|=564.8ft  θ=[-0.1,0.4]  roll_max=3.4  interlock=False  crash=False  residual_steps=0
+
+======================================================================
+  CASE : FULL_STACK
+======================================================================
+  physical γ_remaining=0.50 (50% effectiveness loss) after t=15s
+
+
+     JSBSim Flight Dynamics Model v1.3.1 [GitHub build 1837/commit 3b25f25e49b42d0489c04ac805674fc1450ca579] May 17 2026 14:28:34
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+Reading Aircraft Configuration File: General Dynamics F-16A
+                            Version: 2.0
+
+
+This aircraft model is a PRODUCTION release.
+
+  Description:   Models an F-16A Block-32 (Basic US configuration)
+  Model Author:  Erik Hofman
+  Creation Date: 2001-12-28
+  Version:       $Revision: 1.95 $
+
+  Aircraft Metrics:
+    WingArea: 300.000000
+    WingSpan: 30.000000
+    Incidence: 0.000000
+    Chord: 11.320000
+    H. Tail Area: 63.700000
+    H. Tail Arm: 16.460000
+    V. Tail Area: 54.750000
+    V. Tail Arm: 0.000000
+    Eyepoint (x, y, z): -336.200000 , 0.000000 , 29.500000
+    Ref Pt (x, y, z): -189.500000 , 0.000000 , 3.900000
+    Visual Ref Pt (x, y, z): -180.000000 , 0.000000 , 0.000000
+
+  Mass and Balance:
+    baseIxx: 9496.000000 slug-ft2
+    baseIyy: 55814.000000 slug-ft2
+    baseIzz: 63100.000000 slug-ft2
+    baseIxy: -0.000000 slug-ft2
+    baseIxz: -982.000000 slug-ft2
+    baseIyz: -0.000000 slug-ft2
+    Empty Weight: 17400.000000 lbm
+    CG (x, y, z): -193.000000 , 0.000000 , -5.100000
+    Point Mass Object: 230.000000 lbs. at X, Y, Z (in.): -336.200000  0.000000  0.000000
+
+  Ground Reactions: 
+    BOGEY NOSE_LG
+      Location: -299.600000 , 0.000000 , -72.000000
+      Spring Constant:  17250.000000
+      Damping Constant: 4250.000000 (linear)
+      Rebound Damping Constant: 4250.000000 (linear)
+      Dynamic Friction: 0.500000
+      Static Friction:  0.800000
+      Rolling Friction: 0.020000
+      Steering Type:    STEERABLE
+      Grouping:         CENTER
+      Max Steer Angle:  80.000000
+      Retractable:      1
+    BOGEY LEFT_MLG
+      Location: -158.600000 , -48.000000 , -71.600000
+      Spring Constant:  37500.000000
+      Damping Constant: 7500.000000 (linear)
+      Rebound Damping Constant: 7500.000000 (linear)
+      Dynamic Friction: 0.500000
+      Static Friction:  0.800000
+      Rolling Friction: 0.020000
+      Steering Type:    FIXED
+      Grouping:         LEFT
+      Max Steer Angle:  0.000000
+      Retractable:      1
+    BOGEY RIGHT_MLG
+      Location: -158.600000 , 48.000000 , -71.600000
+      Spring Constant:  37500.000000
+      Damping Constant: 7500.000000 (linear)
+      Rebound Damping Constant: 7500.000000 (linear)
+      Dynamic Friction: 0.500000
+      Static Friction:  0.800000
+      Rolling Friction: 0.020000
+      Steering Type:    FIXED
+      Grouping:         RIGHT
+      Max Steer Angle:  0.000000
+      Retractable:      1
+    STRUCTURE LEFT_WT
+      Location: -121.300000 , -189.000000 , 0.000000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE RIGHT_WT
+      Location: -121.300000 , 189.000000 , 0.000000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE TOP_VS
+      Location: -27.200000 , 0.000000 , 123.200000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE LEFT_VFT
+      Location: -97.600000 , -24.800000 , -52.000000
+      Spring Constant:  200.000000
+      Damping Constant: 5000.000000 (linear)
+      Rebound Damping Constant: 5000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE RIGHT_VFT
+      Location: -97.600000 , 24.800000 , -52.000000
+      Spring Constant:  200.000000
+      Damping Constant: 5000.000000 (linear)
+      Rebound Damping Constant: 5000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE INTAKE
+      Location: -322.400000 , 0.000000 , -36.600000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+    STRUCTURE RADOME
+      Location: -486.600000 , 0.000000 , -8.700000
+      Spring Constant:  10000.000000
+      Damping Constant: 2000.000000 (linear)
+      Rebound Damping Constant: 2000.000000 (linear)
+      Dynamic Friction: 0.200000
+      Static Friction:  0.200000
+
+  External Reactions: 
+    
+    Frame: BODY
+    Location: (0.000000, 0.000000, 0.000000)
+    
+    Frame: BODY
+    Location: (0.000000, 0.000000, 0.000000)
+
+  Propulsion:
+       (FUEL) tank holds 3486 lbs. FUEL
+      currently at 43.0293% of maximum capacity
+      Tank location (X, Y, Z): -174.4, 65, 5
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+       (FUEL) tank holds 3486 lbs. FUEL
+      currently at 43.0293% of maximum capacity
+      Tank location (X, Y, Z): -174.4, -65, 5
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+       (FUEL) tank holds 2991 lbs. FUEL
+      currently at 0% of maximum capacity
+      Tank location (X, Y, Z): -174.4, 65, -15
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+       (FUEL) tank holds 2991 lbs. FUEL
+      currently at 0% of maximum capacity
+      Tank location (X, Y, Z): -174.4, -65, -15
+      Effective radius: 0 inches
+      Initial temperature: -9999 Fahrenheit
+      Priority: 1
+    2 dimensional table with 6 rows, 8 columns.
+		-1e+04	0	1e+04	2e+04	3e+04	4e+04	5e+04	6e+04	
+	0	0.043	0.0488	0.0528	0.0694	0.0899	0.1183	0.1467	0	
+	0.2	0.05	0.0501	0.0335	0.0544	0.0797	0.1049	0.1342	0	
+	0.4	0.004	0.0047	0.002	0.0272	0.0595	0.0891	0.1203	0	
+	0.6	-0.0804	-0.0804	-0.056	-0.0237	0.0276	0.0718	0.1073	0	
+	0.8	-0.2129	-0.2129	-0.1498	-0.1025	0.0474	0.0868	0.09	0	
+	1	-0.2839	-0.2839	-0.1104	-0.0469	-0.027	0.0552	0.08	0	
+    Function: propulsion/engine[0]/IdleThrust
+    2 dimensional table with 8 rows, 8 columns.
+		-1e+04	0	1e+04	2e+04	3e+04	4e+04	5e+04	6e+04	
+	0	1.26	1	0.74	0.534	0.372	0.241	0.149	0	
+	0.2	1.171	0.934	0.697	0.506	0.355	0.231	0.143	0	
+	0.4	1.15	0.921	0.692	0.506	0.357	0.233	0.145	0	
+	0.6	1.181	0.951	0.721	0.532	0.378	0.248	0.154	0	
+	0.8	1.258	1.02	0.782	0.582	0.417	0.275	0.17	0	
+	1	1.369	1.12	0.871	0.651	0.475	0.315	0.195	0	
+	1.2	1.485	1.23	0.975	0.744	0.545	0.364	0.225	0	
+	1.4	1.594	1.34	1.086	0.845	0.628	0.424	0.263	0	
+    Function: propulsion/engine[0]/MilThrust
+    2 dimensional table with 14 rows, 8 columns.
+		-1e+04	0	1e+04	2e+04	3e+04	4e+04	5e+04	6e+04	
+	0	1.182	1	0.8184	0.6627	0.528	0.3756	0.2327	0	
+	0.2	1.131	0.9599	0.789	0.6406	0.5116	0.3645	0.2258	0	
+	0.4	1.115	0.9474	0.7798	0.634	0.507	0.3615	0.224	0	
+	0.6	1.128	0.9589	0.7894	0.642	0.5134	0.3661	0.2268	0	
+	0.8	1.171	0.9942	0.8177	0.6647	0.5309	0.3784	0.2345	0	
+	1	1.241	1.053	0.8648	0.7017	0.5596	0.3983	0.2467	0	
+	1.2	1.329	1.125	0.9221	0.7462	0.5936	0.4219	0.2614	0	
+	1.4	1.437	1.215	0.9933	0.8021	0.636	0.4509	0.2794	0	
+	1.6	1.571	1.326	1.081	0.87	0.6874	0.486	0.3011	0	
+	1.8	1.73	1.458	1.186	0.9512	0.7495	0.5289	0.3277	0	
+	2	1.831	1.57	1.309	1.047	0.8216	0.5786	0.3585	0	
+	2.2	1.97	1.69	1.41	1.24	0.91	0.6359	0.394	0	
+	2.4	2.07	1.8	1.53	1.34	1	0.72	0.46	0	
+	2.6	2.2	1.92	1.64	1.44	1.1	0.8	0.52	0	
+    Function: propulsion/engine[0]/AugThrust
+      X = 0
+      Y = 0
+      Z = 0
+      Pitch = 0 degrees
+      Yaw = 0 degrees
+
+    Declared properties
+
+      /sim/model/pushback/target-speed-fps (initial value: 0)
+
+      /sim/model/pushback/position-norm (initial value: 0)
+
+
+    Overriding properties
+
+      /sim/model/pushback/kp (initial value: 0)
+
+      /sim/model/pushback/ki (initial value: 0)
+
+      /sim/model/pushback/kd (initial value: 0)
+
+
+  System: pushback
+
+    Channel Pushback
+
+    Loading Component "systems/pushback/linked" of type: SWITCH
+        position-norm gt constant value 0.950000        WOW == constant value 1.000000        wheel-speed-fps lt constant value 50.000000      if all of the following are true: {
+
+
+
+      }      Switch default value is: constant value -1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: linked
+
+    Loading Component "systems/pushback/speed-error" of type: SUMMER
+      INPUTS: 
+       target-speed-fps
+       -wheel-speed-fps
+      OUTPUT: speed-error
+
+    Loading Component "systems/pushback/force" of type: PID
+      INPUT: speed-error
+      OUTPUT: force
+      OUTPUT: force
+
+    Loading Component "systems/pushback/force-output" of type: SWITCH
+        linked == constant value 0.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (force)
+
+      OUTPUT: magnitude
+      OUTPUT: force-output
+
+    Declared properties
+
+      systems/hook/tailhook-cmd-norm (initial value: 0)
+
+      systems/hook/tailhook-length-ft (initial value: 4.537)
+
+      systems/hook/tailhook-pos-min-deg (initial value: -3.806)
+
+      systems/hook/tailhook-pos-max-deg (initial value: 53.369)
+
+      systems/hook/tailhook-offset-x-in (initial value: 100.669)
+
+      systems/hook/tailhook-offset-y-in (initial value: 0)
+
+      systems/hook/tailhook-offset-z-in (initial value: -28.818)
+
+      systems/hook/tailhook-pos-deg (initial value: -3.806)
+
+
+  System: hook
+
+    Channel Hook
+
+    Loading Component "systems/hook/tailhook-control" of type: KINEMATIC
+      INPUT: tailhook-cmd-norm
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 1.5000
+      OUTPUT: tailhook-pos-norm
+      OUTPUT: tailhook-control
+
+    Loading Component "systems/hook/ready" of type: SWITCH
+        tailhook-pos-norm gt constant value 0.990000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: ready
+
+    Loading Component "systems/hook/hook-decel-multiplier" of type: SCHEDULED_GAIN
+    1 dimensional table with 3 rows.
+	0	0	
+	1	0	
+	80	2.2	
+    1 dimensional table with 3 rows.
+	0	0	
+	1	0	
+	80	2.2	
+      INPUT: ready
+      GAIN: constant value 1.000000
+      OUTPUT: hook-decel-multiplier
+      Scheduled by table:
+
+    Loading Component "systems/hook/hook-decel-force" of type: PURE_GAIN
+      INPUT: hook-decel-multiplier
+      GAIN: weight-lbs
+      OUTPUT: hook-decel-force
+
+    Loading Component "systems/hook/force" of type: SUMMER
+      INPUTS: 
+       hook-decel-force
+       fbx-prop-lbs
+      OUTPUT: force
+
+    Loading Component "systems/hook/animation-norm" of type: FCS_FUNCTION
+      OUTPUT: tailhook-pos-norm
+      OUTPUT: animation-norm
+
+    Declared properties
+
+      fcs/alpha-norm (initial value: 0)
+
+      fcs/hook-engage (initial value: 0)
+
+      fcs/canopy-engage (initial value: 0)
+
+      fcs/fbw-override (initial value: 0)
+
+
+  FCS: F-16 FC
+
+    Channel Flaps
+
+    Loading Component "fcs/tef-pos-rad" of type: SWITCH
+        vc-kts lt constant value 250.000000      if all of the following are true: {
+
+      }        mach gt constant value 0.900000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 0.349000)
+
+      Switch takes test 2 value (constant value -0.034900)
+
+      OUTPUT: tef-pos-rad
+
+    Loading Component "fcs/tef-pos-norm" of type: PURE_GAIN
+      INPUT: tef-pos-rad
+      GAIN: constant value 2.864789
+      OUTPUT: tef-pos-norm
+
+    Loading Component "fcs/tef-control" of type: KINEMATIC
+      INPUT: tef-pos-norm
+      DETENTS: 3
+        -1.0000 3.0000
+        0.0000 0.0000
+        1.0000 3.0000
+      OUTPUT: tef-control
+
+    Channel Roll
+
+    Loading Component "fcs/roll-rate-norm" of type: PURE_GAIN
+      INPUT: p-aero-rad_sec
+      GAIN: constant value 0.318210
+      OUTPUT: roll-rate-norm
+
+    Loading Component "fcs/roll-trim-error" of type: SUMMER
+      INPUTS: 
+       aileron-cmd-norm
+       -roll-rate-norm
+      OUTPUT: roll-trim-error
+
+    Loading Component "fcs/aileron-pid-trigger" of type: SWITCH
+        vc-kts lt constant value 20.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: aileron-pid-trigger
+
+    Loading Component "fcs/roll-rate-pid" of type: PID
+      INPUT: roll-trim-error
+      OUTPUT: roll-rate-pid
+
+    Loading Component "fcs/roll-rate-command" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       roll-rate-pid
+       aileron-cmd-norm
+      OUTPUT: roll-rate-command
+
+    Loading Component "fcs/aileron-control" of type: AEROSURFACE_SCALE
+      INPUT: roll-rate-command
+      GAIN: constant value 1.000000
+      OUTPUT: aileron-pos-rad
+      OUTPUT: aileron-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.3750
+        Output MAX: 0.3750
+
+    Loading Component "fcs/roll-rate-command-switch" of type: SWITCH
+        fbw-override == constant value 1.000000      if all of the following are true: {
+
+      }      Switch default value is: roll-rate-command
+      Switch takes test 1 value (aileron-cmd-norm)
+
+      OUTPUT: roll-rate-command-switch
+
+    Loading Component "fcs/aileron-position" of type: KINEMATIC
+      INPUT: roll-rate-command-switch
+      DETENTS: 2
+        -1.0000 0.3000
+        1.0000 0.3000
+      OUTPUT: left-aileron-pos-norm
+      OUTPUT: aileron-position
+
+    Loading Component "fcs/aileron-speed-compensated" of type: SCHEDULED_GAIN
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.15	
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.15	
+      INPUT: left-aileron-pos-norm
+      GAIN: constant value 1.000000
+      OUTPUT: aileron-speed-compensated
+      Scheduled by table:
+
+    Loading Component "fcs/left-flaperon-norm" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       -tef-control
+       -aileron-speed-compensated
+      OUTPUT: left-flaperon-norm
+
+    Loading Component "fcs/right-flaperon-norm" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       tef-control
+       -aileron-speed-compensated
+      OUTPUT: right-flaperon-norm
+
+    Loading Component "fcs/flaperon-summer" of type: SUMMER
+      INPUTS: 
+       left-flaperon-norm
+       right-flaperon-norm
+      OUTPUT: flaperon-summer
+
+    Loading Component "fcs/flaperon-mix-rad" of type: PURE_GAIN
+      INPUT: flaperon-summer
+      GAIN: constant value 1.432400
+      OUTPUT: flaperon-mix-rad
+
+    Loading Component "fcs/left-aileron-control" of type: AEROSURFACE_SCALE
+      INPUT: aileron-speed-compensated
+      GAIN: constant value 1.000000
+      OUTPUT: left-aileron-pos-rad
+      OUTPUT: left-aileron-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.3750
+        Output MAX: 0.3750
+
+    Loading Component "fcs/right-aileron-control" of type: AEROSURFACE_SCALE
+      INPUT: -aileron-speed-compensated
+      GAIN: constant value 1.000000
+      OUTPUT: right-aileron-pos-rad
+      OUTPUT: right-aileron-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.3750
+        Output MAX: 0.3750
+
+    Channel Pitch
+
+    Loading Component "fcs/n-pilot-z-correction" of type: FCS_FUNCTION
+      OUTPUT: n-pilot-z-correction
+
+    Loading Component "fcs/g-load-corrected" of type: SUMMER
+      INPUTS: 
+       n-pilot-z-norm
+       -n-pilot-z-correction
+      OUTPUT: g-load-corrected
+
+    Loading Component "fcs/elevator-cmd-limiter" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 0.440000
+      INPUTS: 
+       elevator-cmd-norm
+       pitch-trim-cmd-norm
+      OUTPUT: elevator-cmd-limiter
+
+    Loading Component "fcs/elevator-scheduler" of type: SCHEDULED_GAIN
+    1 dimensional table with 5 rows.
+	-0.5236	0	
+	-0.5	0.11	
+	0	1	
+	0.5	0.11	
+	0.5236	0	
+    1 dimensional table with 5 rows.
+	-0.5236	0	
+	-0.5	0.11	
+	0	1	
+	0.5	0.11	
+	0.5236	0	
+      INPUT: elevator-cmd-limiter
+      GAIN: constant value 1.000000
+      OUTPUT: elevator-scheduler
+      Scheduled by table:
+
+    Loading Component "fcs/alpha-limiter-norm" of type: PURE_GAIN
+      INPUT: alpha-rad
+      GAIN: constant value 1.047200
+      OUTPUT: alpha-limiter-norm
+
+    Loading Component "fcs/pitch-rate-norm" of type: PURE_GAIN
+      INPUT: q-aero-rad_sec
+      GAIN: constant value 6.200000
+      OUTPUT: pitch-rate-norm
+
+    Loading Component "fcs/g-load-norm" of type: PURE_GAIN
+      INPUT: g-load-corrected
+      GAIN: constant value 0.020000
+      OUTPUT: g-load-norm
+
+    Loading Component "fcs/pitch-trim-error" of type: SUMMER
+      INPUTS: 
+       elevator-scheduler
+       pitch-rate-norm
+       -g-load-norm
+      OUTPUT: pitch-trim-error
+
+    Loading Component "fcs/elevator-pid-trigger" of type: SWITCH
+        vc-kts lt constant value 5.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: elevator-pid-trigger
+
+    Loading Component "fcs/g-load-pid" of type: PID
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUT: pitch-trim-error
+      OUTPUT: g-load-pid
+
+    Loading Component "fcs/pitch-scheduler" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       elevator-scheduler
+       alpha-limiter-norm
+       g-load-pid
+      OUTPUT: pitch-scheduler
+
+    Loading Component "fcs/pitch-scheduler-switch" of type: SWITCH
+        fbw-override == constant value 1.000000      if all of the following are true: {
+
+      }      Switch default value is: pitch-scheduler
+      Switch takes test 1 value (elevator-cmd-limiter)
+
+      OUTPUT: pitch-scheduler-switch
+
+    Loading Component "fcs/elevator-position-normalized" of type: KINEMATIC
+      INPUT: pitch-scheduler-switch
+      DETENTS: 2
+        -1.0000 0.3000
+        1.0000 0.3000
+      OUTPUT: elevator-pos-norm
+      OUTPUT: elevator-position-normalized
+
+    Loading Component "fcs/elevator-position" of type: AEROSURFACE_SCALE
+      INPUT: elevator-pos-norm
+      GAIN: constant value 1.000000
+      OUTPUT: elevator-pos-rad
+      OUTPUT: elevator-position
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.4360
+        Output MAX: 0.4360
+
+    Loading Component "fcs/dht-left-pos-rad" of type: SUMMER
+      Minimum limit: constant value -0.436000
+      Maximum limit: constant value 0.436000
+      INPUTS: 
+       -elevator-pos-rad
+       -left-aileron-pos-rad
+      OUTPUT: dht-left-pos-rad
+
+    Loading Component "fcs/dht-right-pos-rad" of type: SUMMER
+      Minimum limit: constant value -0.436000
+      Maximum limit: constant value 0.436000
+      INPUTS: 
+       elevator-pos-rad
+       right-aileron-pos-rad
+      OUTPUT: dht-right-pos-rad
+
+    Channel Yaw
+
+    Loading Component "fcs/yaw-rate-norm" of type: SCHEDULED_GAIN
+    1 dimensional table with 3 rows.
+	80	0	
+	100	15	
+	150	100	
+    1 dimensional table with 3 rows.
+	80	0	
+	100	15	
+	150	100	
+      INPUT: r-aero-rad_sec
+      GAIN: constant value 1.000000
+      OUTPUT: yaw-rate-norm
+      Scheduled by table:
+
+    Loading Component "fcs/yaw-load-norm" of type: PURE_GAIN
+      INPUT: n-pilot-y-norm
+      GAIN: constant value 0.250000
+      OUTPUT: yaw-load-norm
+
+    Loading Component "fcs/yaw-trim-error" of type: SUMMER
+      INPUTS: 
+       rudder-cmd-norm
+       yaw-rate-norm
+       yaw-load-norm
+      OUTPUT: yaw-trim-error
+
+    Loading Component "fcs/rudder-pid-trigger" of type: SWITCH
+        vc-kts lt constant value 10.000000      if all of the following are true: {
+
+      }      Switch default value is: constant value 1.000000
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: rudder-pid-trigger
+
+    Loading Component "fcs/yaw-load-pid" of type: PID
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUT: yaw-trim-error
+      OUTPUT: rudder-pos-norm
+      OUTPUT: yaw-load-pid
+
+    Loading Component "fcs/yaw-scheduler" of type: SUMMER
+      Minimum limit: constant value -1.000000
+      Maximum limit: constant value 1.000000
+      INPUTS: 
+       rudder-cmd-norm
+       yaw-trim-cmd-norm
+       yaw-load-pid
+      OUTPUT: yaw-scheduler
+
+    Loading Component "fcs/rudder-position" of type: KINEMATIC
+      INPUT: yaw-scheduler
+      DETENTS: 2
+        -1.0000 0.4000
+        1.0000 0.4000
+      OUTPUT: rudder-pos-norm
+      OUTPUT: rudder-position
+
+    Loading Component "fcs/rudder-control" of type: AEROSURFACE_SCALE
+      INPUT: rudder-pos-norm
+      GAIN: constant value 1.000000
+      OUTPUT: rudder-pos-rad
+      OUTPUT: rudder-control
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -0.5240
+        Output MAX: 0.5240
+
+    Channel Landing Gear
+
+    Loading Component "fcs/gear-wow" of type: SWITCH
+        WOW eq constant value 1.000000        WOW eq constant value 1.000000      if all of the following are true: {
+
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: gear-wow
+
+    Loading Component "fcs/gear-control" of type: KINEMATIC
+      INPUT: gear-cmd-norm
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 5.0000
+      OUTPUT: gear-pos-norm
+      OUTPUT: gear-control
+
+    Loading Component "fcs/scheduled-steer-pos-deg" of type: SCHEDULED_GAIN
+    1 dimensional table with 3 rows.
+	10	80	
+	50	15	
+	150	2	
+    1 dimensional table with 3 rows.
+	10	80	
+	50	15	
+	150	2	
+      INPUT: steer-cmd-norm
+      GAIN: constant value 1.000000
+      OUTPUT: steer-pos-deg
+      OUTPUT: scheduled-steer-pos-deg
+      Scheduled by table:
+
+    Channel Leading Edge Flap
+
+    Loading Component "fcs/lef-pos-rad" of type: SWITCH
+        gear-wow eq constant value 1.000000        gear-pos-norm gt constant value 0.000000      if all of the following are true: {
+
+
+      }        gear-pos-norm eq constant value 0.000000        alpha-rad gt constant value 0.261800      if all of the following are true: {
+
+
+      }        gear-wow eq constant value 0.000000        alpha-rad gt constant value 0.087300      if all of the following are true: {
+
+
+      }        mach gt constant value 0.900000      if all of the following are true: {
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value -0.034900)
+
+      Switch takes test 2 value (constant value 0.436000)
+
+      Switch takes test 3 value (constant value 0.262000)
+
+      Switch takes test 4 value (constant value -0.034900)
+
+      OUTPUT: lef-pos-rad
+
+    Loading Component "fcs/lef-pos-norm" of type: PURE_GAIN
+      INPUT: lef-pos-rad
+      GAIN: constant value 2.293578
+      OUTPUT: lef-pos-norm
+
+    Loading Component "fcs/lef-control" of type: KINEMATIC
+      INPUT: lef-pos-norm
+      DETENTS: 2
+        -1.0000 3.0000
+        1.0000 3.0000
+      OUTPUT: lef-control
+
+    Loading Component "fcs/lef-pos-deg" of type: AEROSURFACE_SCALE
+      INPUT: lef-control
+      GAIN: constant value 1.000000
+      OUTPUT: lef-pos-deg
+      In/Out Mapping:
+        Input MIN: -1.0000
+        Input MAX: 1.0000
+        Output MIN: -25.0000
+        Output MAX: 25.0000
+
+    Channel Throttle
+
+    Loading Component "fcs/throttle1" of type: PURE_GAIN
+      INPUT: throttle-cmd-norm
+      GAIN: constant value 2.000000
+      OUTPUT: throttle-pos-norm
+      OUTPUT: throttle1
+
+    Channel Speedbrake
+
+    Loading Component "fcs/speedbrake-alpha-limiter" of type: SWITCH
+        alpha-deg ge constant value 53.000000        v-fps le constant value 18.000000      if all of the following are true: {
+
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: speedbrake-alpha-limiter
+
+    Loading Component "fcs/speedbrake-initiate" of type: SWITCH
+        speedbrake-alpha-limiter eq constant value 1.000000        speedbrake-cmd-norm eq constant value 1.000000      if any of the following are true: {
+
+
+      }      Switch default value is: constant value 0.000000
+      Switch takes test 1 value (constant value 1.000000)
+
+      OUTPUT: speedbrake-initiate
+
+    Loading Component "fcs/speedbrake-scheduler" of type: SCHEDULED_GAIN
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.7167	
+    1 dimensional table with 2 rows.
+	0	1	
+	1	0.7167	
+      INPUT: speedbrake-initiate
+      GAIN: constant value 1.000000
+      OUTPUT: speedbrake-scheduler
+      Scheduled by table:
+
+    Loading Component "fcs/speedbrake-control" of type: KINEMATIC
+      INPUT: speedbrake-scheduler
+      DETENTS: 2
+        0.0000 0.0000
+        60.0000 1.0000
+      OUTPUT: speedbrake-pos-deg
+      OUTPUT: speedbrake-control
+
+    Loading Component "fcs/speedbrake-position-normalizer" of type: AEROSURFACE_SCALE
+      INPUT: speedbrake-control
+      GAIN: constant value 1.000000
+      OUTPUT: speedbrake-pos-norm
+      OUTPUT: speedbrake-position-normalizer
+      In/Out Mapping:
+        Input MIN: 0.0000
+        Input MAX: 60.0000
+        Output MIN: 0.0000
+        Output MAX: 1.0000
+
+    Channel Hook
+
+    Loading Component "fcs/hook-control" of type: KINEMATIC
+      INPUT: hook-engage
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 2.5000
+      OUTPUT: hook-pos-norm
+      OUTPUT: hook-control
+
+    Channel Canopy
+
+    Loading Component "fcs/canopy-trigger" of type: SWITCH
+        u-fps gt constant value 1.000000      if all of the following are true: {
+
+      }      Switch default value is: canopy-engage
+      Switch takes test 1 value (constant value 0.000000)
+
+      OUTPUT: canopy-trigger
+
+    Loading Component "fcs/canopy-control" of type: KINEMATIC
+      INPUT: canopy-trigger
+      DETENTS: 2
+        0.0000 0.0000
+        1.0000 10.0000
+      OUTPUT: canopy-pos-norm
+      OUTPUT: canopy-control
+    1 dimensional table with 13 rows.
+	0	1.229	
+	0.1	1.124	
+	0.15	1.116	
+	0.2	1.124	
+	0.3	1.105	
+	0.4	1.041	
+	0.5	1.034	
+	0.6	1.019	
+	0.7	1.008	
+	0.8	1.003	
+	0.9	1.001	
+	1	1	
+	1.1	1	
+    Function: aero/function/kCLge
+
+  Aerodynamics (Lift|Side|Drag axes):
+
+    2 dimensional table with 12 rows, 5 columns.
+		-0.436	-0.218	0	0.218	0.436	
+	-0.175	0.217	0.174	0.156	0.181	0.23	
+	-0.087	0.094	0.055	0.041	0.062	0.101	
+	0	0.081	0.04	0.021	0.039	0.076	
+	0.087	0.106	0.061	0.04	0.057	0.101	
+	0.175	0.166	0.119	0.096	0.114	0.158	
+	0.262	0.252	0.203	0.182	0.202	0.24	
+	0.349	0.404	0.362	0.347	0.371	0.416	
+	0.436	0.628	0.588	0.577	0.601	0.637	
+	0.524	0.875	0.84	0.826	0.852	0.88	
+	0.611	1.127	1.095	1.084	1.102	1.125	
+	0.698	1.365	1.334	1.326	1.338	1.356	
+	0.785	1.517	1.487	1.478	1.482	1.489	
+    Function: aero/coefficient/CDDh
+    1 dimensional table with 4 rows.
+	0	0	
+	0.81	0	
+	1.1	0.023	
+	1.8	0.015	
+    Function: aero/coefficient/CDmach
+    1 dimensional table with 12 rows.
+	-0.175	0.003	
+	-0.087	0.001	
+	0	0	
+	0.087	0.001	
+	0.175	0.002	
+	0.262	0.004	
+	0.349	0.007	
+	0.436	0.011	
+	0.524	0.015	
+	0.611	0.019	
+	0.698	0.023	
+	0.785	0.024	
+    Function: aero/coefficient/CDDlef
+    Function: aero/coefficient/CDDflaps
+    Function: aero/coefficient/CDgear
+    1 dimensional table with 12 rows.
+	-0.175	-0.0545	
+	-0.087	-0.0225	
+	0	0.0096	
+	0.087	0.059	
+	0.175	0.1244	
+	0.262	0.2182	
+	0.349	0.2324	
+	0.436	0.2029	
+	0.524	0.1435	
+	0.611	0.1046	
+	0.698	0.1363	
+	0.785	0.1196	
+    Function: aero/coefficient/CDDsb
+    1 dimensional table with 12 rows.
+	-0.175	-1.265	
+	-0.087	-2.139	
+	0	-0.308	
+	0.087	1.402	
+	0.175	3.369	
+	0.262	5.135	
+	0.349	6.88	
+	0.436	10.06	
+	0.524	13.2	
+	0.611	15.87	
+	0.698	23.22	
+	0.785	24.11	
+    Function: aero/coefficient/CDq
+    1 dimensional table with 12 rows.
+	-0.175	0.067	
+	-0.087	0.034	
+	0	0.028	
+	0.087	0.029	
+	0.175	0.033	
+	0.262	0.059	
+	0.349	0.061	
+	0.436	0.027	
+	0.524	0.036	
+	0.611	0.047	
+	0.698	0.029	
+	0.785	0.015	
+    Function: aero/coefficient/CDq_Dlef
+    Function: aero/coefficient/CYb
+    1 dimensional table with 3 rows.
+	0.4	0	
+	1.2	0.0573	
+	1.6	-0.1719	
+    Function: aero/coefficient/CYb_M
+    Function: aero/coefficient/CYDa
+    Function: aero/coefficient/CYdr
+    1 dimensional table with 12 rows.
+	-0.175	-0.108	
+	-0.087	-0.108	
+	0	-0.188	
+	0.087	0.11	
+	0.175	0.258	
+	0.262	0.226	
+	0.349	0.344	
+	0.436	0.362	
+	0.524	0.611	
+	0.611	0.529	
+	0.698	0.298	
+	0.785	-0.227	
+    Function: aero/coefficient/CYp
+    1 dimensional table with 12 rows.
+	-0.175	0.882	
+	-0.087	0.852	
+	0	0.876	
+	0.087	0.958	
+	0.175	0.962	
+	0.262	0.974	
+	0.349	0.819	
+	0.436	0.483	
+	0.524	0.59	
+	0.611	1.21	
+	0.698	-0.493	
+	0.785	-1.04	
+    Function: aero/coefficient/CYr
+    2 dimensional table with 12 rows, 5 columns.
+		-0.436	-0.218	0	0.218	0.436	
+	-0.175	-0.659	-0.709	-0.754	-0.792	-0.825	
+	-0.087	-0.151	-0.196	-0.238	-0.278	-0.316	
+	0	0.183	0.141	0.1	0.059	0.017	
+	0.087	0.491	0.454	0.414	0.371	0.326	
+	0.175	0.797	0.763	0.725	0.68	0.63	
+	0.262	1.108	1.079	1.041	0.993	0.94	
+	0.349	1.395	1.366	1.327	1.274	1.214	
+	0.436	1.615	1.587	1.547	1.49	1.427	
+	0.524	1.804	1.777	1.737	1.674	1.61	
+	0.611	1.9	1.872	1.829	1.766	1.699	
+	0.698	1.898	1.869	1.822	1.757	1.689	
+	0.785	1.753	1.724	1.674	1.612	1.546	
+    Function: aero/coefficient/CLDh
+    1 dimensional table with 12 rows.
+	-0.175	-0.012	
+	-0.087	-0.004	
+	0	0.002	
+	0.087	0.007	
+	0.175	0.012	
+	0.262	0.018	
+	0.349	0.022	
+	0.436	0.025	
+	0.524	0.026	
+	0.611	0.028	
+	0.698	0.028	
+	0.785	0.025	
+    Function: aero/coefficient/CLDlef
+    Function: aero/coefficient/CLDflaps
+    1 dimensional table with 12 rows.
+	-0.175	0.3645	
+	-0.087	0.3678	
+	0	0.3684	
+	0.087	0.2522	
+	0.175	0.271	
+	0.262	0.3615	
+	0.349	0.1283	
+	0.436	0.0075	
+	0.524	-0.1311	
+	0.611	-0.1836	
+	0.698	-0.1161	
+	0.785	-0.1064	
+    Function: aero/coefficient/CLDsb
+    1 dimensional table with 12 rows.
+	-0.175	8.713	
+	-0.087	25.71	
+	0	28.9	
+	0.087	31.4	
+	0.175	31.09	
+	0.262	30.41	
+	0.349	26.97	
+	0.436	26.42	
+	0.524	25.86	
+	0.611	25.27	
+	0.698	30.52	
+	0.785	25.82	
+    Function: aero/coefficient/CLq
+    1 dimensional table with 12 rows.
+	-0.175	-0.256	
+	-0.087	-0.062	
+	0	-0.01	
+	0.087	0.02	
+	0.175	-0.011	
+	0.262	0.053	
+	0.349	0.063	
+	0.436	-0.009	
+	0.524	0.034	
+	0.611	0.042	
+	0.698	0.005	
+	0.785	0.001	
+    Function: aero/coefficient/CLq_Dsb
+    2 dimensional table with 12 rows, 13 columns.
+		-0.524	-0.436	-0.349	-0.262	-0.175	-0.087	0	0.087	0.175	0.262	0.349	0.436	0.524	
+	-0.175	-0.009	-0.007	-0	0.001	0.003	0.001	0	-0.001	-0.003	-0.001	0	0.007	0.009	
+	-0.087	0.011	0.01	0.01	0.01	0.009	0.004	0	-0.004	-0.009	-0.01	-0.01	-0.01	-0.011	
+	0	0.023	0.023	0.022	0.02	0.017	0.008	0	-0.008	-0.017	-0.02	-0.022	-0.023	-0.023	
+	0.087	0.037	0.034	0.034	0.03	0.024	0.012	0	-0.012	-0.024	-0.03	-0.034	-0.034	-0.037	
+	0.175	0.05	0.049	0.047	0.039	0.03	0.016	0	-0.016	-0.03	-0.039	-0.047	-0.049	-0.05	
+	0.262	0.068	0.063	0.06	0.054	0.041	0.022	0	-0.022	-0.041	-0.054	-0.06	-0.063	-0.068	
+	0.349	0.089	0.081	0.069	0.057	0.045	0.022	0	-0.022	-0.045	-0.057	-0.069	-0.081	-0.089	
+	0.436	0.088	0.079	0.067	0.054	0.04	0.021	0	-0.021	-0.04	-0.054	-0.067	-0.079	-0.088	
+	0.524	0.091	0.06	0.033	0.023	0.016	0.015	0	-0.015	-0.016	-0.023	-0.033	-0.06	-0.091	
+	0.611	0.076	0.058	0.036	0.006	0.002	0.008	0	-0.008	-0.002	-0.006	-0.036	-0.058	-0.076	
+	0.698	0.077	0.062	0.035	0.014	0.01	0.013	0	-0.013	-0.01	-0.014	-0.035	-0.062	-0.077	
+	0.785	0.076	0.059	0.035	0.027	0.019	0.015	0	-0.015	-0.019	-0.027	-0.035	-0.059	-0.076	
+    Function: aero/coefficient/Clb
+    1 dimensional table with 6 rows.
+	0.6	0	
+	0.8	0.1891	
+	1	0.1776	
+	1.2	0.1375	
+	1.4	0.1203	
+	1.6	0.0859	
+    Function: aero/coefficient/Clb_M
+    1 dimensional table with 12 rows.
+	-0.175	-0.36	
+	-0.087	-0.359	
+	0	-0.443	
+	0.087	-0.42	
+	0.175	-0.383	
+	0.262	-0.375	
+	0.349	-0.329	
+	0.436	-0.294	
+	0.524	-0.23	
+	0.611	-0.21	
+	0.698	-0.12	
+	0.785	-0.1	
+    Function: aero/coefficient/Clp
+    1 dimensional table with 12 rows.
+	-0.175	-0.126	
+	-0.087	-0.026	
+	0	0.063	
+	0.087	0.113	
+	0.175	0.208	
+	0.262	0.23	
+	0.349	0.319	
+	0.436	0.437	
+	0.524	0.68	
+	0.611	0.1	
+	0.698	0.447	
+	0.785	-0.33	
+    Function: aero/coefficient/Clr
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	0.041	0.041	0.042	0.04	0.043	0.044	0.043	
+	-0.087	0.052	0.053	0.053	0.052	0.049	0.048	0.049	
+	0	0.053	0.053	0.052	0.051	0.048	0.048	0.047	
+	0.087	0.056	0.053	0.051	0.052	0.049	0.047	0.045	
+	0.175	0.05	0.05	0.049	0.048	0.043	0.042	0.042	
+	0.262	0.056	0.051	0.049	0.048	0.042	0.041	0.037	
+	0.349	0.082	0.066	0.043	0.042	0.042	0.02	0.003	
+	0.436	0.059	0.043	0.035	0.037	0.036	0.028	0.013	
+	0.524	0.042	0.038	0.026	0.031	0.025	0.013	0.01	
+	0.611	0.038	0.027	0.016	0.026	0.021	0.014	0.003	
+	0.698	0.027	0.023	0.018	0.017	0.016	0.011	0.007	
+	0.785	0.017	0.016	0.014	0.012	0.011	-0.01	0.008	
+    Function: aero/coefficient/Clda
+    1 dimensional table with 3 rows.
+	0.6	0	
+	1.2	-0.063	
+	1.6	-0.063	
+    Function: aero/coefficient/Clda_M
+    1 dimensional table with 2 rows.
+	0.6	0	
+	1.6	-0.0201	
+    Function: aero/coefficient/Cldr_M
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	0.005	0.007	0.013	0.018	0.015	0.021	0.023	
+	-0.087	0.017	0.016	0.013	0.015	0.014	0.011	0.01	
+	0	0.014	0.014	0.011	0.015	0.013	0.01	0.011	
+	0.087	0.01	0.014	0.012	0.014	0.013	0.011	0.011	
+	0.175	-0.005	0.013	0.011	0.014	0.012	0.01	0.011	
+	0.262	0.009	0.009	0.009	0.014	0.011	0.009	0.01	
+	0.349	0.019	0.012	0.008	0.014	0.011	0.008	0.008	
+	0.436	0.005	0.005	0.005	0.015	0.01	0.01	0.01	
+	0.524	0	0	0	0.013	0.008	0.006	0.006	
+	0.611	-0.005	0.004	0.005	0.011	0.008	0.005	0.014	
+	0.698	-0.011	0.009	0.003	0.006	0.007	0	0.02	
+	0.785	0.008	0.007	0.005	0.001	0.003	0.001	0	
+    Function: aero/coefficient/Cldr
+    2 dimensional table with 12 rows, 5 columns.
+		-0.436	-0.218	0	0.218	0.436	
+	-0.175	0.205	0.081	-0.046	-0.174	-0.259	
+	-0.087	0.168	0.077	-0.02	-0.145	-0.202	
+	0	0.186	0.107	-0.009	-0.121	-0.184	
+	0.087	0.196	0.11	-0.005	-0.127	-0.193	
+	0.175	0.213	0.11	-0.006	-0.129	-0.199	
+	0.262	0.251	0.141	0.01	-0.102	-0.15	
+	0.349	0.245	0.127	0.006	-0.097	-0.16	
+	0.436	0.238	0.119	-0.001	-0.113	-0.167	
+	0.524	0.252	0.133	0.014	-0.087	-0.104	
+	0.611	0.231	0.108	0	-0.084	-0.076	
+	0.698	0.198	0.081	-0.013	-0.069	-0.041	
+	0.785	0.192	0.093	0.032	-0.006	-0.005	
+    Function: aero/coefficient/CmDh
+    1 dimensional table with 6 rows.
+	0.6	0	
+	0.8	0.0974	
+	0.9	-0.3323	
+	1	-0.9626	
+	1.1	-0.848	
+	1.2	-0.7907	
+    Function: aero/coefficient/Cma_M
+    1 dimensional table with 12 rows.
+	-0.175	-0.0036	
+	-0.087	-0.0036	
+	0	-0.0036	
+	0.087	0.0303	
+	0.175	0.0225	
+	0.262	0.0128	
+	0.349	0.0252	
+	0.436	0.0275	
+	0.524	-0.0171	
+	0.611	-0.0448	
+	0.698	-0.0737	
+	0.785	-0.0884	
+    Function: aero/coefficient/CmDsb
+    1 dimensional table with 12 rows.
+	-0.175	-7.21	
+	-0.087	-5.4	
+	0	-5.23	
+	0.087	-5.26	
+	0.175	-6.11	
+	0.262	-6.64	
+	0.349	-5.69	
+	0.436	-6	
+	0.524	-6.2	
+	0.611	-6.4	
+	0.698	-6.6	
+	0.785	-6	
+    Function: aero/coefficient/Cmq
+    2 dimensional table with 12 rows, 13 columns.
+		-0.524	-0.436	-0.349	-0.262	-0.175	-0.087	0	0.087	0.175	0.262	0.349	0.436	0.524	
+	-0.175	-0.079	-0.074	-0.064	-0.056	-0.038	-0.018	0	0.018	0.038	0.056	0.064	0.074	0.079	
+	-0.087	-0.09	-0.086	-0.077	-0.057	-0.042	-0.019	0	0.019	0.042	0.057	0.077	0.086	0.09	
+	0	-0.106	-0.093	-0.076	-0.059	-0.042	-0.018	0	0.018	0.042	0.059	0.076	0.093	0.106	
+	0.087	-0.106	-0.089	-0.074	-0.058	-0.042	-0.019	0	0.019	0.042	0.058	0.074	0.089	0.106	
+	0.175	-0.096	-0.08	-0.073	-0.058	-0.043	-0.019	0	0.019	0.043	0.058	0.073	0.08	0.096	
+	0.262	-0.08	-0.062	-0.057	-0.053	-0.039	-0.018	0	0.018	0.039	0.053	0.057	0.062	0.08	
+	0.349	-0.068	-0.049	-0.029	-0.032	-0.03	-0.013	0	0.013	0.03	0.032	0.029	0.049	0.068	
+	0.436	-0.03	-0.022	-0.007	-0.012	-0.017	-0.007	0	0.007	0.017	0.012	0.007	0.022	0.03	
+	0.524	-0.064	-0.028	-0.012	-0.002	-0.004	-0.004	0	0.004	0.004	0.002	0.012	0.028	0.064	
+	0.611	-0.015	0.012	0.034	0.046	0.035	0.014	0	-0.014	-0.035	-0.046	-0.034	-0.012	0.015	
+	0.698	-0.011	0.002	0.065	0.071	0.047	0.017	0	-0.017	-0.047	-0.071	-0.065	-0.002	0.011	
+	0.785	0.001	0.013	0.041	0.073	0.057	0.033	0	-0.033	-0.057	-0.073	-0.041	-0.013	-0.001	
+    Function: aero/coefficient/Cnb
+    1 dimensional table with 8 rows.
+	0.6	0	
+	0.7	-0.0688	
+	0.8	-0.0172	
+	0.9	0.0229	
+	1	0	
+	1.2	-0.0688	
+	1.4	0.0057	
+	1.6	0.0688	
+    Function: aero/coefficient/Cnb_M
+    1 dimensional table with 12 rows.
+	-0.175	-0.061	
+	-0.087	-0.052	
+	0	-0.052	
+	0.087	0.012	
+	0.175	0.013	
+	0.262	0.024	
+	0.349	-0.05	
+	0.436	-0.15	
+	0.524	-0.13	
+	0.611	-0.158	
+	0.698	-0.24	
+	0.785	-0.15	
+    Function: aero/coefficient/Cnp
+    1 dimensional table with 12 rows.
+	-0.175	-0.38	
+	-0.087	-0.363	
+	0	-0.378	
+	0.087	-0.386	
+	0.175	-0.37	
+	0.262	-0.453	
+	0.349	-0.55	
+	0.436	-0.582	
+	0.524	-0.595	
+	0.611	-0.637	
+	0.698	-1.02	
+	0.785	-0.84	
+    Function: aero/coefficient/Cnr
+    1 dimensional table with 6 rows.
+	0.6	0	
+	0.8	0.0149	
+	1	-0.0011	
+	1.2	0.0097	
+	1.4	0.0126	
+	1.6	-0.004	
+    Function: aero/coefficient/Cnda_M
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	0.001	0.002	0.006	0.011	0.015	0.024	-0.022	
+	-0.087	0.027	0.014	0.008	0.011	0.015	0.01	-0.002	
+	0	0.017	0.016	0.006	0.01	0.014	0.004	0.003	
+	0.087	0.013	0.016	0.006	0.009	0.012	0.002	0.005	
+	0.175	0.012	0.014	0.005	0.008	0.011	0.001	0.003	
+	0.262	0.016	0.019	0.008	0.006	0.008	-0.003	0.001	
+	0.349	-0.001	0.021	0.005	-0	0.002	-0.014	0.009	
+	0.436	-0.017	-0.002	-0.007	-0.004	-0.002	-0.006	0.009	
+	0.524	-0.011	-0.012	-0.004	-0.007	-0.006	0.001	0.001	
+	0.611	-0.017	-0.016	-0.007	-0.01	-0.012	-0.004	-0.003	
+	0.698	-0.008	-0.015	-0.006	-0.004	-0.011	-0.004	0.002	
+	0.785	-0.016	-0.011	-0.006	-0.01	-0.011	-0.006	-0.001	
+    Function: aero/coefficient/Cnda
+    2 dimensional table with 12 rows, 7 columns.
+		-0.524	-0.349	-0.175	0	0.175	0.349	0.524	
+	-0.175	-0.018	-0.028	-0.037	-0.048	-0.043	-0.052	-0.062	
+	-0.087	-0.052	-0.051	-0.041	-0.045	-0.044	-0.034	-0.034	
+	0	-0.052	-0.043	-0.038	-0.045	-0.041	-0.036	-0.027	
+	0.087	-0.052	-0.046	-0.04	-0.045	-0.041	-0.036	-0.028	
+	0.175	-0.054	-0.045	-0.04	-0.044	-0.04	-0.035	-0.027	
+	0.262	-0.049	-0.049	-0.038	-0.045	-0.038	-0.028	-0.027	
+	0.349	-0.059	-0.057	-0.037	-0.047	-0.034	-0.024	-0.023	
+	0.436	-0.051	-0.052	-0.03	-0.048	-0.035	-0.023	-0.023	
+	0.524	-0.03	-0.03	-0.027	-0.049	-0.035	-0.02	-0.019	
+	0.611	-0.037	-0.033	-0.024	-0.045	-0.029	-0.016	-0.009	
+	0.698	-0.026	-0.03	-0.019	-0.033	-0.022	-0.01	-0.025	
+	0.785	-0.013	-0.008	-0.013	-0.016	-0.009	-0.014	-0.01	
+    Function: aero/coefficient/Cndr
+    1 dimensional table with 3 rows.
+	0.6	0	
+	1.2	0.0401	
+	1.6	0.0716	
+    Function: aero/coefficient/Cndr_M
+[TRIM] Native do_trim(1) ...
+GEAR_CONTACT: 0.000000 seconds: NOSE_LG 1
+GEAR_CONTACT: 0.000000 seconds: LEFT_MLG 1
+GEAR_CONTACT: 0.000000 seconds: RIGHT_MLG 1
+GEAR_CONTACT: 0.000000 seconds: LEFT_VFT 1
+GEAR_CONTACT: 0.000000 seconds: RIGHT_VFT 1
+GEAR_CONTACT: 0.000000 seconds: INTAKE 1
+GEAR_CONTACT: 0.000000 seconds: RADOME 1
+
+  Mass Properties Report (English units: lbf, in, slug-ft^2)
+                                      Weight    CG-X    CG-Y    CG-Z         Ixx         Iyy         Izz         Ixy         Ixz         Iyz
+    Base Vehicle                       17400.0  -193.0     0.0    -5.1      9496.0     55814.0     63100.0        -0.0      -982.0        -0.0
+0   Pilot                                230.0  -336.2     0.0     0.0         0.0         0.0         0.0        -0.0         0.0        -0.0
+[1m0   Fuel                          [22m        1500  -174.4      65       5           0           0           0
+[1m1   Fuel                          [22m        1500  -174.4     -65       5           0           0           0
+[1m2   Fuel                          [22m           0  -174.4      65     -15           0           0           0
+[1m3   Fuel                          [22m           0  -174.4     -65     -15           0           0           0
+                                                                                                                                            
+    Total:                           20630.0  -191.9     0.0    -3.6     12288.8     57107.5     67072.3         0.0     -1059.9         0.0
+
+End of vehicle configuration loading.
+-------------------------------------------------------------------------------
+GEAR_CONTACT: 0.000000 seconds: LEFT_VFT 0
+GEAR_CONTACT: 0.000000 seconds: RIGHT_VFT 0
+GEAR_CONTACT: 0.000000 seconds: INTAKE 0
+GEAR_CONTACT: 0.000000 seconds: RADOME 0
+
+  Mass Properties Report (English units: lbf, in, slug-ft^2)
+                                      Weight    CG-X    CG-Y    CG-Z         Ixx         Iyy         Izz         Ixy         Ixz         Iyz
+    Base Vehicle                       17400.0  -193.0     0.0    -5.1      9496.0     55814.0     63100.0        -0.0      -982.0        -0.0
+0   Pilot                                230.0  -336.2     0.0     0.0         0.0         0.0         0.0        -0.0         0.0        -0.0
+[1m0   Fuel                          [22m        1500  -174.4      65       5           0           0           0
+[1m1   Fuel                          [22m        1500  -174.4     -65       5           0           0           0
+[1m2   Fuel                          [22m           0  -174.4      65     -15           0           0           0
+[1m3   Fuel                          [22m           0  -174.4     -65     -15           0           0           0
+                                                                                                                                            
+    Total:                           20630.0  -191.9     0.0    -3.6     12288.8     57107.5     67072.3         0.0     -1059.9         0.0
+
+End of vehicle configuration loading.
+-------------------------------------------------------------------------------
+  Full Trim
+
+  Trim successful
+  Angle of Attack     : 0.49   wdot : -2.17e-04 Tolerance: 1e-03  Passed
+  Throttle            : 0.33   udot : -1.22e-04 Tolerance: 1e-03  Passed
+  Pitch Trim          : -0.021 qdot : -7.47e-12 Tolerance: 1e-04  Passed
+  Roll Angle          : -2.3e-08 vdot : 9.97e-08  Tolerance: 1e-03  Passed
+  Ailerons            : -1.3e-10 pdot : 2.87e-08  Tolerance: 1e-04  Passed
+  Rudder              : 8.9e-10 rdot : -1.68e-08 Tolerance: 1e-04  Passed
+  Trim Results:
+[TRIM] attempt 0: gamma_bias=+0.00 theta=+0.49 hdot=+0.00 Vc=400.0 elev_cmd=-0.0200 thr=0.3293
+[TRIM] ACCEPTED thr=0.3293 elev=-0.0200 ptrim=-0.0214 theta0=+0.49 hdot=+0.00 (genuinely level)
+[SETTLE] 18s closed-loop settle...
+[SETTLE] h=15093ft Vc=488.1kts theta=+0.38deg
+[PHI-Twin] Loaded CNN-BiLSTM from C:\Users\User\Desktop\COMPLETED_PROJECTS\PHI_CTRL\PHI_CTRL_RELEASE\models\phi_twin_cnn_bilstm.pt
+C:\Users\User\anaconda3\anacondaa\envs\aerospace\Lib\site-packages\keras\src\export\tf2onnx_lib.py:8: FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+  if not hasattr(np, "object"):
+[RL] Loaded F-16 checkpoint 'phi_ctrl_residual_f16.zip'.
+[RL] Residual gate: physical gamma_loss + hysteresis (ON<0.85, OFF>0.95, dwell=0.5s)
+[DETECTOR] Calibrated healthy gain: 9.5801
+[LOG] Wrote 7200 rows
+
+METRICS (FULL_STACK): max|dh|=563.3ft  θ=[-0.1,0.5]  roll_max=3.4  interlock=False  crash=False  residual_steps=5340
+[ABLATION] Wrote C:\Users\User\Desktop\COMPLETED_PROJECTS\PHI_CTRL\PHI_CTRL_RELEASE\results_f16\ablation_summary.csv
+
+======================================================================
+ABLATION SUMMARY (honest — residual not assumed superior)
+======================================================================
+Case            max|Δh|    θ min    θ max  crash  resid_steps
+BASELINE          578.8     -0.1      0.4  False            0
+TECS_MRAC         572.4     -0.1      0.4  False            0
+HYBRID            564.8     -0.1      0.4  False            0
+FULL_STACK        563.3     -0.1      0.5  False         5340
+======================================================================
+Note: FULL_STACK residual is MMAE-gated. If max|Δh| exceeds BASELINE, report as ablation finding and retrain with --curriculum.
+
+[PLOT] Saved: C:\Users\User\Desktop\COMPLETED_PROJECTS\PHI_CTRL\PHI_CTRL_RELEASE\results_f16\phi_ctrl_unified_f16_comparison.png
+
+[DONE] All cases complete.

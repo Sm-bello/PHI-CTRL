@@ -4,17 +4,6 @@ Release: TRL 4 / edge-of-5 package (F-16 primary)
 γ convention: γ = elevator REMAINING effectiveness
   1.0 = healthy; 0.8 = 20% loss; 0.5 = 50% loss
 
-Terminal 1:
----------------------------------------------------------------------------
-"C:\Program Files\FlightGear 2024.1\bin\fgfs.exe" --aircraft=f16-block-52 --fdm=external --native-fdm=socket,in,60,,5606,udp --lat=0 --lon=0 --altitude=15000 --vc=400 --disable-clouds3d --disable-random-objects
-
----------------------------------------------------------------------------
-Terminal 2:
----------------------------------------------------------------------------
-conda activate aerospace
-cd PHI-CTRL          # repo root
-python run_f16_live_flightgear.py --fault
-
 ---------------------------------------------------------------------------
 1. WHAT THIS IS
 ---------------------------------------------------------------------------
@@ -108,6 +97,7 @@ Observer bias columns are diagnostic logs only.
 ---------------------------------------------------------------------------
   docs/TRL_ROADMAP_PHI_CTRL.md
   docs/ICD_HIL_FLIGHTGEAR.md
+  docs/PHI_CTRL_Progress_Report.docx
   README.md
 
 ---------------------------------------------------------------------------
@@ -130,3 +120,16 @@ Ground-truth-labeled F-16 telemetry (not a trained model):
 Outputs: episodes.csv, episode_index.csv, manifest.json
 γ = remaining effectiveness (labels included every row).
 Sliding windows (50–100 steps) → CNN-BiLSTM later.
+
+---------------------------------------------------------------------------
+9. PHI-TWIN (CNN-BiLSTM γ̂) — after good dataset
+---------------------------------------------------------------------------
+  # 1) Regenerate dataset (V2 generator — fresh FDM per episode)
+  python scripts\generate_fault_dataset_f16.py --smoke
+  python scripts\generate_fault_dataset_f16.py --episodes-per-gamma 40 --gammas 1.0 0.8 0.6 0.5 --out data\phi_ctrl_f16_fault
+
+  # 2) Train PHI-Twin
+  python scripts\train_phi_twin_detector.py --data data\phi_ctrl_f16_fault --epochs 25
+
+  # 3) Unified auto-loads models\phi_twin_cnn_bilstm.pt if present
+  python phi_ctrl_unified_f16.py --gamma 0.5

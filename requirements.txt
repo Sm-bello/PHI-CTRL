@@ -2,7 +2,11 @@ numpy>=1.24
 pandas>=2.0
 matplotlib>=3.7
 scipy>=1.10
-# jsbsim  (prefer: conda install -c conda-forge jsbsim)
-# optional for residual RL:
-# stable-baselines3
-# gymnasium
+# Install JSBSim from conda-forge or pip where supported:
+# conda install -c conda-forge jsbsim
+jsbsim>=1.2.0
+# Required for PHI-Twin training/inference:
+torch>=2.0
+# Required for FULL_STACK residual evaluation:
+stable-baselines3>=2.0
+gymnasium>=0.28

@@ -85,10 +85,14 @@ BAILOUT_PHI_DEG = 60.0
 BAILOUT_MIN_ALT_FT = 5000.0
 
 # Residual enable: only when bank believes remaining effectiveness dropped
-RESIDUAL_ENABLE_GAMMA_HAT = 0.92
+RESIDUAL_ENABLE_GAMMA_HAT = 0.92  # legacy single-threshold (kept for log text)
 RESIDUAL_MAX = 0.20          # hard cap on residual contribution (was 0.5 — saturates plant)
 RESIDUAL_RATE_MAX = 0.05     # per step at 120 Hz ≈ 6/s slew
 RESIDUAL_GAIN = 0.35         # scale raw policy output before authority weighting
+# Hysteresis residual gate (prevents healthy residual fire)
+RESIDUAL_ON_TH = 0.85        # latch ON only when gamma_hat stays below this
+RESIDUAL_OFF_TH = 0.95       # latch OFF when gamma_hat recovers above this
+RESIDUAL_DWELL_S = 0.5       # seconds of sustained evidence required
 
 
 class TeeLogger:
@@ -259,7 +263,7 @@ def run_case(
             else:
                 print(f"[RL] Loaded F-16 checkpoint '{fname}'.")
             print(
-                f"[RL] Residual enable gated by MMAE: gamma_hat < {RESIDUAL_ENABLE_GAMMA_HAT}"
+                f"[RL] Residual gate: physical gamma_loss + hysteresis (ON<{RESIDUAL_ON_TH}, OFF>{RESIDUAL_OFF_TH}, dwell={RESIDUAL_DWELL_S}s)"
             )
         except Exception as e:
             print(f"[RL] Load failed, inert: {e}")
@@ -273,6 +277,9 @@ def run_case(
     prev_elev_cmd = trim_elev
     residual_on_count = 0
     prev_rl_res = 0.0
+    resid_latched = False
+    resid_on_timer = 0.0
+    resid_off_timer = 0.0
 
     for i in range(n):
         t = fdm.get_sim_time() - t_offset
@@ -370,20 +377,43 @@ def run_case(
             mrac_prev_u = mrac_elev
             mrac_elev = -mrac_elev
 
-        # --- RL residual: additive correction ON TOP of 1/γ compensation ---
-        # Critical fix: never drop comp_factor when residual is on (that was
-        # the FULL_STACK dive: residual +0.5 replaced authority recovery).
+        # --- RL residual: additive correction ON TOP of 1/gamma compensation ---
+        # Gate: physical effectiveness loss + hysteresis on gamma_hat (no healthy fire).
+        # Application law unchanged: kappa*classical + rate-limited residual.
         rl_res = 0.0
         residual_enabled = False
-        if rl_model is not None and eff_rl and fault_active:
+        if rl_model is not None and eff_rl:
             g_for_gate = case_gamma_estimate
             if phi_twin is not None:
                 g_for_gate = min(g_for_gate, twin_g)
             if mmae is not None:
                 g_for_gate = min(g_for_gate, mmae_gamma_hat)
-            residual_enabled = g_for_gate < RESIDUAL_ENABLE_GAMMA_HAT
-            if mmae is None and phi_twin is None:
-                residual_enabled = True
+
+            # Real effectiveness loss scheduled (gamma_remaining < 1) AND past onset.
+            physical_fault = (float(gamma_remaining) < 0.999) and (t >= FAULT_START_TIME)
+
+            if not physical_fault:
+                resid_latched = False
+                resid_on_timer = 0.0
+                resid_off_timer = 0.0
+            else:
+                if g_for_gate < RESIDUAL_ON_TH:
+                    resid_on_timer += DT
+                    resid_off_timer = 0.0
+                elif g_for_gate > RESIDUAL_OFF_TH:
+                    resid_off_timer += DT
+                    resid_on_timer = 0.0
+                else:
+                    resid_on_timer = 0.0
+                    resid_off_timer = 0.0
+
+                if resid_on_timer >= RESIDUAL_DWELL_S:
+                    resid_latched = True
+                if resid_off_timer >= RESIDUAL_DWELL_S:
+                    resid_latched = False
+
+            residual_enabled = bool(resid_latched)
+
             if residual_enabled:
                 residual_on_count += 1
                 try:
@@ -399,11 +429,9 @@ def run_case(
                     ], dtype=np.float32)
                     action, _ = rl_model.predict(obs8, deterministic=True)
                     raw_a = float(np.clip(float(action[0]), -0.5, 0.5))
-                    # Scale by authority deficit so residual only fills lost γ
                     deficit = float(np.clip(1.0 - case_gamma_estimate, 0.0, 1.0))
                     desired = raw_a * RESIDUAL_GAIN * max(deficit, 0.15)
                     desired = float(np.clip(desired, -RESIDUAL_MAX, RESIDUAL_MAX))
-                    # Rate limit (prevents 0→0.5 jump in one step)
                     du = float(np.clip(desired - prev_rl_res, -RESIDUAL_RATE_MAX, RESIDUAL_RATE_MAX))
                     rl_res = prev_rl_res + du
                 except Exception as e:
@@ -411,7 +439,6 @@ def run_case(
                         print(f"[RL] Inference error at t={t:.1f}s: {e}")
                     rl_res = prev_rl_res * 0.9
             else:
-                # Soft bleed residual off when gate closes
                 rl_res = prev_rl_res * 0.85
             prev_rl_res = rl_res
         else:
