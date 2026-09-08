@@ -1,3 +1,4 @@
+<img width="1536" height="1024" alt="arc" src="https://github.com/user-attachments/assets/9ba2d7e1-1a57-42f5-9983-6c5fc508b46b" />
 # PHI-CTRL — Reproducible F-16 Integrity-Aware Control Release
 
 This archive contains the PHI-CTRL research implementation, F-16 JSBSim plant path, elevator-effectiveness fault injection, PHI-Twin CNN-BiLSTM health estimator, adaptive/control components, residual policy, supplied telemetry dataset, and experiment scripts.
