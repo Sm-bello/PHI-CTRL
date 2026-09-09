@@ -1,9 +1,38 @@
-<img width="1536" height="1024" alt="arc" src="https://github.com/user-attachments/assets/9ba2d7e1-1a57-42f5-9983-6c5fc508b46b" />
-# PHI-CTRL — Reproducible F-16 Integrity-Aware Control Release
+# PHI-CTRL — Physics-Hybrid Integrity Control for F-16
 
-This archive contains the PHI-CTRL research implementation, F-16 JSBSim plant path, elevator-effectiveness fault injection, PHI-Twin CNN-BiLSTM health estimator, adaptive/control components, residual policy, supplied telemetry dataset, and experiment scripts.
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9ba2d7e1-1a57-42f5-9983-6c5fc508b46b" alt="PHI-CTRL Architecture" width="900"/>
+</p>
 
-## One-command reproduction
+<p align="center">
+  <img src="https://img.shields.io/badge/Paper-JGCD-blue?style=for-the-badge" alt="JGCD"/>
+  <img src="https://img.shields.io/badge/Version-v1.1.0-green?style=for-the-badge" alt="v1.1.0"/>
+  <img src="https://img.shields.io/badge/License-MIT-lightgrey?style=for-the-badge" alt="MIT"/>
+  <img src="https://img.shields.io/badge/Reproducibility-First-orange?style=for-the-badge" alt="Reproducibility"/>
+</p>
+
+**PHI-CTRL** couples online actuator-effectiveness estimation with bounded authority reconfiguration on a nonlinear 6-DOF F-16A (JSBSim).  
+The primary demonstration case is partial elevator-effectiveness loss; the architecture and verification discipline are the real contribution.
+
+---
+
+### Quick Links – The Full Picture
+
+| What you need | Where it lives |
+|---------------|----------------|
+| **Full source code** (this repo) | [github.com/Sm-bello/PHI-CTRL](https://github.com/Sm-bello/PHI-CTRL) |
+| **Frozen paper results** (numbers + figures) | [HF – PHI-CTRL-Reproduction-Results](https://huggingface.co/datasets/SM-Bello/PHI-CTRL-Reproduction-Results) |
+| Raw telemetry dataset | [HF – PHI-CTRL-F16-Fault-Recovery-Telemetry](https://huggingface.co/datasets/SM-Bello/PHI-CTRL-F16-Fault-Recovery-Telemetry) |
+| Trained models | [HF – PHI-CTRL-F16-Models](https://huggingface.co/SM-Bello/PHI-CTRL-F16-Models) |
+| Long-term citable archive | [Zenodo (GitHub link)](https://zenodo.org/account/settings/github/repository/Sm-bello/PHI-CTRL) |
+
+> **Want to verify the manuscript numbers in < 5 minutes?**  
+> Go straight to the frozen package → [PHI-CTRL-Reproduction-Results](https://huggingface.co/datasets/SM-Bello/PHI-CTRL-Reproduction-Results)  
+> No simulator required. All CSVs and figures match the paper exactly.
+
+---
+
+## One-command reproduction (full source)
 
 After installing the dependencies:
 
@@ -19,6 +48,8 @@ python reproduce.py --full --seeds 20
 
 The orchestrator records environment/provenance information and creates a SHA-256 manifest under `results/reproduction/`.
 
+---
+
 ## What the release actually runs
 
 The named integrity modes in `eval_campaign_tier12.py` are explicit:
@@ -31,10 +62,12 @@ The named integrity modes in `eval_campaign_tier12.py` are explicit:
 
 The campaign no longer uses a synthetic lagged gamma estimate under these named modes.
 
+---
+
 ## Key scripts
 
 | Script | Purpose |
-|---|---|
+|--------|---------|
 | `reproduce.py` | Top-level reproducibility orchestrator |
 | `eval_campaign_tier12.py` | Multi-envelope controller/integrity campaign |
 | `eval/eval_multiseed.py` | Multi-seed evaluation with deterministic seed schedule |
@@ -42,6 +75,8 @@ The campaign no longer uses a synthetic lagged gamma estimate under these named 
 | `scripts/train_phi_twin_detector.py` | CNN-BiLSTM training with episode-level split and held-out test |
 | `analyze_campaign_stats.py` | Bootstrap pairwise campaign effects |
 | `phi_ctrl_unified_f16.py` | Single unified controller experiment and baseline gate |
+
+---
 
 ## PHI-Twin training
 
@@ -53,15 +88,17 @@ python scripts/train_phi_twin_detector.py \
 
 The training script splits **episodes before sliding-window construction** to prevent leakage between overlapping windows. Feature normalization is fitted on training episodes only. The resulting checkpoint stores the split definition and held-out test metrics.
 
+---
+
 ## Primary campaign
 
 The default full matrix is:
 
-- 10,000 ft / 300 kt
-- 15,000 ft / 400 kt
-- 20,000 ft / 450 kt
-- γ = 1.0, 0.8, 0.6, 0.5
-- BASELINE, CLASSICAL_KAPPA, TECS_MRAC, HYBRID, FULL_STACK
+- 10,000 ft / 300 kt  
+- 15,000 ft / 400 kt  
+- 20,000 ft / 450 kt  
+- γ = 1.0, 0.8, 0.6, 0.5  
+- BASELINE, CLASSICAL_KAPPA, TECS_MRAC, HYBRID, FULL_STACK  
 - configurable number of seeds (20 recommended for the primary result)
 
 Example:
@@ -76,14 +113,31 @@ Noise and randomized onset can be enabled separately:
 python eval_campaign_tier12.py --full-matrix --seeds 20 --integrity twin --noise --onset-random --out results/campaign_twin_robust
 ```
 
+---
+
 ## Baseline gate
 
 The release preserves the principle that the baseline is checked before augmented cases. A failed baseline should be treated as a reproduction failure rather than hidden by augmented-controller results.
 
+---
+
 ## Reproducibility files
 
-See `REPRODUCIBILITY.md` for the exact workflow and scientific interpretation. `CITATION.cff` is included for citation tooling.
+- `REPRODUCIBILITY.md` — exact workflow and scientific interpretation  
+- `CITATION.cff` — citation metadata  
+- [Frozen results package](https://huggingface.co/datasets/SM-Bello/PHI-CTRL-Reproduction-Results) — pre-computed CSVs + figures that match the manuscript
+
+---
 
 ## Limitations
 
-This is research simulation software and is not flight-certified. Numerical results can vary across operating systems, CPU/GPU backends, and library versions; the release therefore defines reproducibility through controlled seeds, provenance, hashes, and numerical/experimental acceptance criteria rather than bit-for-bit identity.
+This is research simulation software and is **not flight-certified**.  
+Numerical results can vary across operating systems, CPU/GPU backends, and library versions; the release therefore defines reproducibility through controlled seeds, provenance, hashes, and numerical/experimental acceptance criteria rather than bit-for-bit identity.
+
+---
+
+<p align="center">
+  <i>Built with care at the Air Force Institute of Technology, Kaduna.</i><br>
+  <b>Mohammed Bello Sani</b> · lead author & architect<br>
+  <a href="https://github.com/Sm-bello">@Sm-bello</a>
+</p>
