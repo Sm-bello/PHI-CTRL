@@ -1,36 +1,46 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
-title: "PHI-CTRL: Physics-Hybrid Integrity Control for Fault-Tolerant Flight"
+title: "PHI-CTRL: Physics-Hybrid Integrity Flight Control for Fault-Conditioned Reconfiguration on an F-16 Aircraft"
 abstract: >-
-  PHI-CTRL is a physics-hybrid, fault-conditioned flight control
-  architecture validated on the JSBSim F-16A 6-DOF plant under actuator
-  effectiveness faults. It combines an energy-hold baseline law, an
-  inverse-multiplicative hybrid compensator, MRAC adaptation, an
-  MMAE-style effectiveness bank, a diagnostic observer, and an optional
-  MMAE-gated PPO residual policy, validated through a three-layer
-  verification ladder.
+  PHI-CTRL is a physics-hybrid integrity flight control architecture
+  validated on the nonlinear 6-DOF JSBSim F-16 plant under control-surface
+  effectiveness loss and coupled propulsion ceiling faults. It integrates a
+  verified Total Energy Control System (TECS) baseline, an inner-loop
+  pitch-rate MRAC, an 8-channel multivariate CNN-BiLSTM sequence estimator,
+  and an integrity-gated PPO residual policy, bounded by an analytical
+  Small-Gain stability margin and formal simulation plant verification contracts.
 authors:
   - family-names: "Sani"
     given-names: "Mohammed Bello"
-    affiliation: "Air Force Institute of Technology (AFIT), Kaduna"
-    website: "https://smbello.vercel.app"
+    affiliation: "Department of Aerospace Engineering, Air Force Institute of Technology (AFIT), Kaduna, Nigeria"
+    email: "bellosani2drescue@gmail.com"
+    orcid: "https://orcid.org/0009-0009-9214-9403"
+  - family-names: "Agyo"
+    given-names: "Haruna Ahmadu"
+    affiliation: "Department of Aerospace Engineering, Air Force Institute of Technology (AFIT), Kaduna, Nigeria"
+    orcid: "https://orcid.org/0009-0009-0702-3292"
 repository-code: "https://github.com/Sm-bello/PHI-CTRL"
 url: "https://github.com/Sm-bello/PHI-CTRL"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.22218809"
-    description: "Zenodo archive of PHI-CTRL v1.0.0"
+    description: "Zenodo archive of PHI-CTRL software release"
+  - type: doi
+    value: "10.5281/zenodo.22218808"
+    description: "Concept DOI representing all versions"
 keywords:
   - flight-control
   - fault-tolerant-control
+  - reconfigurable-flight-control
   - JSBSim
-  - digital-twin
-  - reinforcement-learning
+  - F-16
+  - small-gain-theorem
+  - deep-learning-avionics
+  - CNN-BiLSTM
   - PPO
   - MRAC
-  - aerospace
-  - PHM
+  - TECS
 license: MIT
-version: "v1.0.0"
-date-released: "2026-09-08"
+version: "v1.3.0"
+date-released: "2026-10-29"

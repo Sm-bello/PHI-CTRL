@@ -1,143 +1,107 @@
-# PHI-CTRL — Physics-Hybrid Integrity Control for F-16
+# PHI-CTRL: Physics-Hybrid Integrity Flight Control (F-16)
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/9ba2d7e1-1a57-42f5-9983-6c5fc508b46b" alt="PHI-CTRL Architecture" width="900"/>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Paper-JGCD-blue?style=for-the-badge" alt="JGCD"/>
-  <img src="https://img.shields.io/badge/Version-v1.1.0-green?style=for-the-badge" alt="v1.1.0"/>
+  <a href="https://doi.org/10.5281/zenodo.22218809"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.22218809.svg" alt="DOI"></a>
+  <img src="https://img.shields.io/badge/Journal-Aerospace%20Science%20and%20Technology%20(AST)-blue?style=for-the-badge" alt="Elsevier AST"/>
+  <img src="https://img.shields.io/badge/Version-v1.3.0-green?style=for-the-badge" alt="v1.3.0"/>
   <img src="https://img.shields.io/badge/License-MIT-lightgrey?style=for-the-badge" alt="MIT"/>
-  <img src="https://img.shields.io/badge/Reproducibility-First-orange?style=for-the-badge" alt="Reproducibility"/>
+  <img src="https://img.shields.io/badge/Reproducibility-Verified-orange?style=for-the-badge" alt="Reproducibility"/>
 </p>
 
-**PHI-CTRL** couples online actuator-effectiveness estimation with bounded authority reconfiguration on a nonlinear 6-DOF F-16A (JSBSim).  
-The primary demonstration case is partial elevator-effectiveness loss; the architecture and verification discipline are the real contribution.
+Official implementation and verification suite for:
+> **"Physics-Hybrid Integrity Flight Control for Fault-Conditioned Reconfiguration on an F-16 Aircraft: Analytical Stability Margins, Plant Verification Contracts, and Coupled Effector Misattribution"**  
+> *Elsevier: Aerospace Science and Technology (AST)*  
+> Authors: Mohammed Bello Sani, Haruna Ahmadu Agyo  
+> Affiliation: Department of Aerospace Engineering, Air Force Institute of Technology (AFIT), Kaduna, Nigeria  
+> Permanent Archive (Zenodo): [https://doi.org/10.5281/zenodo.22218809](https://doi.org/10.5281/zenodo.22218809)
 
 ---
 
-### Quick Links – The Full Picture
+## Architecture Overview
 
-| What you need | Where it lives |
-|---------------|----------------|
-| **Full source code** (this repo) | [github.com/Sm-bello/PHI-CTRL](https://github.com/Sm-bello/PHI-CTRL) |
-| **Frozen paper results** (numbers + figures) | [HF – PHI-CTRL-Reproduction-Results](https://huggingface.co/datasets/SM-Bello/PHI-CTRL-Reproduction-Results) |
-| Raw telemetry dataset | [HF – PHI-CTRL-F16-Fault-Recovery-Telemetry](https://huggingface.co/datasets/SM-Bello/PHI-CTRL-F16-Fault-Recovery-Telemetry) |
-| Trained models | [HF – PHI-CTRL-F16-Models](https://huggingface.co/SM-Bello/PHI-CTRL-F16-Models) |
-| Long-term citable archive | [Zenodo (GitHub link)](https://zenodo.org/account/settings/github/repository/Sm-bello/PHI-CTRL) |
-
-> **Want to verify the manuscript numbers in < 5 minutes?**  
-> Go straight to the frozen package → [PHI-CTRL-Reproduction-Results](https://huggingface.co/datasets/SM-Bello/PHI-CTRL-Reproduction-Results)  
-> No simulator required. All CSVs and figures match the paper exactly.
+**PHI-Ctrl** integrates:
+1. **Total Energy Control System (TECS) Baseline:** Outer-loop altitude and airspeed coordination governed by total energy rate and energy distribution channels.
+2. **Inner-Loop Pitch-Rate MRAC:** Direct adaptive model reference tracking augmenting the elevator channel.
+3. **8-Channel CNN-BiLSTM Sequence Estimator (PHI-Twin):** Multivariate sequence network ($n = 1600$ benchmark: $\text{MAE} = 0.0188 \pm 0.0014$, $R^2 = 0.9874$) extracting effectiveness estimates $\hat{\gamma}_e \in [0.25, 1.0]$ while decoupling aerodynamic from propulsion faults.
+4. **Analytical Small-Gain Stability Boundary:** Proved sufficient stability interval $-\frac{\gamma_e}{1+\|T\|_\infty} < \tilde{\gamma}_e < \frac{\gamma_e}{\|T\|_\infty - 1}$ with verified safety floor $\gamma_{\text{floor}} = 0.35$.
+5. **Gated PPO Residual Policy:** Additive transient pitch-rate damping triggered only under verified fault conditions and clamped to $|u_{\text{rl}}| \le 2.0^\circ$.
+6. **Plant Verification Contracts:** Formal contracts guaranteeing JSBSim F-16 hold-trim containment ($|\dot{h}| = 0.0054\text{ ft/s} \ll 0.20\text{ ft/s}$, $|\Delta h| < 0.035\text{ ft}$) and FBW override enforcement.
 
 ---
 
-## One-command reproduction (full source)
+## Quick Links
 
-After installing the dependencies:
+| Resource | Description | Location |
+|---|---|---|
+| **Source Code** | Full Git repository | [github.com/Sm-bello/PHI-CTRL](https://github.com/Sm-bello/PHI-CTRL) |
+| **Zenodo Archive** | Citable DOI repository (v1.0.0 – v1.3.0) | [DOI: 10.5281/zenodo.22218809](https://doi.org/10.5281/zenodo.22218809) |
+| **Concept DOI** | All versions parent DOI | [DOI: 10.5281/zenodo.22218808](https://doi.org/10.5281/zenodo.22218808) |
+| **Frozen Results** | Pre-computed Monte Carlo runs & summaries | `results/` |
+| **Figure Generator** | 300-DPI publication figures | `generate_all_ast_figures.py` |
+
+---
+
+## Installation & Setup
 
 ```bash
-python reproduce.py --smoke
+git clone https://github.com/Sm-bello/PHI-CTRL.git
+cd PHI-CTRL
+pip install -r requirements.txt
 ```
 
-For the primary campaign:
+*Note: JSBSim 6-DOF simulation engine can be installed via conda or pip (`conda install -c conda-forge jsbsim` or `pip install jsbsim`).*
+
+---
+
+## One-Command Complete Reproduction
+
+To execute the verified AST simulation suite:
 
 ```bash
-python reproduce.py --full --seeds 20
+# 1. Run the verified multi-stage verification suite (Contract 1, Monte Carlo, Throttle Boundary, Bias Audit)
+python run_fast_verified_suite.py
+
+# 2. Generate all 7 publication figures exactly matching manuscript specifications
+python generate_all_ast_figures.py
 ```
 
-The orchestrator records environment/provenance information and creates a SHA-256 manifest under `results/reproduction/`.
+Generated outputs will populate `results/` and produce all 7 manuscript figures:
+- `arc.png`: System architecture of the 6-mode PHI-Ctrl framework.
+- `fig_baseline_verify.png`: Contract 1 hold-trim verification telemetry ($60\text{ s}$).
+- `fig_phi_twin_scatter.png`: Parity scatter and signed error distribution vs. Theorem 1 lower bound ($n = 1600$).
+- `fig_unified_ablation_50.png`: 8-panel closed-loop ablation trajectories under $50\%$ elevator loss.
+- `full_campaign.png`: 20-seed Monte Carlo design point (480 runs) and paired bootstrap confidence intervals.
+- `fig_throttle_boundary.png`: Out-of-scope throttle ceiling audit and cross-channel decoupling.
+- `fig_bias_sensitivity.png`: Closed-loop detector calibration audit across rate-gyro biases $b_q \in [0.0, 5.0]^\circ\text{/s}$.
 
 ---
 
-## What the release actually runs
+## Citation
 
-The named integrity modes in `eval_campaign_tier12.py` are explicit:
+If you use PHI-CTRL in your research, please cite our software release and paper:
 
-- `none` — no integrity compensation.
-- `oracle` — perfect knowledge of physical remaining elevator effectiveness; reference condition.
-- `mmae` — physics-bank estimate from `detector/mmae_bank.py`.
-- `twin` — **actual online CNN-BiLSTM inference** from `models/phi_twin_cnn_bilstm.pt` through `detector/phi_twin_cnn_bilstm.py`.
-- `fused` — confidence-weighted PHI-Twin + MMAE estimate.
+```bibtex
+@article{SaniAgyo2026PhiCtrl,
+  author  = {Mohammed Bello Sani and Haruna Ahmadu Agyo},
+  title   = {Physics-Hybrid Integrity Flight Control for Fault-Conditioned Reconfiguration on an F-16 Aircraft: Analytical Stability Margins, Plant Verification Contracts, and Coupled Effector Misattribution},
+  journal = {Aerospace Science and Technology},
+  year    = {2026},
+  note    = {Under Review}
+}
 
-The campaign no longer uses a synthetic lagged gamma estimate under these named modes.
-
----
-
-## Key scripts
-
-| Script | Purpose |
-|--------|---------|
-| `reproduce.py` | Top-level reproducibility orchestrator |
-| `eval_campaign_tier12.py` | Multi-envelope controller/integrity campaign |
-| `eval/eval_multiseed.py` | Multi-seed evaluation with deterministic seed schedule |
-| `scripts/generate_fault_dataset_f16.py` | F-16 fault telemetry generation |
-| `scripts/train_phi_twin_detector.py` | CNN-BiLSTM training with episode-level split and held-out test |
-| `analyze_campaign_stats.py` | Bootstrap pairwise campaign effects |
-| `phi_ctrl_unified_f16.py` | Single unified controller experiment and baseline gate |
-
----
-
-## PHI-Twin training
-
-```bash
-python scripts/train_phi_twin_detector.py \
-  --data data/phi_ctrl_f16_fault \
-  --epochs 25
-```
-
-The training script splits **episodes before sliding-window construction** to prevent leakage between overlapping windows. Feature normalization is fitted on training episodes only. The resulting checkpoint stores the split definition and held-out test metrics.
-
----
-
-## Primary campaign
-
-The default full matrix is:
-
-- 10,000 ft / 300 kt  
-- 15,000 ft / 400 kt  
-- 20,000 ft / 450 kt  
-- γ = 1.0, 0.8, 0.6, 0.5  
-- BASELINE, CLASSICAL_KAPPA, TECS_MRAC, HYBRID, FULL_STACK  
-- configurable number of seeds (20 recommended for the primary result)
-
-Example:
-
-```bash
-python eval_campaign_tier12.py --full-matrix --seeds 20 --integrity twin --out results/campaign_twin
-```
-
-Noise and randomized onset can be enabled separately:
-
-```bash
-python eval_campaign_tier12.py --full-matrix --seeds 20 --integrity twin --noise --onset-random --out results/campaign_twin_robust
+@misc{SaniPhiCtrlZenodo,
+  author       = {Mohammed Bello Sani and Haruna Ahmadu Agyo},
+  title        = {{PHI-CTRL: Physics-Hybrid Integrity Flight Control for Fault-Conditioned Reconfiguration on an F-16 Aircraft}},
+  year         = {2026},
+  publisher    = {Zenodo},
+  version      = {v1.3.0},
+  doi          = {10.5281/zenodo.22218809},
+  url          = {https://doi.org/10.5281/zenodo.22218809}
+}
 ```
 
 ---
 
-## Baseline gate
+## License
 
-The release preserves the principle that the baseline is checked before augmented cases. A failed baseline should be treated as a reproduction failure rather than hidden by augmented-controller results.
-
----
-
-## Reproducibility files
-
-- `REPRODUCIBILITY.md` — exact workflow and scientific interpretation  
-- `CITATION.cff` — citation metadata  
-- [Frozen results package](https://huggingface.co/datasets/SM-Bello/PHI-CTRL-Reproduction-Results) — pre-computed CSVs + figures that match the manuscript
-
----
-
-## Limitations
-
-This is research simulation software and is **not flight-certified**.  
-Numerical results can vary across operating systems, CPU/GPU backends, and library versions; the release therefore defines reproducibility through controlled seeds, provenance, hashes, and numerical/experimental acceptance criteria rather than bit-for-bit identity.
-
----
-
-<p align="center">
-  <i>Built with care at the Air Force Institute of Technology, Kaduna.</i><br>
-  <b>Mohammed Bello Sani</b> · lead author & architect<br>
-  <a href="https://github.com/Sm-bello">@Sm-bello</a>
-</p>
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

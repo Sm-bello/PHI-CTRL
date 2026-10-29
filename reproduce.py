@@ -85,10 +85,12 @@ def main():
     ap.add_argument("--train-twin",action="store_true")
     ap.add_argument("--campaign",action="store_true")
     ap.add_argument("--analysis",action="store_true")
+    ap.add_argument("--ast",action="store_true",help="Run full verified AST simulation suite & generate 7 figures")
+    ap.add_argument("--figures",action="store_true",help="Generate all 7 AST publication figures")
     ap.add_argument("--seeds",type=int,default=20)
     ap.add_argument("--twin-epochs",type=int,default=25)
     args=ap.parse_args()
-    if not any(vars(args)[k] for k in ("smoke","full","baseline","dataset","train_twin","campaign","analysis")):
+    if not any(vars(args)[k] for k in ("smoke","full","baseline","dataset","train_twin","campaign","analysis","ast","figures")):
         ap.print_help(); return
     verify()
     prov=ROOT/"results"/"reproduction"; write_provenance(prov)
@@ -107,6 +109,11 @@ def main():
     if args.analysis or args.full:
         inp=prov/"campaign_full" if (prov/"campaign_full").exists() else prov/"campaign_smoke"
         run([PY,"analyze_campaign_stats.py","--in",str(inp)],"campaign-analysis")
+    if args.ast:
+        run([PY,"run_fast_verified_suite.py"],"ast-verified-suite")
+        run([PY,"generate_all_ast_figures.py"],"ast-generate-figures")
+    if args.figures:
+        run([PY,"generate_all_ast_figures.py"],"ast-generate-figures")
     write_manifest(prov)
     print("\nREPRODUCTION COMPLETE")
     print(f"Manifest: {prov/'release_manifest.json'}")
