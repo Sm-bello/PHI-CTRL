@@ -1,0 +1,7 @@
+Highlights for Aerospace Science and Technology (AST):
+
+- Physics-hybrid flight control combines TECS, pitch-rate MRAC, and CNN-BiLSTM.
+- Analytical Small-Gain stability bounds derived for elevator effectiveness loss.
+- 6-DOF F-16 hold-trim verification contracts eliminate uncommanded climb drift.
+- 20-seed Monte Carlo campaign under Dryden gusts achieves 6.3% ISE_h reduction.
+- Open-source JSBSim simulation code, weights, and telemetry released on Zenodo.
