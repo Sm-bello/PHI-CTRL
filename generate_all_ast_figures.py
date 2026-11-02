@@ -610,7 +610,7 @@ def make_fig7_throttle():
     ax.plot(d_full["time_s"], ghe_full, color="#c0392b", lw=2.2,
             label="8-Ch PHI-Twin $\\hat{\\gamma}_e(t)$ (Decoupled: $\\approx 1.00$)")
     ax.plot(d_mis["time_s"], ghe_mis, color="#8e44ad", ls="--", lw=2.0,
-            label="1-Ch Pitch-Only $\\hat{\\gamma}_e(t)$ (False Drop $\\to 0.52$)")
+            label="1-Ch Pitch-Only $\\hat{\\gamma}_e(t)$ (False Drop $\\to 0.32$)")
     ax.axhline(1.0, color="black", ls=":", lw=1.1, label="True Elevator $\\gamma_e(t) \equiv 1.00$")
     ax.axvline(10.0, color="#7f8c8d", ls="--", lw=1.2, label="50% Throttle Loss ($t=10$ s)")
 
@@ -623,26 +623,35 @@ def make_fig7_throttle():
     ax.set_xlabel("Time [s]")
     ax.set_ylabel("Estimated Elevator Health $\\hat{\\gamma}_e(t)$ [-]", color="#c0392b")
     ax2.set_ylabel("Angle of Attack $\\alpha(t)$ [deg]", color="#27ae60")
-    ax.set_ylim(0.40, 1.08)
+    ax.set_ylim(0.28, 1.08)
     ax2.set_ylim(-1.0, 5.5)
     ax.set_title("(b) Cross-Channel Isolation Under $\\gamma_{\\mathrm{th}}=0.50$ Fault")
     l1, lb1 = ax.get_legend_handles_labels()
     l2, lb2 = ax2.get_legend_handles_labels()
     ax.legend(l1 + l2, lb1 + lb2, loc="lower left", fontsize=7.0, framealpha=0.92)
 
-    # Panel (c): Pitch-Rate Total Variation & Altitude Error under Throttle Faults
+    # Panel (c): Pitch-Rate Total Variation under Throttle Faults (New WP-3 Runs)
     ax = axes[2]
+    wp3_file = os.path.join(DATA_DIR, "wp3_throttle_boundary_comparators.csv")
+    df_wp3 = pd.read_csv(wp3_file) if os.path.exists(wp3_file) else df_sum
+
     g_ths = [0.5, 0.6, 0.8, 1.0]
     x = np.arange(len(g_ths))
-    w = 0.25
+    w = 0.20
     cases = [
-        ("BASELINE", "BASELINE (No Reconfig)", "#7f8c8d"),
-        ("FULL_STACK", "FULL_STACK (8-Ch PHI-Twin)", "#c0392b"),
-        ("MISATTRIBUTED_1CH", "1-Ch Pitch-Only (Misattributed)", "#8e44ad"),
+        ("BASELINE", "BASELINE", "#7f8c8d"),
+        ("8CH", "FULL_STACK (8-Ch)", "#c0392b"),
+        ("3CH", "Pitch+Surface (3-Ch)", "#2980b9"),
+        ("1CH", "1-Ch Misattributed", "#8e44ad"),
     ]
     for idx, (c_key, c_lbl, c_col) in enumerate(cases):
-        sub = df_sum[df_sum["case"] == c_key].set_index("gamma_th").reindex(g_ths)
-        ax.bar(x + (idx - 1) * w, sub["tv_q_deg"].values, w, color=c_col, edgecolor="black",
+        if "Architecture" in df_wp3.columns:
+            sub = df_wp3[df_wp3["Architecture"] == c_key].set_index("gamma_th").reindex(g_ths)
+            vals = sub["TV_q_deg"].values
+        else:
+            sub = df_wp3[df_wp3["case"] == c_key].set_index("gamma_th").reindex(g_ths)
+            vals = sub["tv_q_deg"].values
+        ax.bar(x + (idx - 1.5) * w, vals, w, color=c_col, edgecolor="black",
                alpha=0.90, label=c_lbl)
 
     ax.set_xticks(x)
