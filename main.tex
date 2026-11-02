@@ -14,8 +14,8 @@
 \usepackage{url}
 \usepackage[hidelinks]{hyperref}
 \hypersetup{
-  pdfauthor={Mohammed Bello Sani},
-  pdftitle={Physics-Hybrid Integrity Flight Control for Fault-Conditioned Reconfiguration on an F-16 Aircraft}
+  pdfauthor={Mohammed Bello Sani, Abdulmalik Balogun},
+  pdftitle={Physics-Hybrid Integrity Flight Control for Fault-Conditioned Reconfiguration on an F-16 Aircraft: Analytical Stability Margins, Plant Verification Contracts, and Coupled Effector Misattribution}
 }
 \input{ast_macros.tex}
 \graphicspath{{figures/}}
@@ -30,13 +30,16 @@
 
 \title{Physics-Hybrid Integrity Flight Control for Fault-Conditioned Reconfiguration on an F-16 Aircraft: Analytical Stability Margins, Plant Verification Contracts, and Coupled Effector Misattribution}
 
-\author[afit]{Mohammed Bello Sani\corref{cor1}}
+\author[phi-lab]{Mohammed Bello Sani\corref{cor1}}
 \ead{bellosani2drescue@gmail.com}
+\ead[url]{https://orcid.org/0009-0009-9214-9403}
 
-\author[afit]{Haruna Ahmadu Agyo}
+\author[phi-lab]{Abdulmalik Balogun}
+\ead{balogunabdulmalik04@gmail.com}
+\ead[url]{https://orcid.org/0009-0006-9259-5946}
 
 \cortext[cor1]{Corresponding author. Email: bellosani2drescue@gmail.com}
-\address[afit]{Department of Aerospace Engineering, Air Force Institute of Technology (AFIT), Kaduna, Nigeria}
+\address[phi-lab]{Physics Hybrid Integrity Lab, Department of Digital Intelligence Maintenance for Aircraft Systems, Abuja, Nigeria}
 
 \begin{abstract}
 Autonomous and reconfigurable flight control under severe effector degradation faces three persistent operational challenges: cross-channel effector misattribution, detector calibration collapse under low trim excitation, and the absence of analytical stability margins bounding real-time learned estimators. This paper presents the Physics-Hybrid Integrity Flight Control (PHI-Ctrl) framework on an F-16 aircraft, integrating a verified Total Energy Control System (TECS), an inner-loop pitch-rate Model Reference Adaptive Controller (MRAC), an 8-channel multivariate CNN-BiLSTM sequence estimator (PHI-Twin), and an integrity-gated PPO residual policy. Using the Small-Gain Theorem, we establish an analytical sufficient stability condition bounding real-time estimation error in the linearized short-period loop ($-\frac{\gamma_e}{1+\|T\|_\infty} < \tilde{\gamma}_e < \frac{\gamma_e}{\|T\|_\infty - 1}$), defining an asymmetric design-point lower bound of $\tilde{\gamma}_e > \SmallGainBoundNominal$ ($\hat{\gamma}_e > \SmallGainMinGammaHat$) at $50\%$ elevator loss ($\gamma_e = 0.50$) and motivating an adaptive safety floor of $\gamma_{\text{floor}} = \SafetyFloorVal$. Across $n = 1600$ held-out test windows, PHI-Twin achieves $\text{MAE} = \PhiTwinMaeMean \pm \PhiTwinMaeStd$ ($R^2 = \PhiTwinRTwoMean$), maintaining a $>\SafetyMarginFiveSeedRatio$ margin to the Small-Gain boundary at the design point ($>\SafetyMarginGlobalRatio$ globally). In a 20-seed Monte Carlo campaign (480 runs) under active Dryden turbulence, \texttt{FULL\_STACK} reduces cumulative altitude tracking error $\text{ISE}_h$ by $\IseReductionFullStackFtTwoS\text{ ft}^2\text{s}$ ($-\IseReductionFullStackPct$) under $\gamma_e = 0.50$ alongside statistically significant paired error reduction ($\Delta = \DeltaPeakErrFt\text{ ft}$). Finally, boundary audits demonstrate that multi-channel estimation eliminates propulsion fault cross-coupling ($\text{TV}_q = \TvQFullStackThrottle$ vs. $\TvQMisattrThrottle$ for single-channel adaptation). All software, pre-trained weights, and simulation telemetry are open-sourced under the MIT License at \url{https://github.com/Sm-bello/PHI-CTRL} and permanently archived on Zenodo (DOI: 10.5281/zenodo.22218809).
