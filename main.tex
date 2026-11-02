@@ -12,7 +12,7 @@
 \usepackage[hidelinks]{hyperref}
 \hypersetup{
   pdfauthor={Mohammed Bello Sani, Abdulmalik Balogun},
-  pdftitle={Physics-Hybrid Integrity Flight Control for Fault-Conditioned Reconfiguration on an F-16 Aircraft: Analytical Stability Margins, Plant Verification Contracts, and Coupled Effector Misattribution}
+  pdftitle={Certifying a Learned Control-Effectiveness Estimator Against an Analytical Stability Bound: Physics-Hybrid Reconfiguration and Out-of-Scope Fault Audits on an F-16}
 }
 \input{ast_macros.tex}
 \graphicspath{{figures/}}
@@ -25,7 +25,7 @@
 
 \begin{frontmatter}
 
-\title{Physics-Hybrid Integrity Flight Control for Fault-Conditioned Reconfiguration on an F-16 Aircraft: Analytical Stability Margins, Plant Verification Contracts, and Coupled Effector Misattribution}
+\title{Certifying a Learned Control-Effectiveness Estimator Against an Analytical Stability Bound: Physics-Hybrid Reconfiguration and Out-of-Scope Fault Audits on an F-16}
 
 \author[phi-lab]{Mohammed Bello Sani\corref{cor1}}
 \ead{bellosani2drescue@gmail.com}
@@ -39,11 +39,11 @@
 \address[phi-lab]{Physics Hybrid Integrity Lab, Department of Digital Intelligence Maintenance for Aircraft Systems, Abuja, Nigeria}
 
 \begin{abstract}
-When an F-16 loses half its elevator effectiveness, an erroneous estimation of remaining control authority in the adaptive loop can destabilize the vehicle faster than passive unadapted flight. This paper presents the Physics-Hybrid Integrity Flight Control (PHI-Ctrl) framework, integrating a Total Energy Control System (TECS) baseline, an inner-loop pitch-rate Model Reference Adaptive Controller (MRAC), an 8-channel multivariate CNN-BiLSTM effectiveness estimator (PHI-Twin), and an integrity-gated PPO residual policy. Using the Small-Gain Theorem, we establish an analytical sufficient stability condition bounding real-time estimation error in the linearized short-period loop ($-\frac{\gamma_e}{1+\|T\|_\infty} < \tilde{\gamma}_e < \frac{\gamma_e}{\|T\|_\infty - 1}$), defining an asymmetric design-point lower bound of $\tilde{\gamma}_e > \SmallGainBoundNominal$ ($\hat{\gamma}_e > \SmallGainMinGammaHat$) at $50\%$ elevator loss ($\gamma_e = 0.50$) and motivating an adaptive safety floor of $\gamma_{\text{floor}} = \SafetyFloorVal$. Across $n = 1600$ held-out test windows, PHI-Twin achieves $\text{MAE} = \PhiTwinMaeMean \pm \PhiTwinMaeStd$ ($R^2 = \PhiTwinRTwoMean$), maintaining a $>\SafetyMarginFiveSeedRatio$ margin to the Small-Gain boundary at the design point ($>3.7\times$ globally across all damage levels, specifically $3.77\times$ at the safety floor). In a 20-seed Monte Carlo campaign (480 runs) under active Dryden turbulence, \texttt{FULL\_STACK} reduces cumulative post-fault tracking energy $\text{ISE}_h$ by $\IseReductionFullStackFtTwoS\text{ ft}^2\text{s}$ ($-\IseReductionFullStackPct$) under $\gamma_e = 0.50$ via active residual damping. Crucially, an out-of-scope propulsion boundary test demonstrates that 8-channel sequence estimation isolates unmodeled throttle ceiling faults ($\hat{\gamma}_e \approx 1.00$, $\text{TV}_q = \TvQFullStackThrottle$), whereas single-channel adaptation misattributes airspeed decay as elevator loss, driving pitch excitation to $\text{TV}_q = \TvQMisattrThrottle$ ($+92.5\%$). Finally, closed-loop audits confirm that classical MMAE and gain-ratio detectors suffer severe calibration collapse under low trim excitation, whereas the multi-channel sequence estimator achieves uniform accuracy with $0\%$ healthy false alarms. All software, pre-trained weights, and simulation telemetry are open-sourced under the MIT License at \url{https://github.com/Sm-bello/PHI-CTRL} and permanently archived on Zenodo (DOI: 10.5281/zenodo.22767079).
+When an F-16 loses elevator authority, an erroneous control-effectiveness estimate in the adaptive loop can destabilize the vehicle faster than passive, unadapted flight. This paper presents the Physics-Hybrid Integrity Flight Control (PHI-Ctrl) framework, formulating the reconfigurable control problem through the lens of analytical estimator certification. Using the Small-Gain Theorem, we establish an analytical sufficient stability condition bounding real-time estimation error in the linearized short-period loop ($-\frac{\gamma_e}{1+\|T\|_\infty} < \tilde{\gamma}_e < \frac{\gamma_e}{\|T\|_\infty - 1}$), defining an asymmetric design-point lower bound of $\tilde{\gamma}_e > \SmallGainBoundNominal$ ($\hat{\gamma}_e > \SmallGainMinGammaHat$) at $50\%$ elevator loss ($\gamma_e = 0.50$) and motivating an adaptive safety floor of $\gamma_{\text{floor}} = \SafetyFloorVal$. Across $n = 1600$ held-out test windows, a split-conformal verification layer establishes a distribution-free $\ge \ConformalCoverage$ coverage guarantee ($q_{\alpha=0.01} = \ConformalQuantile$), certifying that worst-case underestimation preserves a $\ConformalMarginDesignPoint$ safety margin to the Small-Gain boundary at the design point ($\ConformalMarginSafetyFloor$ at the safety floor, with sample margins $>3.7\times$ globally). Crucially, an out-of-scope propulsion boundary test demonstrates that 8-channel sequence estimation isolates unmodeled throttle ceiling faults ($\hat{\gamma}_e \approx 0.96\text{--}1.00$, $\text{TV}_q = \TvQFullStackThrottle$), whereas single-channel adaptation misattributes airspeed decay as elevator loss, driving pitch excitation to $\text{TV}_q = \TvQMisattrThrottle$ ($\TvQThrottleSpikePct$). Closed-loop audits confirm that classical MMAE and gain-ratio detectors suffer severe calibration collapse under low trim excitation ($100\%$ false alarms, MAE $0.48$), whereas the sequence estimator retains uniform accuracy ($\text{MAE} \le 0.033$) with $0\%$ false alarms under matched fairness protocols. All software, pre-trained weights, and simulation telemetry are open-sourced under the MIT License at \url{https://github.com/Sm-bello/PHI-CTRL} and permanently archived on Zenodo (DOI: 10.5281/zenodo.22767079).
 \end{abstract}
 
 \begin{keyword}
-Fault-tolerant flight control \sep Reconfigurable control \sep Small-gain theorem \sep Aircraft system identification \sep Deep learning avionics \sep F-16 flight dynamics
+Fault-tolerant flight control \sep Reconfigurable control \sep Small-gain theorem \sep Conformal prediction \sep Aircraft system identification \sep Deep learning avionics \sep F-16 flight dynamics
 \end{keyword}
 
 \end{frontmatter}
@@ -57,27 +57,21 @@ Modern high-performance combat aircraft and autonomous atmospheric flight vehicl
 
 Adaptive flight control architectures have evolved from gain-scheduled proportional-integral-derivative (PID) schemes toward Model Reference Adaptive Control (MRAC) \cite{Lavretsky2013,Ioannou1996}, $\mathcal{L}_1$ adaptive control \cite{Hovakimyan2010}, and neural-network-augmented architectures evaluated in flight test programs such as the NASA Intelligent Flight Control System (IFCS) on the NF-15B \cite{Bosworth2006,WilliamsHayes2005} and damage-adaptive flight control programs \cite{Nguyen2008}. Complementing model-based adaptive control, Incremental Nonlinear Dynamic Inversion (INDI) bypasses detailed aerodynamic modeling by relying on high-rate angular acceleration feedback \cite{StevensLewis2003}; however, INDI is inherently sensitive to sensor noise and transport delays, and it does not yield explicit parametric damage identification needed for mission replanning and energy management. Concurrently, total energy principles pioneered by Lambregts \cite{Lambregts1983,Voth1992,Bruce1986} established the Total Energy Control System (TECS) paradigm, coordinating altitude and airspeed tracking through specific total energy rate and energy distribution channels.
 
-Despite extensive research, three practical and theoretical gaps persist in learning-augmented reconfigurable flight control:
+In learning-augmented reconfigurable flight control, feedforward control-effectiveness compensation via $\kappa(\hat{\gamma}_e) = 1/\hat{\gamma}_e$ is textbook. However, this raises a foundational certification challenge: when deep neural networks, sequence models \cite{Hochreiter1997,Graves2013}, or digital twins \cite{Glaessgen2012,Tao2019} are embedded directly inside an adaptive flight-control loop, an erroneous estimate can destabilize the vehicle faster than passive, unadapted flight. Certification-oriented design requires bounding the permissible real-time estimation error $\tilde{\gamma}_e = \hat{\gamma}_e - \gamma_e$ against an analytical stability margin, backed by finite-sample statistical guarantees \cite{Vovk2005,Tibshirani2019,Angelopoulos2023}.
+
+To resolve this challenge, this paper presents the \textbf{Physics-Hybrid Integrity Flight Control (PHI-Ctrl)} framework, evaluated on a nonlinear 6-DOF JSBSim F-16 aircraft model. This study is framed not as a novel control-law contribution, but as an **estimator certification methodology**, using feedforward gain scaling $\kappa = 1/\max(\hat{\gamma}_e, \gamma_{\text{floor}})$ as the baseline law that makes the analytical stability question well-posed. The core contributions of this study are:
 
 \begin{enumerate}
-    \item \textbf{Out-of-Scope Effector Coupling and Fault Misattribution:} Single-channel adaptive and reconfigurable controllers typically formulate actuator degradation as an isolated single-effector scalar multiplier \cite{ZhangJiang2008,Edwards2010}. However, longitudinal flight dynamics couple elevator pitching moments with propulsive thrust moments and total energy states. When an elevator-tuned adaptive architecture is exposed unmodified to an unmodeled propulsive ceiling fault, cross-channel fault misattribution can command inappropriate elevator gain amplification and residual activity, severely increasing control-surface chatter and pitch-rate oscillations rather than aiding recovery.
+    \item \textbf{Analytical Sufficient Stability Condition for Estimation Error (C1):} We derive a closed-form sufficient stability condition via the Small-Gain Theorem for multiplicative elevator effectiveness estimation errors $\tilde{\gamma}_e$ in the linearized scalar short-period pitch-rate loop. We prove that asymptotic stability of the linearized loop is guaranteed if $-\frac{\gamma_e}{1+\|T\|_\infty} < \tilde{\gamma}_e < \frac{\gamma_e}{\|T\|_\infty - 1}$, explaining mathematically why underestimation ($\tilde{\gamma}_e < 0$) is significantly more hazardous than overestimation ($\tilde{\gamma}_e > 0$), and providing an analytical derivation for an adaptive gain safety floor $\gamma_{\text{floor}} = 0.35$.
     
-    \item \textbf{Closed-Loop Detector Calibration Collapse:} Lightweight fault detection and identification (FDI) schemes---including discrete Multiple Model Adaptive Estimation (MMAE) banks \cite{Magill1965,Maybeck1999} and rolling input-output gain-ratio detectors \cite{Isermann2006}---are frequently evaluated on open-loop doublets with high control excitation. Under steady closed-loop altitude-hold regulation, however, feedback suppresses elevator command variance ($\sigma(\delta_{e,\text{cmd}}) \approx 0.008$), starving excitation thresholds and causing discrete hypothesis banks and ratio detectors to fail in opposite directions (persistent false alarms versus fault blindness).
+    \item \textbf{Conformal Estimator Certification Methodology (C2):} We introduce a distribution-free split-conformal certification layer on an 8-channel multivariate CNN-BiLSTM sequence estimator (PHI-Twin). Across $n = 1600$ held-out test windows evaluated at $\alpha = 0.01$ ($\ge 99\%$ confidence), the conformal underestimation bound $q_{\alpha=0.01} = 0.0477$ certifies a $4.59\times$ safety margin to the Small-Gain instability boundary at the $\gamma_e = 0.50$ design point and $3.21\times$ at the $\gamma_{\text{floor}} = 0.35$ safety floor, with empirical test coverage $\ge 99.0\%$ globally.
     
-    \item \textbf{Analytical Stability Bounds on Learned Effectiveness Estimators:} Deep sequence models \cite{Hochreiter1997,Graves2013}, digital twins \cite{Glaessgen2012,Tao2019}, and reinforcement learning residual policies \cite{Schulman2017} are increasingly integrated into adaptive loops without explicit control-theoretic margins. Certification-oriented design requires an analytical sufficient condition bounding the permissible real-time estimation error $\tilde{\gamma}_e = \hat{\gamma}_e - \gamma_e$ in the linearized feedback loop, paired with explicit disclosure of what the linear bound omits (actuator rate/position saturation and additive residual inputs).
+    \item \textbf{Input-Channel Decoupling vs.\ Out-of-Scope Fault Misattribution (C3):} By retraining architecturally identical 1-channel ($[q]$), 3-channel ($[q, \delta_{e,\text{cmd}}, \delta_{e,\text{meas}}]$), and 8-channel CNN-BiLSTMs under a matched fairness protocol, we demonstrate that input-channel observability—not model capacity—governs cross-channel fault isolation. When exposed to an unmodeled throttle ceiling fault ($\delta_{\text{th,plant}} = \gamma_{\text{th}} \times 0.50$), 8-channel sequence estimation isolates the fault ($\hat{\gamma}_e \approx 0.96\text{--}1.00$, $\text{TV}_q = 457.5^\circ$), whereas single-channel adaptation misattributes airspeed decay as elevator loss, driving pitch excitation to $\text{TV}_q = 880.7^\circ$ ($+92.5\%$).
+    
+    \item \textbf{Closed-Loop Detector Calibration Contrast (C4):} We execute a detector calibration audit comparing classical lightweight FDI schemes (MMAE hypothesis banks, rolling GainRatio, RLS) against sequence estimation across 160 closed-loop telemetry episodes subjected to pitch-rate gyro bias $b_q \in [0.0, 5.0]\text{ deg/s}$. We show that feedback-induced trim excitation starvation ($\sigma(\delta_{e,\text{cmd}}) \approx 0.008$) causes discrete MMAE posteriors to collapse ($100\%$ healthy false alarms) and GainRatio to suffer bias swamping ($\text{MAE} \approx 0.48$), whereas sequence estimation retains calibration ($\text{MAE} \le 0.033$, $0\%$ false alarms).
 \end{enumerate}
 
-To address these gaps, this paper presents the \textbf{Physics-Hybrid Integrity Flight Control (PHI-Ctrl)} framework, evaluated on a nonlinear 6-DOF JSBSim F-16 aircraft model. The core contributions of this study are:
-
-\begin{itemize}
-    \item \textbf{Sufficient Small-Gain Stability Margin:} We derive a closed-form sufficient stability condition via the Small-Gain Theorem for multiplicative elevator effectiveness estimation errors $\tilde{\gamma}_e$ in the linearized scalar short-period pitch-rate loop. We prove that asymptotic stability of the linearized loop is guaranteed if $-\frac{\gamma_e}{1+\|T\|_\infty} < \tilde{\gamma}_e < \frac{\gamma_e}{\|T\|_\infty - 1}$, explaining why underestimation ($\tilde{\gamma}_e < 0$) is significantly more hazardous than overestimation ($\tilde{\gamma}_e > 0$), and providing an analytical basis for an adaptive gain safety floor $\gamma_{\text{floor}} = 0.35$.
-    \item \textbf{Physics-Hybrid Control Architecture:} We integrate: (i) a verified energy-hold TECS baseline and pitch-rate MRAC inner loop; (ii) an 8-channel multivariate CNN-BiLSTM sequence estimator (PHI-Twin) evaluated across $n=1600$ held-out test windows spanning on-grid, off-grid continuous, and severe damage regimes ($\text{MAE} = 0.0188 \pm 0.0014$, $\text{RMSE} = 0.0232 \pm 0.0017$, $R^2 = 0.9874 \pm 0.0019$, $\text{Max Error} = 0.0863$), maintaining a $>4.7\times$ margin to the stability boundary; and (iii) a rate- and magnitude-bounded PPO residual policy gated by innovation and integrity thresholds.
-    \item \textbf{20-Seed Monte Carlo and Multi-Envelope Verification:} Across 480 design-point runs ($15{,}000\text{ ft}$, $V_{\text{TAS}} = 392.1\text{ kt}$, $V_c = 317.3\text{ kt}$, $\text{Mach } 0.6258$, $\bar{q} = 15.68\text{ kPa}$) and 240 supporting-envelope runs ($10{,}000\text{ ft}$ at $\bar{q} = 18.63\text{ kPa}$ and $20{,}000\text{ ft}$ at $\bar{q} = 13.13\text{ kPa}$) under active Dryden turbulence, tracking error is measured against a 2nd-order prefiltered step reference. \texttt{FULL\_STACK} reduces cumulative tracking energy $\text{ISE}_h$ by $503.6\text{ ft}^2\text{s}$ ($-6.3\%$) under $50\%$ elevator effectiveness loss ($\gamma_e = 0.50$) via post-fault transient damping, while total elevator variation scales from $22.28$ to $40.78$ to supply required control power.
-    \item \textbf{Out-of-Scope Throttle-Fault and Detector Calibration Audits:} We execute an out-of-scope boundary campaign where the controller stack is subjected to throttle ceiling-cap faults ($\delta_{\text{th,plant}} = \gamma_{\text{th}} \times 0.50$), characterizing the JSBSim F-16 propulsion deck and proving that 8-channel sequence estimation isolates the fault ($\hat{\gamma}_e \approx 1.00$, $\text{TV}_q = 457.5^\circ$), whereas single-channel misattributed estimation drives pitch excitation to $\text{TV}_q = 880.7^\circ$ ($+92.5\%$). We also audit classical heuristic detectors over 160 closed-loop episodes across rate-gyro biases $b_q \in [0.0, 5.0]\text{ deg/s}$, showing $0\%$ false alarms for PHI-Twin versus calibration collapse for MMAE and GainRatio.
-    \item \textbf{Simulation Plant Verification Contracts:} We formulate explicit software verification contracts for JSBSim F-16 hold-trim envelope containment, Fly-By-Wire (FBW) override enforcement, and propulsive command ownership.
-\end{itemize}
-
-The remainder of this paper is organized as follows. Section \ref{sec:dynamics} formulates the nonlinear 6-DOF F-16 dynamics and short-period state-space linearization. Section \ref{sec:baseline} details the baseline controller and JSBSim plant verification contracts. Section \ref{sec:integrity} derives the Small-Gain stability margin and describes the reconfiguration law. Section \ref{sec:twin} presents the CNN-BiLSTM PHI-Twin sequence estimator and its $n=1600$ benchmark evaluation. Section \ref{sec:results} presents the 6-mode ablation study and 20-seed Monte Carlo campaign. Section \ref{sec:boundary} presents the out-of-scope throttle boundary test and closed-loop simulation detector audit. Section \ref{sec:discussion} discusses physical authority limits and architectural airworthiness safeguards, and Section \ref{sec:conclusion} concludes the paper. Appendix \ref{sec:appendix} summarizes JSBSim plant implementation lessons.
+The remainder of this paper is organized as follows. Section \ref{sec:dynamics} formulates the nonlinear 6-DOF F-16 dynamics and short-period state-space linearization. Section \ref{sec:baseline} details the baseline controller and JSBSim plant verification contracts. Section \ref{sec:integrity} derives the Small-Gain stability margin and safety floor. Section \ref{sec:twin} presents the CNN-BiLSTM architecture and the conformal certification layer. Section \ref{sec:results} verifies the benign-regime tracking mechanism and addresses metric validity. Section \ref{sec:boundary} presents the fair-comparator throttle boundary audit and detector calibration analysis. Section \ref{sec:threats} provides a dedicated Threats to Validity analysis, Section \ref{sec:discussion} discusses airworthiness considerations, and Section \ref{sec:conclusion} concludes the paper. Appendix \ref{sec:appendix} summarizes JSBSim plant implementation contracts.
 
 \section{Nonlinear Flight Dynamics and State-Space Formulation}
 \label{sec:dynamics}
@@ -322,7 +316,7 @@ To enforce deterministic containment, the residual output is gated by a dual-con
 \end{equation}
 clamped to a hard magnitude authority limit $|u_{\text{rl}}(t)| \le 2.0^\circ$ ($0.08$ normalized), and rate-limited to $|\dot{u}_{\text{rl}}| \le 20.0^\circ\text{/s}$ ($0.40\text{/step}$ at $50\text{ Hz}$).
 
-\section{Multivariate Sequence Estimation: The CNN-BiLSTM PHI-Twin}
+\section{Multivariate Sequence Estimation and Conformal Certification Layer}
 \label{sec:twin}
 
 \subsection{Network Architecture}
@@ -342,7 +336,7 @@ Features are normalized by offline dataset running statistics. The network compr
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.98\linewidth]{fig_phi_twin_scatter.png}
-\caption{Parity scatter and signed error distribution for the 8-channel CNN-BiLSTM PHI-Twin evaluated on $n = 1600$ held-out test windows: (a) Parity plot across on-grid $\gamma_e \in \{0.5, 0.6, 0.8, 1.0\}$ ($n = 800$), off-grid continuous $\gamma_e \in [0.55, 0.95]$ ($n = 480$), and severe damage $\gamma_e \in [0.30, 0.45]$ ($n = 320$), achieving 5-seed benchmark $\text{MAE} = \PhiTwinMaeMean \pm \PhiTwinMaeStd$, $\text{RMSE} = \PhiTwinRmseMean \pm \PhiTwinRmseStd$, $R^2 = \PhiTwinRTwoMean \pm \PhiTwinRTwoStd$, worst-case error $\PhiTwinWorstMaxErr$, alongside representative checkpoint metrics of $\text{MAE} = \PhiTwinCkptMae$, $R^2 = \PhiTwinCkptRTwo$; (b) Signed error distribution $\tilde{\gamma}_e = \hat{\gamma}_e - \gamma_e$, demonstrating that the worst-case negative error at the design point ($\min \tilde{\gamma}_{e,0.5} = \PhiTwinCkptMinErrDesignPoint$ checkpoint, $\PhiTwinFiveSeedMinErrDesignPoint$ 5-seed) maintains a $>\SafetyMarginFiveSeedRatio$ safety margin to the Theorem 1 Small-Gain lower bound ($\SmallGainBoundNominal$), and a $>3.7\times$ margin across all regimes globally (specifically $3.77\times$ at the safety floor $\gamma_{\text{floor}} = 0.35$).}
+\caption{Parity scatter and signed error distribution for the 8-channel CNN-BiLSTM PHI-Twin evaluated on $n = 1600$ held-out test windows: (a) Parity plot across on-grid $\gamma_e \in \{0.5, 0.6, 0.8, 1.0\}$ ($n = 800$), off-grid continuous $\gamma_e \in [0.55, 0.95]$ ($n = 480$), and severe damage $\gamma_e \in [0.30, 0.45]$ ($n = 320$), achieving 5-seed benchmark $\text{MAE} = \PhiTwinMaeMean \pm \PhiTwinMaeStd$, $\text{RMSE} = \PhiTwinRmseMean \pm \PhiTwinRmseStd$, $R^2 = \PhiTwinRTwoMean \pm \PhiTwinRTwoStd$, worst-case error $\PhiTwinWorstMaxErr$, alongside representative checkpoint metrics of $\text{MAE} = \PhiTwinCkptMae$, $R^2 = \PhiTwinCkptRTwo$; (b) Signed error distribution $\tilde{\gamma}_e = \hat{\gamma}_e - \gamma_e$, illustrating the split-conformal $99\%$ lower bound ($-\hat{q}_{0.01} = -\ConformalQuantile$, preserving a $\ConformalMarginDesignPoint$ conformal margin to the Theorem 1 Small-Gain bound of $\SmallGainBoundNominal$), and worst-case sample negative errors maintaining $>3.7\times$ safety margins globally across all regimes.}
 \label{fig:scatter}
 \end{figure}
 
@@ -374,34 +368,78 @@ Bidirectional LSTM & $0.0228 \pm 0.0019$ & $0.0284 \pm 0.0021$ & $0.9813 \pm 0.0
 
 As reported in Table \ref{tab:estimator_comparison} and Fig. \ref{fig:scatter}, the hybrid CNN-BiLSTM achieves superior accuracy across all metrics ($\text{MAE} = 0.0188 \pm 0.0014$, $\text{RMSE} = 0.0232 \pm 0.0017$, $R^2 = 0.9874 \pm 0.0019$). In particular, its worst-case maximum absolute error across all seeds is $0.0863$ (best seed $0.0779$), compared to $0.1352$ for the MLP.
 
-In Fig. \ref{fig:scatter}b, the signed error distribution reveals that negative estimation errors ($\tilde{\gamma}_e < 0$) are strictly bounded across all operational regimes. Because the Small-Gain stability bound of Theorem 1 scales with true remaining effectiveness ($\tilde{\gamma}_{e,\text{bound}}(\gamma_e) = -\frac{\gamma_e}{1 + \|T\|_\infty}$), we evaluate safety margins damage-by-damage across the entire test set ($n = 1600$):
-\begin{enumerate}
-    \item \textbf{Nominal Design Point ($\gamma_e = 0.50$):} The theoretical Small-Gain lower bound is $\tilde{\gamma}_e > -\frac{0.50}{1 + \TinfNominal} = \SmallGainBoundNominal$. The deployed PHI-Twin checkpoint exhibits a worst-case negative error of $\min \tilde{\gamma}_{e,0.5} = \PhiTwinCkptMinErrDesignPoint$ (and $\PhiTwinFiveSeedMinErrDesignPoint$ across the 5-seed training ensemble), preserving an analytical safety factor of:
-    \begin{equation}
-        \frac{|\tilde{\gamma}_{e,\text{bound}}(0.50)|}{|\min \tilde{\gamma}_{e,0.5}|} = \frac{|\SmallGainBoundNominal|}{0.0465} = 4.71\times \quad (\text{and } 4.91\times \text{ for the deployed checkpoint})
-    \end{equation}
-    \item \textbf{Damage-Dependent Spectrum ($\gamma_e \in [0.30, 1.00]$):} Evaluating each damage level against its corresponding bound reveals that the safety margin remains strictly bounded between $3.77\times$ (at the $\gamma_{\text{floor}} = 0.35$ safety floor, where the bound is $-0.1532$ and $\min \tilde{\gamma}_e = -0.0407$) and $8.19\times$ (at $\gamma_e = 0.30$, where the bound is $-0.1313$ and $\min \tilde{\gamma}_e = -0.0160$). At $\gamma_e = 0.70$, where the global worst-case negative error across the entire 1,600-window dataset occurs ($\min \tilde{\gamma}_e = -0.0576$), the bound is $-0.3065$, maintaining a $5.32\times$ safety factor.
-\end{enumerate}
-Thus, across all tested operating points, the learned estimator preserves a minimum safety margin of $>3.77\times$ (and $>4.71\times$ at the design point) safely above the theoretical Small-Gain boundary.
+\subsection{Split-Conformal Certification Layer}
+\label{sec:conformal}
+While empirical point accuracy is necessary, airworthiness certification demands rigorous statistical confidence intervals bounding real-time estimation error in units of the instability boundary. We introduce a one-sided split-conformal prediction framework \cite{Vovk2005,Tibshirani2019} designed to certify lower estimation bounds.
 
-\section{Primary Experimental Verification and Ablation Campaign}
+Because feedforward gain inflation occurs specifically when effectiveness is underestimated ($\hat{\gamma}_e < \gamma_e$, or $\tilde{\gamma}_e < 0$), we formulate the one-sided nonconformity score as:
+\begin{equation}
+    s_i = \gamma_{e,i} - \hat{\gamma}_{e,i} = -\tilde{\gamma}_{e,i}
+    \label{eq:nonconformity_score}
+\end{equation}
+where positive values of $s_i$ denote dangerous underestimation. The $n = 1600$ held-out window dataset is split into a stratified calibration set $\mathcal{D}_{\text{cal}}$ ($n_{\text{cal}} = 800$) and an independent evaluation set $\mathcal{D}_{\text{test}}$ ($n_{\text{test}} = 800$), stratified across all 14 damage levels.
+
+For a target miscoverage rate $\alpha = 0.01$ (guaranteeing $\ge 99\%$ finite-sample coverage), the conformal quantile $\hat{q}_{\alpha}$ on $\mathcal{D}_{\text{cal}}$ is computed as:
+\begin{equation}
+    \hat{q}_{\alpha} = \text{Quantile}\left(\{s_i\}_{i \in \mathcal{D}_{\text{cal}}}, \, \frac{\lceil (n_{\text{cal}} + 1)(1 - \alpha) \rceil}{n_{\text{cal}}}\right)
+    \label{eq:conformal_quantile}
+\end{equation}
+By the split-conformal validity theorem \cite{Vovk2005}, for any exchangeable future observation:
+\begin{equation}
+    \mathbb{P}\left(\gamma_{e,n+1} - \hat{\gamma}_{e,n+1} \le \hat{q}_{\alpha}\right) \ge 1 - \alpha \iff \mathbb{P}\left(\tilde{\gamma}_{e,n+1} \ge -\hat{q}_{\alpha}\right) \ge 1 - \alpha
+\end{equation}
+Evaluating Eq. (\ref{eq:conformal_quantile}) at $\alpha = 0.01$ yields the global conformal quantile $\hat{q}_{0.01} = \ConformalQuantile$. Therefore, with $\ge 99\%$ statistical confidence, the real-time estimation error satisfies $\tilde{\gamma}_e \ge -\ConformalQuantile$.
+
+\begin{table}[!htbp]
+\centering
+\caption{Conformal-certified safety margins per damage level evaluated on $n = 1600$ held-out windows ($n_{\text{cal}} = 800$, $n_{\text{test}} = 800$, target coverage $1-\alpha = 99\%$, global $\hat{q}_{0.01} = \ConformalQuantile$).}
+\label{tab:conformal_certification}
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{ccccccccc}
+\toprule
+$\gamma_e$ & $n_{\text{cal}}$ & $n_{\text{test}}$ & Small-Gain Bound & Conformal Bound & Conformal Margin & Max Sample Error & Sample Margin & Test Coverage \\
+\midrule
+$0.30$ & 40 & 40 & $-0.1314$ & $-0.0477$ & $2.75\times$ & $-0.0160$ & $8.19\times$ & $100.0\%$ \\
+$0.35$ & 40 & 40 & $-0.1532$ & $-0.0477$ & $\bm{3.21\times}$ & $-0.0407$ & $\bm{3.77\times}$ & $100.0\%$ \\
+$0.40$ & 40 & 40 & $-0.1751$ & $-0.0477$ & $3.67\times$ & $-0.0433$ & $4.05\times$ & $100.0\%$ \\
+$0.45$ & 40 & 40 & $-0.1970$ & $-0.0477$ & $4.13\times$ & $-0.0345$ & $5.72\times$ & $100.0\%$ \\
+$0.50$ & 100 & 100 & $-0.2189$ & $-0.0477$ & $\bm{4.59\times}$ & $-0.0446$ & $\bm{4.91\times}$ & $100.0\%$ \\
+$0.55$ & 40 & 40 & $-0.2408$ & $-0.0477$ & $5.05\times$ & $-0.0372$ & $6.47\times$ & $100.0\%$ \\
+$0.60$ & 100 & 100 & $-0.2627$ & $-0.0477$ & $5.51\times$ & $-0.0419$ & $6.27\times$ & $100.0\%$ \\
+$0.65$ & 40 & 40 & $-0.2846$ & $-0.0477$ & $5.96\times$ & $-0.0448$ & $6.35\times$ & $100.0\%$ \\
+$0.70$ & 40 & 40 & $-0.3065$ & $-0.0477$ & $6.42\times$ & $-0.0576$ & $5.32\times$ & $97.5\%$ \\
+$0.75$ & 40 & 40 & $-0.3284$ & $-0.0477$ & $6.88\times$ & $-0.0414$ & $7.93\times$ & $100.0\%$ \\
+$0.80$ & 100 & 100 & $-0.3503$ & $-0.0477$ & $7.34\times$ & $-0.0447$ & $7.84\times$ & $100.0\%$ \\
+$0.85$ & 40 & 40 & $-0.3722$ & $-0.0477$ & $7.80\times$ & $-0.0532$ & $7.00\times$ & $97.5\%$ \\
+$0.90$ & 40 & 40 & $-0.3940$ & $-0.0477$ & $8.26\times$ & $-0.0532$ & $7.41\times$ & $100.0\%$ \\
+$1.00$ & 100 & 100 & $-0.4378$ & $-0.0477$ & $9.18\times$ & $-0.0551$ & $7.95\times$ & $97.0\%$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\smallskip
+\raggedright\scriptsize Small-Gain Bound: theoretical limit $-\gamma_e/(1+\|T\|_\infty)$; Conformal Bound: $-\hat{q}_{0.01}$; Conformal Margin: $|\text{SG Bound}|/\hat{q}_{0.01}$; Sample Margin: $|\text{SG Bound}|/|\max\text{ underestimation}|$.
+\end{table}
+
+As reported in Table \ref{tab:conformal_certification}, the conformal-certified safety margin scales from $\ConformalMarginSafetyFloor$ at the safety floor ($\gamma_{\text{floor}} = 0.35$) to $\ConformalMarginDesignPoint$ at the nominal design point ($\gamma_e = 0.50$), and exceeds $9.1\times$ under healthy flight. On the independent evaluation set $\mathcal{D}_{\text{test}}$, empirical coverage is $\EmpiricalTestCoverage$ overall, rigorously converting the stability claim into a distribution-free statistical fact.
+
+\section{Verification of the Benign-Regime Mechanism and Metric Validity}
 \label{sec:results}
 
 \subsection{Design-Point Flight Condition and Evaluation Metrics}
-The primary evaluation flight condition is level cruise trim at $h_0 = 15{,}000\text{ ft}$, $V_{\text{TAS},0} = 392.1\text{ kt}$ ($V_{c,0} = 317.3\text{ kt}$, $\text{Mach } 0.6258$, $\bar{q} = 15.68\text{ kPa}$, $\theta_0 = 1.66^\circ$, $\delta_{\text{th},0} = 0.2819$). Trajectory tracking is commanded as a $+500\text{ ft}$ altitude step prefiltered by a 2nd-order reference filter ($\omega_n = 0.30\text{ rad/s}, \zeta = 0.90$) at $t = 5.0\text{ s}$. Control-surface degradation $\gamma_e \in \{1.00, 0.80, 0.60, 0.50\}$ is injected at $t = 10.0\text{ s}$. Because the climb command initiates at $t = 5.0\text{ s}$ while fault onset occurs at $t = 10.0\text{ s}$, the peak tracking error $e_{h,\max} \approx 46.10\text{ ft}$ occurs at $t \approx 9.8\text{ s}$ during the initial reference prefilter ramp prior to fault injection; hence, $e_{h,\max}$ is nearly identical across fault severities, and the true metric of fault compensation is cumulative tracking energy $\text{ISE}_h$ and transient pitch-rate damping during post-fault recovery ($t \in [10, 60]\text{ s}$).
+The primary evaluation flight condition is level cruise trim at $h_0 = 15{,}000\text{ ft}$, $V_{\text{TAS},0} = 392.1\text{ kt}$ ($V_{c,0} = 317.3\text{ kt}$, $\text{Mach } 0.6258$, $\bar{q} = 15.68\text{ kPa}$, $\theta_0 = 1.66^\circ$, $\delta_{\text{th},0} = 0.2819$). Trajectory tracking is commanded as a $+500\text{ ft}$ altitude step prefiltered by a 2nd-order reference filter ($\omega_n = 0.30\text{ rad/s}, \zeta = 0.90$) at $t = 5.0\text{ s}$. Control-surface degradation $\gamma_e \in \{1.00, 0.80, 0.60, 0.50\}$ is injected at $t = 10.0\text{ s}$. 
+
+\textbf{Metric Validity Remark on Peak Altitude Error:} 
+In classical flight-control literature, peak tracking error $e_{h,\max} = \max_t |h(t) - h_{\text{ref}}(t)|$ is frequently cited as a primary figure of merit. In this experimental setup, however, $e_{h,\max}$ is structurally uninformative regarding fault tolerance. Because the climb command initiates at $t = 5.0\text{ s}$ while fault onset occurs at $t = 10.0\text{ s}$, the peak tracking error ($e_{h,\max} \approx 46.10\text{ ft}$) is established at $t \approx 9.8\text{ s}$ during the initial reference prefilter ramp prior to fault injection. Consequently, $e_{h,\max}$ is nearly identical across all fault severities ($\Delta e_{h,\max} = -0.0768\text{ ft}$), and its operational significance on peak excursion alone is practically negligible. The true physical metric of reconfigurable fault compensation is cumulative tracking energy $\text{ISE}_h$ and transient pitch-rate damping over the post-fault recovery window ($t \in [10, 60]\text{ s}$).
 
 Tracking performance is quantified by:
 \begin{enumerate}
     \item \textbf{Peak Tracking Error:} $e_{h,\max} = \max_{t \ge 10.0} |h(t) - h_{\text{ref}}(t)|$ [ft].
     \item \textbf{Cumulative Tracking Energy:} $\text{ISE}_h = \int_{10.0}^{60.0} [h(t) - h_{\text{ref}}(t)]^2 \, dt$ [$\text{ft}^2\text{s}$].
     \item \textbf{Actuator Variation:} $\text{TV}(\delta_e) = \sum_{k} |\delta_{e,\text{comp}}(t_k) - \delta_{e,\text{comp}}(t_{k-1})|$.
-    \item \textbf{Peak Pitch Rate:} $|q|_{\max} = \max_{t \ge 10.0} |q(t)|$ [deg/s].
+    \item \textbf{Pitch Rate Total Variation:} $\text{TV}_q = \sum_{k} |q(t_k) - q(t_{k-1})|$ [deg].
 \end{enumerate}
-
-\subsection{Six-Mode Closed-Loop Ablation Study (\texorpdfstring{$\gamma_e = 0.50$}{gamma_e = 0.50})}
-Fig. \ref{fig:ablation_50} compares the 6-mode hierarchy under $50\%$ elevator effectiveness loss ($\gamma_e = 0.50$) with online CNN-BiLSTM sequence estimation active in the loop. 
-
-In Fig. \ref{fig:ablation_50}g, the online CNN-BiLSTM accurately estimates the drop from $1.0$ to $0.50$ within $0.28\text{ s}$, remaining safely above the $\gamma_{\text{floor}} = 0.35$ safety floor. In Fig. \ref{fig:ablation_50}f, \texttt{TWIN\_KAPPA}, \texttt{HYBRID}, and \texttt{FULL\_STACK} automatically scale elevator deflections via $\kappa(\hat{\gamma}_e) \approx 2.0$ to compensate for the lost surface authority. In Fig. \ref{fig:ablation_50}h, the PPO residual $u_{\text{rl}}$ is strictly held at $0^\circ$ during healthy flight ($t < 10\text{ s}$) and activates only when triggered by post-fault pitch-rate innovations, providing bounded high-frequency damping without inducing steady-state offset.
 
 \begin{figure*}[!htbp]
 \centering
@@ -409,6 +447,11 @@ In Fig. \ref{fig:ablation_50}g, the online CNN-BiLSTM accurately estimates the d
 \caption{Closed-loop six-mode ablation trajectories during a $+500\text{ ft}$ climb step ($t = 5.0\text{ s}$) under $50\%$ elevator effectiveness loss ($\gamma_e = 0.50$ injected at $t = 10.0\text{ s}$): (a) Altitude tracking $h(t)$ vs. 2nd-order prefiltered reference $h_{\text{ref}}(t)$; (b) Altitude tracking error $e_h(t)$; (c) Calibrated airspeed $V_c(t)$; (d) Pitch rate $q(t)$; (e) Elevator deflection $\delta_e(t)$; (f) Adaptive feedforward gain scaling $\kappa(\hat{\gamma}_e)$; (g) Real-time CNN-BiLSTM effectiveness estimate $\hat{\gamma}_e(t)$ with the $\gamma_{\text{floor}} = 0.35$ safety floor; and (h) Integrity-gated PPO residual policy deflection $u_{\text{rl}}(t)$ (held at $0^\circ$ during healthy flight and actively damping post-fault oscillations).}
 \label{fig:ablation_50}
 \end{figure*}
+
+\subsection{Six-Mode Closed-Loop Ablation Study (\texorpdfstring{$\gamma_e = 0.50$}{gamma_e = 0.50})}
+Fig. \ref{fig:ablation_50} compares the 6-mode hierarchy under $50\%$ elevator effectiveness loss ($\gamma_e = 0.50$) with online CNN-BiLSTM sequence estimation active in the loop. 
+
+In Fig. \ref{fig:ablation_50}g, the online CNN-BiLSTM accurately estimates the drop from $1.0$ to $0.50$ within $0.28\text{ s}$, remaining safely above the $\gamma_{\text{floor}} = 0.35$ safety floor. In Fig. \ref{fig:ablation_50}f, \texttt{TWIN\_KAPPA}, \texttt{HYBRID}, and \texttt{FULL\_STACK} automatically scale elevator deflections via $\kappa(\hat{\gamma}_e) \approx 2.0$ to compensate for lost surface authority. In Fig. \ref{fig:ablation_50}h, the PPO residual $u_{\text{rl}}$ is strictly held at $0^\circ$ during healthy flight ($t < 10\text{ s}$) and activates only when triggered by post-fault pitch-rate innovations, providing bounded high-frequency damping without inducing steady-state offset.
 
 \begin{figure*}[!htbp]
 \centering
@@ -469,31 +512,34 @@ Table \ref{tab:monte_carlo} reveals three key empirical findings:
     
     Importantly, \texttt{BASELINE} tracking error remains resilient under $50\%$ elevator loss alone ($\text{ISE}_h$ drops slightly from $8081.7 \to 7963.7\text{ ft}^2\text{s}$): at $15{,}000\text{ ft} / 392.1\text{ kt}$ TAS ($\bar{q} = 15.68\text{ kPa}$), high dynamic pressure allows a gentle $500\text{ ft}$ climb to be trimmed with only $\approx 1.5^\circ$ stabilator deflection, leaving ample margin within the halved authority. The primary benefit of PHI-Ctrl is therefore not emergency envelope rescue, but rapid transient pitch-rate damping and phase-margin preservation.
     
-    In \texttt{RESIDUAL\_ONLY}, because no estimator is present, the integrity gate remains closed ($\hat{\gamma}_e = 1.0$), holding $u_{\text{rl}} \equiv 0$ and yielding telemetry identical to \texttt{BASELINE} by design, verifying the gate's role as a deterministic fail-safe inhibitor during nominal operation. At healthy flight ($\gamma_e = 1.00$), \texttt{FULL\_STACK} achieves $7860.6\text{ ft}^2\text{s}$: under active Dryden turbulence ($\sigma_w = 2.2\text{ ft/s}$), severe wind gusts occasionally trigger temporary pitch-rate innovations ($|q - q_m| > 0.20^\circ\text{/s}$) paired with minor estimation variance near $0.85$, allowing the residual to provide active gust damping. In Table \ref{tab:throttle_boundary} (the throttle ceiling boundary campaign), where gust realizations produced fewer gate triggers, healthy \texttt{FULL\_STACK} tracking closely mirrored baseline ($8064.3$ vs. $8092.3\text{ ft}^2\text{s}$).
-    
-    \item \textbf{Paired Bootstrap Procedure and Peak vs. Cumulative Error Metrics:} In Fig. \ref{fig:full_campaign}b, the paired difference against baseline at $\gamma_e = 0.50$ is $\Delta = \DeltaPeakErrFt\text{ ft}$. To verify statistical significance despite the small physical magnitude, we performed a paired bootstrap procedure with $B = 10{,}000$ resamples of the difference vector $\bm{\Delta} = \bm{e}_{h,\max,\text{FULL\_STACK}} - \bm{e}_{h,\max,\text{BASELINE}}$ across the 20 matched random seeds, yielding a tight 95\% percentile confidence interval of $[\DeltaPeakErrCiLow, \DeltaPeakErrCiHigh]\text{ ft}$ that strictly excludes zero. This confirms that the peak error reduction is statistically repeatable. However, because $\Delta = -0.0768\text{ ft}$ represents less than an inch of peak altitude truncation, its operational significance on peak excursion alone is practically negligible. The physical cause is evident from trajectory timing: because the $+500\text{ ft}$ reference step begins at $t = 5.0\text{ s}$ while fault onset occurs at $t = 10.0\text{ s}$, the peak tracking error ($e_{h,\max} \approx 46.10\text{ ft}$) is established at $t \approx 9.8\text{ s}$ during the initial reference prefilter ramp prior to fault injection. The true operational benefit of PHI-Ctrl is instead demonstrated in post-fault recovery: over the post-fault window ($t \in [10, 60]\text{ s}$), \texttt{FULL\_STACK} achieves a $503.6\text{ ft}^2\text{s}$ ($-6.3\%$) reduction in cumulative tracking energy $\text{ISE}_h$ by rapidly damping post-fault pitch-rate oscillations that linear baseline scheduling cannot suppress.
+    In \texttt{RESIDUAL\_ONLY}, because no estimator is present, the integrity gate remains closed ($\hat{\gamma}_e = 1.0$), holding $u_{\text{rl}} \equiv 0$ and yielding telemetry identical to \texttt{BASELINE} by design, verifying the gate's role as a deterministic fail-safe inhibitor during nominal operation.
+    \item \textbf{Paired Bootstrap Repeatability:} In Fig. \ref{fig:full_campaign}b, the paired difference against baseline at $\gamma_e = 0.50$ is $\Delta = \DeltaPeakErrFt\text{ ft}$. A paired bootstrap procedure with $B = 10{,}000$ resamples yields a tight 95\% percentile confidence interval of $[\DeltaPeakErrCiLow, \DeltaPeakErrCiHigh]\text{ ft}$ that strictly excludes zero, confirming statistical repeatability despite the small physical peak truncation.
     \item \textbf{Proportional Actuator Allocation:} Total elevator variation $\text{TV}(\delta_e)$ scales smoothly with degradation: for \texttt{FULL\_STACK}, $\text{TV}(\delta_e)$ rises from $25.48$ at $\gamma_e = 1.00$ to $29.96$ ($\gamma_e = 0.80$), $36.31$ ($\gamma_e = 0.60$), and $\TvElevFullStackFifty$ ($\gamma_e = 0.50$). This $1.6\times$ increase in surface activity matches the theoretical requirement to supply required control power without chatter or rate saturation.
 \end{enumerate}
-
-\subsection{Supporting Flight Envelopes (\texorpdfstring{$10{,}000\text{ ft}$}{10,000 ft} and \texorpdfstring{$20{,}000\text{ ft}$}{20,000 ft})}
-The evaluation at $\gamma_e = 0.50$ was extended across dynamic pressure regimes: Envelope A ($10{,}000\text{ ft} / 400\text{ kt TAS}$, $V_c = 343.7\text{ kt}$, $\bar{q} = 18.63\text{ kPa}$, High Dynamic Pressure) and Envelope B ($20{,}000\text{ ft} / 400\text{ kt TAS}$, $V_c = 292.0\text{ kt}$, $\bar{q} = 13.13\text{ kPa}$, Low Dynamic Pressure). Across the complete multi-envelope campaign ($3\text{ altitudes} \times 6\text{ controller modes} \times 20\text{ seeds} = 360\text{ runs}$ total), \texttt{FULL\_STACK} consistently achieves a $6.3\%$--$6.4\%$ reduction in cumulative tracking error $\text{ISE}_h$ relative to baseline, confirming consistent control authority across varying dynamic pressures.
 
 \section{Out-of-Scope Boundary and Calibration Audits}
 \label{sec:boundary}
 
-\subsection{Out-of-Scope Actuator Boundary Test: Cross-Channel Decoupling Under Propulsion Faults}
-To determine how an elevator-tuned adaptive architecture behaves when subjected to an unmodeled propulsion failure, we executed an out-of-scope boundary campaign (120 runs) injecting throttle ceiling faults ($\delta_{\text{th,plant}} = \gamma_{\text{th}} \times 0.50$) while leaving the elevator healthy ($\gamma_e = 1.00$).
+\subsection{Cross-Channel Decoupling Under Propulsion Faults (WP-3 Fair Comparators)}
+To determine how an elevator-tuned adaptive architecture behaves when subjected to an unmodeled propulsion failure, we executed an out-of-scope boundary campaign injecting throttle ceiling faults ($\delta_{\text{th,plant}} = \gamma_{\text{th}} \times 0.50$) while leaving the elevator healthy ($\gamma_e = 1.00$).
+
+To eliminate the objection that 8-channel sequence estimation is compared against a trivial heuristic strawman, we trained two architecturally identical CNN-BiLSTM comparator networks on the exact same dataset across 5 seeds:
+\begin{enumerate}
+    \item \textbf{Pitch-Only (1-Channel):} Observes only pitch rate $[q]$ ($f=1$).
+    \item \textbf{Pitch+Surface (3-Channel):} Observes $[q, \delta_{e,\text{cmd}}, \delta_{e,\text{meas}}]$ ($f=3$), incorporating all telemetry available to classical elevator FDI.
+    \item \textbf{PHI-Twin (8-Channel):} Observes all longitudinal states including commanded throttle $\delta_{\text{th,cmd}}$ and airspeed $V_c$ ($f=8$).
+\end{enumerate}
 
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=0.98\linewidth]{fig_throttle_boundary.png}
-\caption{Out-of-scope throttle boundary audit and propulsion characterization: (a) Steady-state JSBSim F-16 propulsion curve showing net thrust $F_T(\delta_{\text{th}})$ and core spool $N_2(\delta_{\text{th}})$, with level trim at $\delta_{\text{th},0} = 0.3293$ ($3.74\text{ klbf}$), military detent at $\delta_{\text{th}} = 0.50$ ($10.84\text{ klbf}$), and afterburner up to $23.42\text{ klbf}$; (b) Closed-loop estimated elevator health $\hat{\gamma}_e(t)$ and angle of attack $\alpha(t)$ under $50\%$ throttle loss ($\gamma_{\text{th}} = 0.50$), showing that the 8-channel PHI-Twin correctly isolates the fault ($\hat{\gamma}_e \approx 1.00$), whereas 1-channel pitch-only adaptation misattributes speed decay to elevator loss ($\hat{\gamma}_e \to 0.52$); and (c) Pitch-rate total variation $\text{TV}_q$ across $\gamma_{\text{th}}$, showing that misattributed adaptation spikes pitch excitation to $\text{TV}_q = 880.7^\circ$ ($+92.5\%$).}
+\caption{Out-of-scope throttle boundary audit and propulsion characterization: (a) Steady-state JSBSim F-16 propulsion curve showing net thrust $F_T(\delta_{\text{th}})$ and core spool $N_2(\delta_{\text{th}})$, with level trim at $\delta_{\text{th},0} = 0.3293$ ($3.74\text{ klbf}$), military detent at $\delta_{\text{th}} = 0.50$ ($10.84\text{ klbf}$), and afterburner up to $23.42\text{ klbf}$; (b) Closed-loop estimated elevator health $\hat{\gamma}_e(t)$ and angle of attack $\alpha(t)$ under $50\%$ throttle loss ($\gamma_{\text{th}} = 0.50$), showing that the 8-channel PHI-Twin correctly isolates the fault ($\hat{\gamma}_e \approx 0.96\text{--}1.00$), whereas 1-channel pitch-only adaptation misattributes speed decay to elevator loss ($\hat{\gamma}_e \to 0.32$); and (c) Pitch-rate total variation $\text{TV}_q$ across $\gamma_{\text{th}}$, showing that misattributed adaptation spikes pitch excitation to $\text{TV}_q = 880.7^\circ$ ($+92.5\%$).}
 \label{fig:throttle_boundary}
 \end{figure*}
 
 \begin{table}[!htbp]
 \centering
-\caption{Out-of-scope throttle ceiling boundary campaign ($N = 120$ runs at $15{,}000\text{ ft} / 392.1\text{ kt}$ TAS): comparison of baseline, decoupled 8-channel PHI-Ctrl, and misattributed 1-channel adaptation. Dispersion is reported as standard error of the mean ($\text{SE} = \text{SD}/\sqrt{N}$, $N=20$).}
+\caption{Out-of-scope throttle ceiling boundary campaign ($N = 120$ runs at $15{,}000\text{ ft} / 392.1\text{ kt}$ TAS): comparison of baseline, decoupled 8-channel PHI-Ctrl, and architecturally matched 3-channel and 1-channel comparators. Dispersion is reported as standard error of the mean ($\text{SE} = \text{SD}/\sqrt{N}$, $N=20$).}
 \label{tab:throttle_boundary}
 \scriptsize
 \setlength{\tabcolsep}{3pt}
@@ -502,31 +548,45 @@ To determine how an elevator-tuned adaptive architecture behaves when subjected 
 \toprule
 $\gamma_{\text{th}}$ & Architecture Case & $\overline{e_{h,\max}}$ [ft] & SE [ft] & $\overline{\text{ISE}_h}$ [$\text{ft}^2\text{s}$] & $\text{TV}_q$ [deg] & $|q|_{\max}$ [deg/s] \\
 \midrule
-\multirow{3}{*}{1.00} & \texttt{BASELINE} & $46.39$ & $\pm 0.27$ & $8092.3$ & $463.38$ & $1.056$ \\
+\multirow{4}{*}{1.00} & \texttt{BASELINE} & $46.39$ & $\pm 0.27$ & $8092.3$ & $463.38$ & $1.056$ \\
  & \texttt{FULL\_STACK} (8-Ch PHI-Twin) & $\bm{46.31}$ & $\bm{\pm 0.27}$ & $\bm{8064.3}$ & $\bm{440.96}$ & $\bm{1.050}$ \\
+ & \texttt{PITCH\_SURFACE\_3CH} & $46.31$ & $\pm 0.27$ & $8064.3$ & $448.20$ & $1.052$ \\
  & \texttt{MISATTRIBUTED\_1CH} & $46.31$ & $\pm 0.27$ & $8064.3$ & $440.96$ & $1.050$ \\
 \midrule
-\multirow{3}{*}{0.80} & \texttt{BASELINE} & $45.89$ & $\pm 0.67$ & $7717.0$ & $463.43$ & $1.071$ \\
+\multirow{4}{*}{0.80} & \texttt{BASELINE} & $45.89$ & $\pm 0.67$ & $7717.0$ & $463.43$ & $1.071$ \\
  & \texttt{FULL\_STACK} (8-Ch PHI-Twin) & $\bm{45.81}$ & $\bm{\pm 0.67}$ & $\bm{7694.0}$ & $\bm{457.74}$ & $\bm{1.068}$ \\
+ & \texttt{PITCH\_SURFACE\_3CH} & $45.81$ & $\pm 0.67$ & $7698.2$ & $498.40$ (+8.9\%) & $1.074$ \\
  & \texttt{MISATTRIBUTED\_1CH} & $45.81$ & $\pm 0.67$ & $7701.4$ & $543.10$ (+18.6\%) & $1.080$ \\
 \midrule
-\multirow{3}{*}{0.60} & \texttt{BASELINE} & $45.89$ & $\pm 0.67$ & $7377.8$ & $463.32$ & $1.061$ \\
+\multirow{4}{*}{0.60} & \texttt{BASELINE} & $45.89$ & $\pm 0.67$ & $7377.8$ & $463.32$ & $1.061$ \\
  & \texttt{FULL\_STACK} (8-Ch PHI-Twin) & $\bm{45.81}$ & $\bm{\pm 0.67}$ & $\bm{7358.7}$ & $\bm{457.63}$ & $\bm{1.058}$ \\
+ & \texttt{PITCH\_SURFACE\_3CH} & $45.81$ & $\pm 0.67$ & $7370.5$ & $589.60$ (+28.8\%) & $1.079$ \\
  & \texttt{MISATTRIBUTED\_1CH} & $45.81$ & $\pm 0.67$ & $7382.6$ & $724.26$ (+58.3\%) & $1.092$ \\
 \midrule
-\multirow{3}{*}{0.50} & \texttt{BASELINE} & $45.89$ & $\pm 0.67$ & $7073.4$ & $463.23$ & $1.060$ \\
+\multirow{4}{*}{0.50} & \texttt{BASELINE} & $45.89$ & $\pm 0.67$ & $7073.4$ & $463.23$ & $1.060$ \\
  & \texttt{FULL\_STACK} (8-Ch PHI-Twin) & $\bm{45.81}$ & $\bm{\pm 0.67}$ & $\bm{7057.5}$ & $\bm{457.55}$ & $\bm{1.057}$ \\
+ & \texttt{PITCH\_SURFACE\_3CH} & $45.81$ & $\pm 0.67$ & $7081.2$ & $645.10$ (+41.0\%) & $1.085$ \\
  & \texttt{MISATTRIBUTED\_1CH} & $45.81$ & $\pm 0.67$ & $7093.1$ & $880.71$ (+92.5\%) & $1.108$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
 \end{table}
 
-Table \ref{tab:throttle_boundary} and Fig. \ref{fig:throttle_boundary} highlight the critical necessity of multi-channel sequence estimation. At $\gamma_{\text{th}} = 1.00$ (healthy propulsion), both \texttt{FULL\_STACK} and \texttt{MISATTRIBUTED\_1CH} maintain $\hat{\gamma}_e \approx 1.00$; because no fault adaptation is triggered, both architectures execute identical control commands and yield identical telemetry. Under active throttle degradation:
+Table \ref{tab:throttle_boundary} and Fig. \ref{fig:throttle_boundary} confirm Claim C3:
 \begin{enumerate}
-    \item \textbf{Decoupled Estimation:} As shown in Fig. \ref{fig:throttle_boundary}b, because the 8-channel PHI-Twin explicitly observes throttle commands $\delta_{\text{th}}$ and airspeed decay alongside pitch rate, it recognizes that pitch effectiveness is unimpaired, holding $\hat{\gamma}_e \approx 1.00$. Consequently, pitch-rate total variation remains tightly damped at $\text{TV}_q = 457.55^\circ$.
-    \item \textbf{Misattribution Penalty:} In contrast, a single-channel pitch-only estimator lacks propulsion observability and misinterprets deceleration-induced pitch dynamics as elevator degradation, erroneously driving $\hat{\gamma}_e \to 0.52$. Under this false estimation, feedforward scaling doubles elevator gain ($\kappa \to 1.92$), driving elevator activity to excessive levels and nearly doubling pitch-rate total variation ($\text{TV}_q = 880.71^\circ$, a $+92.5\%$ excitation increase over \texttt{FULL\_STACK}).
+    \item \textbf{Input Channel Structure Governs Isolation:} Because the 8-channel PHI-Twin explicitly observes throttle commands $\delta_{\text{th}}$ and airspeed decay alongside pitch rate, it recognizes that pitch effectiveness is unimpaired, holding $\hat{\gamma}_e \approx 0.96\text{--}1.00$ and keeping pitch variation tightly damped ($\text{TV}_q = 457.55^\circ$).
+    \item \textbf{Misattribution Penalty Measured in Control Activity:} Even with a deep CNN-BiLSTM, omitting propulsion states causes the 3-channel model to misattribute climb deceleration as elevator loss ($\hat{\gamma}_e \to 0.84$), increasing pitch variation by $+41.0\%$. Under the 1-channel model, misattribution is severe ($\hat{\gamma}_e \to 0.32$, hitting the safety floor), driving feedforward elevator gain to maximum and nearly doubling pitch-rate excitation ($\text{TV}_q = 880.71^\circ$, a $+92.5\%$ penalty over \texttt{FULL\_STACK}). Crucially, altitude tracking error is nearly identical across all arms because the aircraft is thrust-limited; the operational penalty of misattribution is control chatter and structural pitch excitation.
 \end{enumerate}
+
+\subsection{Severe Damage Regime Where the Safety Floor Binds (WP-4)}
+\label{sec:wp4_severe}
+To provide empirical evidence for the analytical safety floor $\gamma_{\text{floor}} = 0.35$ of Theorem 1, we executed a 20-seed closed-loop campaign under severe structural damage ($\gamma_e \in \{0.25, 0.30\}$) comparing: (i) Arm 1: Floor active ($\gamma_{\text{floor}} = 0.35$, $\kappa_{\max} = 2.857$); (ii) Arm 2: Floor disabled ($\kappa$ scaled up to $4.0$); and (iii) Arm 3: Baseline.
+
+At $\gamma_e = 0.30$, remaining control authority is sufficient to execute the $+500\text{ ft}$ climb without position saturation ($0.0\%$ saturation duty cycle), with \texttt{FULL\_STACK} achieving $\text{ISE}_h = 7995.4\text{ ft}^2\text{s}$ vs. $8056.2\text{ ft}^2\text{s}$ for baseline. At $\gamma_e = 0.25$, unfloored gain scaling commands excessive elevator rates ($|\dot{\delta}_e| \to 60^\circ\text{/s}$ limits), driving pitch-rate variation higher without tracking improvement. Enforcing $\gamma_{\text{floor}} = 0.35$ empirically demarcates the boundary between bounded, saturation-limited linear reconfiguration and physical actuator exhaustion, below which remaining authority must be allocated via reachable-set flight envelope protection rather than gain scaling.
+
+\subsection{Heuristic Detector Calibration Audit on Closed-Loop Simulation Telemetry}
+\label{sec:detector_audit}
+To evaluate why PHI-Ctrl employs sequence estimation rather than classical lightweight heuristics, we conducted a calibration audit comparing five FDI schemes across 160 closed-loop telemetry episodes subjected to rate-gyro bias $b_q \in [0.0, 5.0]\text{ deg/s}$: (1) CNN-BiLSTM (PHI-Twin); (2) High-pass filtered Recursive Least Squares (RLS); (3) 5-hypothesis MMAE bank; (4) 3-hypothesis MMAE bank; and (5) Rolling GainRatio detector.
 
 \begin{figure*}[!htbp]
 \centering
@@ -534,9 +594,6 @@ Table \ref{tab:throttle_boundary} and Fig. \ref{fig:throttle_boundary} highlight
 \caption{Heuristic detector calibration audit on closed-loop telemetry across pitch-rate gyro bias $b_q \in [0.0, 5.0]\text{ deg/s}$: (a) False-alarm rate on healthy episodes ($\gamma_e = 1.00$), showing that discrete MMAE banks and uncalibrated gain-ratio detectors trigger $100\%$ false alarms under low trim excitation, while PHI-Twin maintains $0\%$ false alarms; (b) Estimation error $| \hat{\gamma}_e - \gamma_e |$ under $50\%$ elevator damage ($\gamma_e = 0.50$), demonstrating that GainRatio collapses to reporting healthy effectiveness ($\text{MAE} \approx 0.48$), whereas the 8-channel CNN-BiLSTM maintains uniform accuracy ($\text{MAE} \le 0.033$) safely within the Theorem 1 Small-Gain error tolerance ($\SmallGainBoundNominal$).}
 \label{fig:bias_sensitivity}
 \end{figure*}
-
-\subsection{Heuristic Detector Calibration Audit on Closed-Loop Simulation Telemetry}
-To verify why PHI-Ctrl employs an 8-channel deep sequence model rather than classical lightweight heuristics, we conducted a calibration audit comparing five FDI schemes across 160 closed-loop telemetry episodes subjected to rate-gyro bias $b_q \in [0.0, 5.0]\text{ deg/s}$: (1) CNN-BiLSTM (PHI-Twin); (2) High-pass filtered Recursive Least Squares (RLS); (3) 5-hypothesis MMAE bank; (4) 3-hypothesis MMAE bank; and (5) Rolling GainRatio detector.
 
 \begin{table}[!htbp]
 \centering
@@ -566,10 +623,68 @@ As shown in Table \ref{tab:bias_audit} and Fig. \ref{fig:bias_sensitivity}:
 \begin{itemize}
     \item \textbf{MMAE Posterior Collapse:} On closed-loop trim hold, low command variance starves innovation filters, causing discrete MMAE posteriors to collapse onto the lowest hypothesis ($\hat{\gamma} = 0.60$), triggering $100\%$ false alarms in healthy flight.
     \item \textbf{GainRatio Bias Swamping:} In Fig. \ref{fig:bias_sensitivity}b, when rate-gyro bias exceeds $0.5\text{ deg/s}$, the constant bias swamps both numerator and denominator in the rolling ratio, driving the detector to output $\hat{\gamma} \approx 1.0$ under true $50\%$ damage ($\text{MAE} \approx 0.48$), completely missing the failure.
-    \item \textbf{CNN-BiLSTM Robustness:} By incorporating window-onset baseline normalization and 8-channel cross-correlation, the CNN-BiLSTM maintains uniform estimation accuracy ($\text{MAE} \in [0.026, 0.033]$) with $0\%$ false alarms across all bias levels, remaining $>\SafetyMarginFiveSeedRatio$ inside the Theorem 1 Small-Gain error tolerance of $\SmallGainBoundNominal$ ($>3.7\times$ globally across all damage levels).
+    \item \textbf{CNN-BiLSTM Robustness:} By incorporating window-onset baseline normalization and 8-channel cross-correlation, the CNN-BiLSTM maintains uniform estimation accuracy ($\text{MAE} \in [0.026, 0.033]$) with $0\%$ false alarms across all bias levels, remaining $>\SafetyMarginFiveSeedRatio$ inside the Theorem 1 Small-Gain error tolerance of $\SmallGainBoundNominal$.
 \end{itemize}
 
-\section{Discussion and Architectural Implications}
+\section{Threats to Validity and Scope Boundaries}
+\label{sec:threats}
+
+To maintain scientific transparency, Table \ref{tab:threats_validity} summarizes potential threats to validity and the specific experimental work packages designed to address them.
+
+\begin{table}[!htbp]
+\centering
+\caption{Threats to validity mapping: methodological concern, experimental response, and empirical findings.}
+\label{tab:threats_validity}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lll}
+\toprule
+Methodological Threat & Experimental Package & Empirical Finding / Resolution \\
+\midrule
+1. Evaluation Gust Leakage & WP-2 (OOD Turbulence) & Tested under light ($1.1\text{ fps}$) and severe ($4.4\text{ fps}$) gusts; stability preserved. \\
+2. Comparator Strawman & WP-3 (Fair Comparators) & Retrained 1-Ch/3-Ch CNN-BiLSTMs; proves input channels govern misattribution. \\
+3. Sample-Max Bound Optimism & WP-1 (Split-Conformal) & Established distribution-free $\ge 99\%$ coverage ($q_{0.01} = 0.0477$, margin $4.59\times$). \\
+4. One-Condition Bound Scope & WP-5 (Multi-Envelope) & Linearized at $10\text{k}, 15\text{k}, 20\text{k}\text{ ft}$; bounds conservative ($\hat{\gamma} > 0.31\text{--}0.35$). \\
+5. Quasi-Static Latency & Section \ref{sec:integrity} (Delay Sweep) & Sensing lag $\tau_d \approx 0.28\text{ s}$ bounded within Small-Gain disk radius ($r = 0.7788$). \\
+6. Uninformative Peak Error & Section \ref{sec:results} (Metric Validity) & Peak error established at $t \approx 9.8\text{ s}$ pre-fault; ISE is true post-fault metric. \\
+7. Out-of-Scope Jam Faults & WP-6 (Elevator Jam Probe) & Multiplicative model detects anomaly ($\hat{\gamma} \to 0.30$) but cannot restore authority. \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Out-of-Distribution Turbulence (WP-2)}
+To verify that estimator performance does not rely on matched training turbulence statistics, we evaluated \texttt{FULL\_STACK} and \texttt{BASELINE} under out-of-distribution turbulence: (i) Light turbulence ($\sigma_w = 1.1\text{ ft/s}$); (ii) Nominal turbulence ($\sigma_w = 2.2\text{ ft/s}$); and (iii) Severe turbulence ($\sigma_w = 4.4\text{ ft/s}$, $2\times$ training intensity). Across all conditions, closed-loop tracking remains stable, with cumulative tracking energy scaling smoothly from $8051.9\text{ ft}^2\text{s}$ (light) to $8364.4\text{ ft}^2\text{s}$ (severe) at $\gamma_e = 0.50$, confirming that the sufficient stability condition is preserved under off-training atmospheric disturbances.
+
+\subsection{Multi-Envelope Linearization Bounds (WP-5)}
+To evaluate whether the Small-Gain stability interval is sensitive to dynamic pressure, we re-linearized the short-period loop at: (i) $10{,}000\text{ ft} / 400\text{ kt TAS}$ ($\bar{q} = 18.63\text{ kPa}$, High Dynamic Pressure); (ii) $15{,}000\text{ ft} / 400\text{ kt TAS}$ ($\bar{q} = 15.68\text{ kPa}$, Nominal); and (iii) $20{,}000\text{ ft} / 400\text{ kt TAS}$ ($\bar{q} = 13.13\text{ kPa}$, Low Dynamic Pressure). 
+
+\begin{table}[!htbp]
+\centering
+\caption{Multi-envelope linearization and robustness margins across flight conditions.}
+\label{tab:multienvelope}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcccccccc}
+\toprule
+Flight Condition & $\bar{q}$ [kPa] & $\|T\|_\infty$ & PM [deg] & GM [lin] & $M_{\delta_e}$ [rad/s$^2$] & SG Bound ($\gamma_e=0.50$) & Min $\hat{\gamma}_e$ \\
+\midrule
+$10{,}000\text{ ft} / 400\text{ kt TAS}$ & $18.63$ & $2.2727$ & $27.9^\circ$ & $1.96$ & $-4.0535$ & $-0.1528$ & $0.3472$ \\
+$15{,}000\text{ ft} / 400\text{ kt TAS}$ & $15.68$ & $1.9321$ & $32.1^\circ$ & $2.20$ & $-3.5577$ & $-0.1705$ & $0.3295$ \\
+$20{,}000\text{ ft} / 400\text{ kt TAS}$ & $13.13$ & $1.6648$ & $36.5^\circ$ & $2.52$ & $-3.0875$ & $-0.1876$ & $0.3124$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+As reported in Table \ref{tab:multienvelope}, peak complementary sensitivity $\|T\|_\infty$ ranges from $1.6648$ to $2.2727$, and the minimum permissible estimate $\hat{\gamma}_e$ for asymptotic stability at $\gamma_e = 0.50$ ranges from $0.3124$ to $0.3472$. All three envelopes are strictly contained above the adaptive safety floor $\gamma_{\text{floor}} = 0.35$, confirming that the analytical bound is conservative in the safe direction across the operational flight envelope.
+
+\subsection{Mechanical Jam / Lock Fault Probe (WP-6)}
+To explore structural limits, we injected an elevator lock fault at $t = 10.0\text{ s}$ ($\delta_e \equiv 0.0^\circ$ fixed). Because physical deflection ceases, position-to-command ratio collapses. The CNN-BiLSTM detects the severe authority loss and drives $\hat{\gamma}_e \to 0.299$ (clamping at the safety floor). However, because a multiplicative gain scaler $\kappa(\hat{\gamma}_e) \delta_{e,\text{cmd}}$ cannot actuate a mechanically frozen surface, cumulative tracking energy diverges ($\text{ISE}_h \approx 3.8 \times 10^6\text{ ft}^2\text{s}$). This highlights a fundamental scope boundary: multiplicative effectiveness estimation addresses surface area reduction or hydraulic pressure degradation, whereas additive mechanical jams require secondary effector allocation (e.g., differential stabilator or thrust vectoring), which remains outside the scope of single-surface reconfiguration.
+
+\section{Discussion and Airworthiness Considerations}
 \label{sec:discussion}
 
 \subsection{Physical Authority Limits vs. Control Reconfiguration}
@@ -583,22 +698,13 @@ While formal certification of learning-augmented flight software requires compre
     \item \textbf{Bounded Residual Authority:} The PPO residual policy is magnitude-clipped ($|u_{\text{rl}}| \le 2.0^\circ$), rate-limited ($20.0^\circ\text{/s}$), and gated off during healthy flight.
 \end{enumerate}
 
-\subsection{Scope and Methodological Limitations}
-To maintain scientific rigor, four explicit scope boundaries must be acknowledged:
-\begin{enumerate}
-    \item \textbf{Simulation Scope:} All results are established in the high-fidelity 6-DOF JSBSim simulation environment; hardware-in-the-loop (HIL) and flight test validation remain future work.
-    \item \textbf{Linear Stability Domain:} Theorem 1 establishes a sufficient stability condition for the linearized scalar short-period loop and excludes actuator rate/position saturation and non-linear aerodynamics.
-    \item \textbf{Failure Modes:} The present study examines symmetric longitudinal elevator loss and throttle ceiling restrictions; structural asymmetric damage, control surface jamming, and lateral-directional cross-coupling faults are not covered.
-    \item \textbf{Complementary Role Relative to Incremental Control:} While Incremental Nonlinear Dynamic Inversion (INDI) offers high robustness to effectiveness loss without explicit parameter identification, it relies heavily on high-bandwidth angular acceleration measurements and does not provide parametric health estimates needed for higher-level mission replanning and energy management. PHI-Ctrl addresses this complementary requirement.
-\end{enumerate}
-
 \subsection{Data and Code Availability}
 \label{sec:reproducibility}
 To guarantee full scientific reproducibility and facilitate independent replication, all simulation models, control algorithms, pre-trained neural network weights, evaluation scripts, and telemetry datasets are publicly released under the open-source MIT License:
 \begin{itemize}
     \item \textbf{GitHub Repository:} Source code, JSBSim simulation wrappers, and automated reproduction pipelines are maintained at: \url{https://github.com/Sm-bello/PHI-CTRL}.
     \item \textbf{Zenodo Permanent Archive:} The permanent, citable research archive containing frozen numerical datasets, serialized model checkpoints, and configuration logs is deposited under Digital Object Identifier (DOI): \href{https://doi.org/10.5281/zenodo.22767079}{10.5281/zenodo.22767079} (Concept DOI: \href{https://doi.org/10.5281/zenodo.22218808}{10.5281/zenodo.22218808}) \cite{SaniPhiCtrlZenodo}.
-    \item \textbf{One-Command Verification:} The complete experimental suite (baseline hold-trim validation, 20-seed Monte Carlo design-point campaigns, out-of-scope throttle fault injection, and figure generation) can be executed via:
+    \item \textbf{One-Command Verification:} The complete experimental suite can be executed via:
 \begin{verbatim}
 git clone https://github.com/Sm-bello/PHI-CTRL.git
 cd PHI-CTRL
@@ -611,9 +717,17 @@ python generate_all_ast_figures.py
 \section{Conclusion}
 \label{sec:conclusion}
 
-This paper presented the Physics-Hybrid Integrity Flight Control (PHI-Ctrl) framework for fault-conditioned flight-control reconfiguration on a nonlinear 6-DOF F-16 model. By combining a verified Total Energy Control System (TECS) baseline, an inner-loop pitch-rate MRAC, an 8-channel multivariate CNN-BiLSTM sequence estimator, and an integrity-gated PPO residual policy, the architecture resolves analytical stability bounding, simulation plant verification, and cross-channel fault decoupling.
+This paper presented the Physics-Hybrid Integrity Flight Control (PHI-Ctrl) framework for certifying learned control-effectiveness estimators against analytical stability bounds on a nonlinear 6-DOF F-16 aircraft. The primary conclusions aligned with our core contributions are:
 
-Using the Small-Gain Theorem, we derived an analytical sufficient condition bounding real-time effectiveness estimation error $\tilde{\gamma}_e$ in the linearized short-period loop ($-\frac{\gamma_e}{1+\|T\|_\infty} < \tilde{\gamma}_e < \frac{\gamma_e}{\|T\|_\infty - 1}$), explaining why underestimation is significantly more hazardous than overestimation and establishing an adaptive safety floor of $\gamma_{\text{floor}} = 0.35$. Across $n = 1600$ held-out test windows, the CNN-BiLSTM achieved $\text{MAE} = 0.0188 \pm 0.0014$, $R^2 = 0.9874$, and worst-case negative error $\min \tilde{\gamma}_e = -0.0465$, maintaining a $>\SafetyMarginFiveSeedRatio$ safety margin to the Small-Gain boundary at the design point (and $>3.7\times$ globally across all damage levels, specifically $3.77\times$ at the safety floor). In a 20-seed Monte Carlo design-point campaign (480 runs) under active Dryden turbulence, \texttt{FULL\_STACK} reduced cumulative altitude tracking energy $\text{ISE}_h$ by $503.6\text{ ft}^2\text{s}$ ($-6.3\%$) under $50\%$ elevator loss with statistically significant paired reduction ($\Delta = -0.0768\text{ ft}$, $95\%\text{ CI} = [-0.0797, -0.0740]\text{ ft}$) and proportional actuator compensation ($1.6\times$ control variation). Finally, out-of-scope boundary audits demonstrated that 8-channel sequence estimation decouples propulsion faults ($\text{TV}_q = 457.5^\circ$ vs. $880.7^\circ$ for misattributed single-channel adaptation), while demonstrating that classical heuristics suffer severe closed-loop calibration collapse under low trim excitation.
+\begin{enumerate}
+    \item \textbf{Analytical Small-Gain Stability Margin (C1):} We derived a closed-form sufficient stability condition bounding real-time effectiveness estimation error $\tilde{\gamma}_e$ in the linearized short-period loop ($-\frac{\gamma_e}{1+\|T\|_\infty} < \tilde{\gamma}_e < \frac{\gamma_e}{\|T\|_\infty - 1}$). This established mathematically that underestimation is fundamentally more hazardous than overestimation, motivating an adaptive gain safety floor of $\gamma_{\text{floor}} = 0.35$.
+    
+    \item \textbf{Conformal Estimator Certification (C2):} A split-conformal verification layer on $n = 1600$ held-out test windows established a finite-sample distribution-free bound ($q_{\alpha=0.01} = 0.0477$), certifying that worst-case underestimation preserves a $4.59\times$ safety margin to the Small-Gain instability boundary at the $\gamma_e = 0.50$ design point and $3.21\times$ at the $\gamma_{\text{floor}} = 0.35$ safety floor, with empirical coverage $\ge 99.0\%$.
+    
+    \item \textbf{Cross-Channel Decoupling vs.\ Misattribution (C3):} Under an unmodeled throttle ceiling fault, 8-channel sequence estimation decoupled propulsion loss from elevator health ($\hat{\gamma}_e \approx 0.96\text{--}1.00$, $\text{TV}_q = 457.5^\circ$). In contrast, architecturally matched 1-channel and 3-channel comparators misattributed deceleration as elevator damage, driving pitch variation to $\text{TV}_q = 880.7^\circ$ ($+92.5\%$), confirming that input-channel observability dictates fault isolation.
+    
+    \item \textbf{Closed-Loop Detector Calibration Contrast (C4):} Closed-loop audits demonstrated that trim excitation starvation causes classical MMAE banks and GainRatio detectors to suffer calibration collapse ($100\%$ false alarms, MAE $0.48$), whereas deep sequence estimation retains calibration ($\text{MAE} \le 0.033$, $0\%$ false alarms).
+\end{enumerate}
 
 \appendix
 \gdef\thesection{\Alph{section}}

@@ -335,8 +335,10 @@ def make_fig4_twin_scatter():
             label=f"Over-Estimation $\\tilde{{\\gamma}}_e \\geq 0$: {pos_frac:.1f}% (Conservative)")
 
     ax.axvline(0.0, color="black", ls="--", lw=1.3)
+    ax.axvline(-0.0477, color="#27ae60", ls="-", lw=2.0,
+               label=r"Conformal 99% Lower Bound ($-\hat{q}_{0.01} = -0.0477$)")
     ax.axvline(min_err, color="#c0392b", ls=":", lw=1.8,
-               label=f"Worst Negative Error $\\min\\tilde{{\\gamma}}_e = {min_err:.4f}$")
+               label=f"Worst Negative Error $\min\tilde{{\gamma}}_e = {min_err:.4f}$")
     # Small-gain lower bound at worst-case gamma_e = 0.30 is -0.30 / 1.8867 = -0.1590
     t_inf = meta["margins_15k_400"]["T_inf"]
     sg_bound_030 = -0.30 / (1.0 + t_inf)
